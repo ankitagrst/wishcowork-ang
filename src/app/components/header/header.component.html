@@ -1,0 +1,150 @@
+<header class="bg-white shadow-md sticky top-0 z-50 border-b border-gray-200 backdrop-blur-md bg-white/98">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16 lg:h-20">
+      <!-- Logo - Enhanced -->
+      <div class="flex items-center">
+        <a routerLink="/" class="flex items-center space-x-2 sm:space-x-3 group">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-600 via-primary-500 to-blue-600 rounded-2xl flex items-center justify-center group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
+            <span class="text-white font-bold text-xl sm:text-2xl">W</span>
+          </div>
+          <div class="hidden xs:block">
+            <span class="font-bold text-xl sm:text-2xl bg-gradient-to-r from-primary-600 to-blue-600 bg-clip-text text-transparent group-hover:from-primary-700 group-hover:to-blue-700 transition-all duration-300">WishCowork</span>
+            <div class="text-xs text-gray-500 -mt-1 hidden sm:block">Premium Workspaces</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation - Enhanced -->
+      <div class="hidden lg:flex items-center space-x-4 xl:space-x-8">
+        <!-- Solutions Dropdown - Improved -->
+        <div class="relative group">
+          <button class="text-gray-700 hover:text-primary-600 font-semibold flex items-center space-x-1 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50 transition-all duration-200">
+            <span>Solutions</span>
+            <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="absolute top-full left-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2 border border-gray-100">
+            <div class="p-6">
+              <h3 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Workspace Solutions</h3>
+              <div class="space-y-1">
+                <a *ngFor="let category of categories" 
+                   [routerLink]="['/category', category.slug]"
+                   class="flex items-center space-x-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 transition-all duration-200 group/item">
+                  <span class="text-2xl transform group-hover/item:scale-110 transition-transform duration-200">{{category.icon}}</span>
+                  <div class="flex-1">
+                    <div class="font-semibold">{{category.name}}</div>
+                    <div class="text-xs text-gray-500">{{category.description}}</div>
+                  </div>
+                  <svg class="w-4 h-4 text-primary-600 opacity-0 group-hover/item:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Business Services - Improved -->
+        <div class="relative group">
+          <button class="text-gray-700 hover:text-primary-600 font-semibold flex items-center space-x-1 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50 transition-all duration-200">
+            <span>Services</span>
+            <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2 border border-gray-100">
+            <div class="p-4 space-y-1">
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Business Services</a>
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Incorporation Services</a>
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Tax and Accounting</a>
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Visa and Work Permits</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direct Navigation Links - Improved -->
+        <a routerLink="/plans" class="text-gray-700 hover:text-primary-600 font-semibold transition-all duration-200 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50">
+          Plans
+        </a>
+
+        <a routerLink="/about" class="text-gray-700 hover:text-primary-600 font-semibold transition-all duration-200 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50">
+          About
+        </a>
+
+        <a routerLink="/contact" class="text-gray-700 hover:text-primary-600 font-semibold transition-all duration-200 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50">
+          Contact
+        </a>
+      </div>
+
+      <!-- CTA Button - Enhanced -->
+      <div class="hidden lg:flex items-center space-x-4">
+        <button routerLink="/contact" class="relative bg-gradient-to-r from-primary-600 via-primary-500 to-blue-600 hover:from-primary-700 hover:to-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-2xl text-sm xl:text-base overflow-hidden group">
+          <span class="relative z-10">Book a Space</span>
+          <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="lg:hidden">
+        <button (click)="toggleMobileMenu()" class="p-2 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-gray-100 transition-all duration-200">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path *ngIf="!isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            <path *ngIf="isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="lg:hidden" [class.hidden]="!isMobileMenuOpen">
+      <div class="bg-white border-t border-gray-200 shadow-lg">
+        <div class="px-4 py-6 space-y-6 max-h-[calc(100vh-5rem)] overflow-y-auto">
+          <!-- Workspace Categories -->
+          <div>
+            <h3 class="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Workspace Solutions</h3>
+            <div class="space-y-1">
+              <a *ngFor="let category of categories" 
+                 [routerLink]="['/category', category.slug]"
+                 (click)="closeMobileMenu()"
+                 class="flex items-center space-x-3 py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 active:bg-primary-100">
+                <span class="text-xl">{{category.icon}}</span>
+                <span class="font-medium text-sm">{{category.name}}</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Business Services -->
+          <div class="border-t border-gray-100 pt-4">
+            <h3 class="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Business Services</h3>
+            <div class="space-y-1">
+              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-sm active:bg-primary-100">Business Services</a>
+              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-sm active:bg-primary-100">Incorporation Services</a>
+              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-sm active:bg-primary-100">Tax and Accounting</a>
+            </div>
+          </div>
+
+          <!-- Main Navigation -->
+          <div class="border-t border-gray-100 pt-4">
+            <h3 class="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Quick Links</h3>
+            <div class="grid grid-cols-2 gap-2">
+              <a href="/plans" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Plans</a>
+              <a href="/about" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">About</a>
+              <a href="/gallery" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Gallery</a>
+              <a href="/events" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Events</a>
+              <a href="/news" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">News</a>
+              <a href="/contact" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Contact</a>
+            </div>
+          </div>
+
+          <!-- CTA Buttons -->
+          <div class="pt-4 border-t border-gray-100">
+            <button (click)="closeMobileMenu()" routerLink="/contact" class="w-full bg-gradient-to-r from-primary-600 to-blue-600 hover:from-primary-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg uppercase tracking-wide text-sm active:scale-95">
+              Book a Space
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

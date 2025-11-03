@@ -1,0 +1,12 @@
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="2" y="2" width="36" height="36" rx="8" fill="url(#paint0_linear_1_1)"/>
+<text x="48" y="18" font-family="Arial, sans-serif" font-weight="bold" font-size="16" fill="#1F2937">WishCowork</text>
+<text x="48" y="32" font-family="Arial, sans-serif" font-size="10" fill="#6B7280">Premium Workspaces</text>
+<text x="20" y="27" font-family="Arial, sans-serif" font-weight="bold" font-size="20" fill="white" text-anchor="middle">W</text>
+<defs>
+<linearGradient id="paint0_linear_1_1" x1="2" y1="2" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+<stop stop-color="#3B82F6"/>
+<stop offset="1" stop-color="#1D4ED8"/>
+</linearGradient>
+</defs>
+</svg>

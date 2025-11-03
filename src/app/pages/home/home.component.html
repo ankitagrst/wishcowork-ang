@@ -1,0 +1,513 @@
+<!-- Hero Section -->
+<section class="relative bg-gradient-to-br from-primary-50 via-blue-50 to-indigo-100 pt-12 sm:pt-16 pb-16 sm:pb-20 overflow-hidden">
+  <!-- Background Pattern -->
+  <div class="absolute inset-0 bg-white bg-opacity-40"></div>
+  <div class="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 sm:w-96 sm:h-96 bg-primary-100 rounded-full opacity-20"></div>
+  <div class="absolute bottom-0 left-0 -mb-16 -ml-16 w-56 h-56 sm:w-80 sm:h-80 bg-blue-100 rounded-full opacity-20"></div>
+  
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
+      <!-- Hero Content -->
+      <div class="text-center lg:text-left">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
+          Premium and Flexible<br class="hidden sm:block">
+          <span class="text-primary-600 bg-gradient-to-r from-primary-600 to-blue-600 bg-clip-text text-transparent">Workspace Solutions</span>
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed px-2 sm:px-0">
+          Discover professional workspaces across India's major cities. From virtual offices to private spaces, 
+          find your perfect workspace solution with flexible terms and premium amenities.
+        </p>
+        
+        <!-- Stats -->
+        <div class="flex flex-wrap justify-center lg:justify-start gap-4 sm:gap-6 md:gap-8 mb-6 sm:mb-8">
+          <div class="text-center">
+            <div class="text-xl sm:text-2xl md:text-3xl font-bold text-primary-600">500+</div>
+            <div class="text-xs sm:text-sm text-gray-600">Workspaces</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xl sm:text-2xl md:text-3xl font-bold text-primary-600">50+</div>
+            <div class="text-xs sm:text-sm text-gray-600">Cities</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xl sm:text-2xl md:text-3xl font-bold text-primary-600">10K+</div>
+            <div class="text-xs sm:text-sm text-gray-600">Happy Clients</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Hero Image -->
+      <div class="relative mt-6 sm:mt-8 lg:mt-0 px-4 sm:px-0">
+        <div class="rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
+          <img 
+            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop&q=80" 
+            alt="Modern Coworking Space"
+            class="w-full h-48 sm:h-64 md:h-80 lg:h-96 object-cover"
+            loading="eager"
+          />
+        </div>
+        <!-- Floating Cards -->
+        <div class="absolute -top-2 -right-2 sm:-top-4 sm:-right-4 bg-white rounded-lg shadow-lg p-2 sm:p-4 hidden xs:block">
+          <div class="flex items-center space-x-1.5 sm:space-x-2">
+            <div class="w-2 h-2 sm:w-3 sm:h-3 bg-green-500 rounded-full"></div>
+            <span class="text-[10px] sm:text-xs md:text-sm font-medium whitespace-nowrap">Available Now</span>
+          </div>
+        </div>
+        <div class="absolute -bottom-2 -left-2 sm:-bottom-4 sm:-left-4 bg-white rounded-lg shadow-lg p-2 sm:p-4 hidden xs:block">
+          <div class="text-xs sm:text-sm">
+            <div class="font-bold text-primary-600">₹899/day</div>
+            <div class="text-gray-600 text-[10px] sm:text-xs">Starting from</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div class="mt-8 sm:mt-12">
+      <div class="max-w-2xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-xl p-2">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 sm:space-x-2">
+          <div class="flex-1 flex items-center space-x-2 px-3 sm:px-4 min-h-[48px]">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input 
+              type="text" 
+              [(ngModel)]="searchQuery"
+              placeholder="Search workspace, city..."
+              class="flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base bg-transparent"
+            />
+          </div>
+          <button (click)="onSearch()" class="btn-primary whitespace-nowrap px-4 py-3 sm:px-6 sm:py-2.5 text-sm sm:text-base w-full sm:w-auto touch-manipulation active:scale-95">
+            Search Spaces
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Find Your Ideal Working Space Section -->
+<section class="py-16 sm:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12 sm:mb-16">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">Find Your Ideal Working Space</h2>
+      <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        Choose from our curated selection of premium workspace solutions designed to elevate your business and boost productivity.
+      </p>
+    </div>
+    
+    <!-- Service Categories Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
+      <!-- Private Office -->
+      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-blue-100 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-blue-200 transition-colors">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">PRIVATE OFFICE</h3>
+        <p class="text-gray-600 mb-4 text-sm sm:text-base">Fully furnished private offices for teams of all sizes with 24/7 access and premium amenities.</p>
+        <div class="flex items-center text-primary-600 font-medium text-sm sm:text-base">
+          <span>Starting from ₹35,999/month</span>
+        </div>
+      </div>
+
+      <!-- Coworking -->
+      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-green-100 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-green-200 transition-colors">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">COWORKING</h3>
+        <p class="text-gray-600 mb-4 text-sm sm:text-base">Flexible shared workspaces with vibrant community, networking opportunities, and collaborative environment.</p>
+        <div class="flex items-center text-primary-600 font-medium text-sm sm:text-base">
+          <span>Starting from ₹899/day</span>
+        </div>
+      </div>
+
+      <!-- Meeting Room -->
+      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-purple-200 transition-colors">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">MEETING ROOM</h3>
+        <p class="text-gray-600 mb-4 text-sm sm:text-base">Professional meeting rooms equipped with latest technology for presentations, conferences, and client meetings.</p>
+        <div class="flex items-center text-primary-600 font-medium text-sm sm:text-base">
+          <span>Starting from ₹199/hour</span>
+        </div>
+      </div>
+
+      <!-- Virtual Office -->
+      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-orange-100 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-orange-200 transition-colors">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">VIRTUAL OFFICE</h3>
+        <p class="text-gray-600 mb-4 text-sm sm:text-base">Professional business address with GST registration, mail handling, and meeting room access when needed.</p>
+        <div class="flex items-center text-primary-600 font-medium text-sm sm:text-base">
+          <span>Starting from ₹2,999/month</span>
+        </div>
+      </div>
+
+      <!-- Dedicated Desk -->
+      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-red-100 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-red-200 transition-colors">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">DEDICATED DESK</h3>
+        <p class="text-gray-600 mb-4 text-sm sm:text-base">Your own permanent workstation in a shared office environment with personal storage and 24/7 access.</p>
+        <div class="flex items-center text-primary-600 font-medium text-sm sm:text-base">
+          <span>Starting from ₹12,999/month</span>
+        </div>
+      </div>
+
+      <!-- On The Go -->
+      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100">
+        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-teal-100 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-teal-200 transition-colors">
+          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-3">ON THE GO</h3>
+        <p class="text-gray-600 mb-4 text-sm sm:text-base">Flexible daily passes for professionals who need workspace access without long-term commitments.</p>
+        <div class="flex items-center text-primary-600 font-medium text-sm sm:text-base">
+          <span>Starting from ₹499/day</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Button -->
+    <div class="text-center">
+      <button class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+        EXPLORE ALL LOCATIONS
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Properties -->
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto section-padding">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Featured Workspaces</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Discover our handpicked premium workspaces across major cities in India.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <app-property-card 
+        *ngFor="let property of featuredProperties" 
+        [property]="property">
+      </app-property-card>
+    </div>
+    
+    <div class="text-center mt-8">
+      <button routerLink="/properties" class="btn-secondary">
+        View All Properties
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Your Workspace, Your Way Section -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto section-padding">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <!-- Content -->
+      <div>
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+          Your Workspace, Your Way
+        </h2>
+        <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+          Experience the freedom of flexible workspace solutions tailored to your unique needs. From hot desks to private offices, 
+          we provide everything you need to work productively and grow your business.
+        </p>
+        
+        <!-- Features List -->
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-4">
+            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Flexible Membership Options</h4>
+              <p class="text-gray-600">Choose from daily, weekly, monthly, or annual plans that fit your schedule and budget.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-4">
+            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Premium Amenities</h4>
+              <p class="text-gray-600">High-speed WiFi, printing services, meeting rooms, and complimentary refreshments.</p>
+            </div>
+          </div>
+          
+          <div class="flex items-start space-x-4">
+            <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div>
+              <h4 class="font-semibold text-gray-900 mb-1">Prime Locations</h4>
+              <p class="text-gray-600">Strategic locations in business districts with excellent connectivity and accessibility.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+          <a routerLink="/contact" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 text-center">
+            Book a Tour
+          </a>
+          <a routerLink="/plans" class="border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 text-center">
+            View Pricing
+          </a>
+        </div>
+      </div>
+      
+      <!-- Image -->
+      <div class="relative">
+        <div class="rounded-2xl overflow-hidden shadow-2xl">
+          <img 
+            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=600&h=500&fit=crop&q=80" 
+            alt="Modern workspace with natural lighting"
+            class="w-full h-96 lg:h-[500px] object-cover"
+          />
+        </div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute -top-6 -left-6 w-24 h-24 bg-primary-100 rounded-2xl opacity-60"></div>
+        <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-100 rounded-2xl opacity-60"></div>
+        
+        <!-- Stats Card -->
+        <div class="absolute bottom-8 left-8 bg-white rounded-xl p-4 shadow-lg">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-primary-600">98%</div>
+            <div class="text-sm text-gray-600">Client Satisfaction</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cities Section -->
+<section class="py-16">
+  <div class="max-w-7xl mx-auto section-padding">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-gray-900 mb-4">Work From Anywhere, Nationwide</h2>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        We have premium workspace solutions across India's major business hubs.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <a *ngFor="let city of cities" 
+         [routerLink]="['/city', city.slug]"
+         class="group text-center">
+        <div class="w-20 h-20 mx-auto mb-3 bg-primary-100 rounded-full flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+          <span class="text-2xl font-bold text-primary-600">{{city.name.charAt(0)}}</span>
+        </div>
+        <h3 class="font-semibold text-gray-900 group-hover:text-primary-600">{{city.name}}</h3>
+        <p class="text-sm text-gray-600">{{city.state}}</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Section -->
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto section-padding">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-900 mb-4">Read Our Latest Articles</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Stay updated with the latest insights on workspace trends, productivity tips, and business growth strategies.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Blog Post 1 -->
+      <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group">
+        <div class="relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=250&fit=crop&q=80" 
+            alt="Future of Workspace"
+            class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute top-4 left-4">
+            <span class="bg-primary-600 text-white px-3 py-1 rounded-full text-xs font-medium">WORKSPACE</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center text-sm text-gray-500 mb-3">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+            September 25, 2025
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+            The Future of Flexible Workspaces: Trends to Watch in 2025
+          </h3>
+          <p class="text-gray-600 mb-4 line-clamp-3">
+            Discover how the workspace industry is evolving and what trends are shaping the future of flexible work environments across India.
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <img src="https://i.pravatar.cc/32?img=10" alt="Author" class="w-8 h-8 rounded-full" (error)="onImageError($event)">
+              <span class="text-sm text-gray-600">Rajesh Kumar</span>
+            </div>
+            <a routerLink="/blogs" class="text-primary-600 hover:text-primary-700 font-medium text-sm">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Blog Post 2 -->
+      <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group">
+        <div class="relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&h=250&fit=crop&q=80" 
+            alt="Productivity Tips"
+            class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute top-4 left-4">
+            <span class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">PRODUCTIVITY</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center text-sm text-gray-500 mb-3">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+            September 20, 2025
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+            10 Productivity Hacks for Remote Workers and Freelancers
+          </h3>
+          <p class="text-gray-600 mb-4 line-clamp-3">
+            Boost your productivity with these proven strategies that successful remote workers and freelancers use to stay focused and efficient.
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <img src="https://i.pravatar.cc/32?img=15" alt="Author" class="w-8 h-8 rounded-full" (error)="onImageError($event)">
+              <span class="text-sm text-gray-600">Priya Sharma</span>
+            </div>
+            <a routerLink="/blogs" class="text-primary-600 hover:text-primary-700 font-medium text-sm">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Blog Post 3 -->
+      <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group">
+        <div class="relative overflow-hidden">
+          <img 
+            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop&q=80" 
+            alt="Business Growth"
+            class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+          <div class="absolute top-4 left-4">
+            <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">BUSINESS</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-center text-sm text-gray-500 mb-3">
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+            </svg>
+            September 15, 2025
+          </div>
+          <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+            How Coworking Spaces Accelerate Startup Growth in India
+          </h3>
+          <p class="text-gray-600 mb-4 line-clamp-3">
+            Learn how startups are leveraging coworking spaces to reduce costs, build networks, and scale their operations faster than ever before.
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <img src="https://i.pravatar.cc/32?img=20" alt="Author" class="w-8 h-8 rounded-full" (error)="onImageError($event)">
+              <span class="text-sm text-gray-600">Amit Patel</span>
+            </div>
+            <a routerLink="/blogs" class="text-primary-600 hover:text-primary-700 font-medium text-sm">Read More →</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- View All Articles Button -->
+    <div class="text-center mt-12">
+      <button class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
+        View All Articles
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Form Section -->
+<app-contact-form
+  title="Ready to Transform Your Work Experience?"
+  subtitle="Get in touch with our workspace experts to find the perfect solution for your business needs. Join thousands of professionals who trust WishCowork."
+  sectionClass="py-20 bg-white"
+>
+</app-contact-form>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-primary-600 via-blue-600 to-indigo-600 relative overflow-hidden">
+  <!-- Background Elements -->
+  <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+  <div class="absolute top-0 left-0 w-96 h-96 bg-white bg-opacity-5 rounded-full -translate-x-48 -translate-y-48"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-white bg-opacity-5 rounded-full translate-x-48 translate-y-48"></div>
+  
+  <div class="relative max-w-6xl mx-auto text-center section-padding">
+    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Join the WishCowork Community</h2>
+    <p class="text-xl text-blue-100 mb-10 max-w-3xl mx-auto leading-relaxed">
+      Be part of India's fastest-growing network of premium workspaces. Connect, collaborate, and grow with like-minded professionals.
+    </p>
+    
+    <!-- Trust Indicators -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-white">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-2">No Setup Fees</h3>
+        <p class="text-blue-100">Get started immediately with zero upfront costs</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-2">Flexible Terms</h3>
+        <p class="text-blue-100">Choose from daily, weekly, or monthly plans</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="w-16 h-16 bg-white bg-opacity-20 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold mb-2">24/7 Support</h3>
+        <p class="text-blue-100">Round-the-clock assistance whenever you need it</p>
+      </div>
+    </div>
+  </div>
+</section>

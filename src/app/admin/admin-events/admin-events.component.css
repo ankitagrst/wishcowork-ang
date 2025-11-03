@@ -1,0 +1,130 @@
+/* Primary color variables */
+:host {
+  --primary-50: #f0f9ff;
+  --primary-100: #e0f2fe;
+  --primary-500: #0ea5e9;
+  --primary-600: #0284c7;
+  --primary-700: #0369a1;
+}
+
+.bg-primary-600 {
+  background-color: var(--primary-600);
+}
+
+.bg-primary-700 {
+  background-color: var(--primary-700);
+}
+
+.hover\:bg-primary-700:hover {
+  background-color: var(--primary-700);
+}
+
+.text-primary-600 {
+  color: var(--primary-600);
+}
+
+.focus\:ring-primary-500:focus {
+  --tw-ring-color: var(--primary-500);
+}
+
+/* Modal animations */
+.fixed {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fixed > div {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Card hover effects */
+.hover\:shadow-md:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Button focus states */
+button:focus-visible {
+  outline: 2px solid var(--primary-500);
+  outline-offset: 2px;
+}
+
+/* Input focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+/* Checkbox styling */
+input[type="checkbox"]:checked {
+  background-color: var(--primary-600);
+  border-color: var(--primary-600);
+}
+
+/* Success/Error message animations */
+.bg-green-50,
+.bg-red-50 {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .grid-cols-2 {
+    grid-template-columns: 1fr;
+  }
+  
+  .max-w-3xl {
+    max-width: 100%;
+  }
+}
+
+/* Scrollbar styling */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

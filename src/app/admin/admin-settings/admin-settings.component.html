@@ -1,0 +1,150 @@
+<div class="settings-container">
+  <div class="settings-header">
+    <button class="back-btn" (click)="goBack()">
+      <span>←</span> Back to Dashboard
+    </button>
+    <h1>⚙️ API Settings</h1>
+    <p>Configure your backend API connection</p>
+  </div>
+
+  <div class="settings-card">
+    <div class="alert alert-info">
+      <strong>ℹ️ Note:</strong> These settings are saved in your browser's local storage.
+      You may need to refresh the page after saving for changes to take effect.
+    </div>
+
+    <form (ngSubmit)="saveSettings()">
+      <!-- API URL -->
+      <div class="form-group">
+        <label for="apiUrl">
+          <strong>API URL</strong>
+          <span class="hint">The base URL of your PHP backend (without trailing slash)</span>
+        </label>
+        <input
+          type="text"
+          id="apiUrl"
+          name="apiUrl"
+          [(ngModel)]="apiUrl"
+          class="form-control"
+          placeholder="http://localhost/wishcowork/api"
+          required
+        />
+        <div class="examples">
+          <small>Examples:</small>
+          <ul>
+            <li><code>http://localhost/wishcowork/api</code> (Local XAMPP/WAMP)</li>
+            <li><code>https://your-domain.com/api</code> (Production)</li>
+            <li><code>http://192.168.1.100/wishcowork/api</code> (Local network)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Use Mock API -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            name="useMockAPI"
+            [(ngModel)]="useMockAPI"
+          />
+          <span>
+            <strong>Use Mock API (Frontend Only)</strong>
+            <span class="hint">Enable this to test without a backend. Uses sample data.</span>
+          </span>
+        </label>
+      </div>
+
+      <!-- Connection Status -->
+      <div class="connection-status" *ngIf="connectionStatus !== 'idle'">
+        <div class="status-badge" [class.success]="connectionStatus === 'success'" [class.error]="connectionStatus === 'error'">
+          <span *ngIf="connectionStatus === 'success'">✓ Connected</span>
+          <span *ngIf="connectionStatus === 'error'">✗ Connection Failed</span>
+        </div>
+      </div>
+
+      <!-- Save Message -->
+      <div class="alert alert-success" *ngIf="saveMessage">
+        {{ saveMessage }}
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="testConnection()"
+          [disabled]="testingConnection || !apiUrl"
+        >
+          <span *ngIf="!testingConnection">🔍 Test Connection</span>
+          <span *ngIf="testingConnection">Testing...</span>
+        </button>
+
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!apiUrl"
+        >
+          💾 Save Settings
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="resetToDefaults()"
+        >
+          🔄 Reset to Defaults
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Current Configuration -->
+  <div class="info-card">
+    <h3>📋 Current Configuration</h3>
+    <div class="config-info">
+      <div class="config-row">
+        <span class="config-label">API URL:</span>
+        <code>{{ apiUrl || 'Not set' }}</code>
+      </div>
+      <div class="config-row">
+        <span class="config-label">Mode:</span>
+        <span class="badge" [class.badge-warning]="useMockAPI" [class.badge-success]="!useMockAPI">
+          {{ useMockAPI ? 'Mock API (Testing)' : 'Real API (Production)' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Help Section -->
+  <div class="help-card">
+    <h3>❓ Need Help?</h3>
+    <div class="help-content">
+      <h4>Setting up Local Development:</h4>
+      <ol>
+        <li>Install XAMPP or WAMP on your computer</li>
+        <li>Copy the <code>api</code> folder to <code>htdocs/wishcowork/api</code></li>
+        <li>Create database and run <code>init-database.php</code></li>
+        <li>Set API URL to: <code>http://localhost/wishcowork/api</code></li>
+        <li>Uncheck "Use Mock API" and save</li>
+        <li>Click "Test Connection" to verify</li>
+      </ol>
+
+      <h4>Setting up Production:</h4>
+      <ol>
+        <li>Upload <code>api</code> folder to your hosting</li>
+        <li>Configure database in <code>api/config/database.php</code></li>
+        <li>Set API URL to: <code>https://your-domain.com/api</code></li>
+        <li>Uncheck "Use Mock API" and save</li>
+        <li>Test the connection</li>
+      </ol>
+
+      <h4>Troubleshooting:</h4>
+      <ul>
+        <li><strong>CORS Error:</strong> Update CORS headers in <code>api/config/database.php</code></li>
+        <li><strong>404 Error:</strong> Check if <code>.htaccess</code> file exists in api folder</li>
+        <li><strong>Connection Refused:</strong> Verify your server is running</li>
+        <li><strong>Database Error:</strong> Check database credentials in config</li>
+      </ul>
+    </div>
+  </div>
+</div>

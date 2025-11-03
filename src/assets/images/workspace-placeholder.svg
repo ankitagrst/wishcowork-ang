@@ -1,0 +1,5 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="400" height="300" fill="#F3F4F6"/>
+<path d="M175 125H150C145.58 125 142 128.58 142 133V167C142 171.42 145.58 175 150 175H250C254.42 175 258 171.42 258 167V133C258 128.58 254.42 125 250 125H225M175 125L212.5 87.5L250 125M175 125L212.5 162.5L250 125M212.5 137C212.5 143.076 207.576 148 201.5 148C195.424 148 190.5 143.076 190.5 137C190.5 130.924 195.424 126 201.5 126C207.576 126 212.5 130.924 212.5 137Z" fill="#9CA3AF"/>
+<text x="200" y="200" font-family="Arial, sans-serif" font-size="14" fill="#6B7280" text-anchor="middle">WishCowork Workspace</text>
+</svg>

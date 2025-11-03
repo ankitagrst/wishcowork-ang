@@ -1,0 +1,47 @@
+ // Modern Property Form Styles - Clean and minimal, Tailwind CSS handles most styling
+
+// Smooth scrolling
+html {
+  scroll-behavior: smooth;
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  
+  &:hover {
+    background: #94a3b8;
+  }
+}
+
+// Textarea resize
+textarea {
+  font-family: inherit;
+  resize: vertical;
+}
+
+// Number input arrows
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 1;
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

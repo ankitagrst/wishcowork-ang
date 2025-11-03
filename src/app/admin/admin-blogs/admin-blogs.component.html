@@ -1,0 +1,189 @@
+<div class="admin-blogs">
+  <div class="header">
+    <div class="header-left">
+      <h1>📝 Blogs Management</h1>
+      <button class="btn-back" (click)="goToDashboard()">← Back to Dashboard</button>
+    </div>
+    <div class="header-right">
+      <button class="btn-primary" (click)="openBlogModal()">+ Add New Blog</button>
+      <button class="btn-logout" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="alerts">
+    <div class="alert alert-success" *ngIf="success">{{ success }}</div>
+    <div class="alert alert-error" *ngIf="error">{{ error }}</div>
+  </div>
+
+  <div class="loading" *ngIf="loading && !showBlogModal">
+    <div class="spinner"></div>
+    <p>Loading blogs...</p>
+  </div>
+
+  <div class="blogs-grid" *ngIf="!loading">
+    <div class="blog-card" *ngFor="let blog of blogs">
+      <div class="blog-image" *ngIf="blog.featuredImage">
+        <img [src]="blog.featuredImage" [alt]="blog.title">
+      </div>
+      <div class="blog-content">
+        <div class="blog-header">
+          <h3>{{ blog.title }}</h3>
+          <div class="blog-badges">
+            <span class="badge badge-featured" *ngIf="blog.isFeatured">⭐ Featured</span>
+            <span class="badge badge-published" *ngIf="blog.isPublished">✓ Published</span>
+            <span class="badge badge-draft" *ngIf="!blog.isPublished">✎ Draft</span>
+          </div>
+        </div>
+        <p class="blog-excerpt">{{ blog.excerpt || 'No excerpt provided' }}</p>
+        <div class="blog-meta">
+          <span class="meta-item"><strong>Author:</strong> {{ blog.author }}</span>
+          <span class="meta-item"><strong>Category:</strong> {{ blog.category }}</span>
+          <span class="meta-item"><strong>Read Time:</strong> {{ blog.readTime }} min</span>
+          <span class="meta-item"><strong>Views:</strong> {{ blog.views || 0 }}</span>
+        </div>
+        <div class="blog-tags" *ngIf="blog.tags && blog.tags.length > 0">
+          <span class="tag" *ngFor="let tag of blog.tags">{{ tag }}</span>
+        </div>
+        <div class="blog-footer">
+          <span class="blog-date">{{ formatDate(blog.publishedAt) }}</span>
+          <div class="blog-actions">
+            <button class="btn-edit" (click)="openBlogModal(blog)">Edit</button>
+            <button class="btn-delete" (click)="deleteBlog(blog.id)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && blogs.length === 0">
+    <div class="empty-icon">📝</div>
+    <h2>No blogs yet</h2>
+    <p>Create your first blog post to get started!</p>
+    <button class="btn-primary" (click)="openBlogModal()">+ Add New Blog</button>
+  </div>
+</div>
+
+<!-- Blog Modal -->
+<div class="modal-overlay" *ngIf="showBlogModal" (click)="closeBlogModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ selectedBlog?.id ? 'Edit Blog' : 'Add New Blog' }}</h2>
+      <button class="modal-close" (click)="closeBlogModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <form *ngIf="selectedBlog">
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Title *</label>
+            <input type="text" [(ngModel)]="selectedBlog.title" name="title" placeholder="Blog title">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Slug</label>
+            <input type="text" [(ngModel)]="selectedBlog.slug" name="slug" placeholder="Auto-generated from title">
+            <small>Leave empty to auto-generate from title</small>
+          </div>
+          <div class="form-group">
+            <label>Display Order</label>
+            <input type="number" [(ngModel)]="selectedBlog.displayOrder" name="displayOrder" placeholder="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Excerpt</label>
+            <textarea [(ngModel)]="selectedBlog.excerpt" name="excerpt" rows="3" placeholder="Brief description"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Content *</label>
+            <textarea [(ngModel)]="selectedBlog.content" name="content" rows="8" placeholder="Full blog content"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Author *</label>
+            <input type="text" [(ngModel)]="selectedBlog.author" name="author" placeholder="Author name">
+          </div>
+          <div class="form-group">
+            <label>Author Image URL</label>
+            <input type="text" [(ngModel)]="selectedBlog.authorImage" name="authorImage" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Featured Image URL</label>
+            <input type="text" [(ngModel)]="selectedBlog.featuredImage" name="featuredImage" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select [(ngModel)]="selectedBlog.category" name="category">
+              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Read Time (minutes)</label>
+            <input type="number" [(ngModel)]="selectedBlog.readTime" name="readTime" placeholder="5">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Tags (comma-separated)</label>
+            <input type="text" [(ngModel)]="tagsString" name="tags" placeholder="coworking, productivity, workspace">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Meta Title</label>
+            <input type="text" [(ngModel)]="selectedBlog.metaTitle" name="metaTitle" placeholder="SEO title">
+          </div>
+          <div class="form-group">
+            <label>Meta Keywords</label>
+            <input type="text" [(ngModel)]="selectedBlog.metaKeywords" name="metaKeywords" placeholder="SEO keywords">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Meta Description</label>
+            <textarea [(ngModel)]="selectedBlog.metaDescription" name="metaDescription" rows="2" placeholder="SEO description"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="selectedBlog.isFeatured" name="isFeatured">
+              Featured Blog
+            </label>
+          </div>
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="selectedBlog.isPublished" name="isPublished">
+              Published
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeBlogModal()">Cancel</button>
+      <button class="btn-primary" (click)="saveBlog()" [disabled]="loading">
+        {{ loading ? 'Saving...' : 'Save Blog' }}
+      </button>
+    </div>
+  </div>
+</div>

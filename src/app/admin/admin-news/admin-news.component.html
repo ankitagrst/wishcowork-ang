@@ -1,0 +1,163 @@
+<div class="admin-news">
+  <div class="header">
+    <div class="header-left">
+      <h1>📰 News Management</h1>
+      <button class="btn-back" (click)="goToDashboard()">← Back to Dashboard</button>
+    </div>
+    <div class="header-right">
+      <button class="btn-primary" (click)="openNewsModal()">+ Add New Article</button>
+      <button class="btn-logout" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="alerts">
+    <div class="alert alert-success" *ngIf="success">{{ success }}</div>
+    <div class="alert alert-error" *ngIf="error">{{ error }}</div>
+  </div>
+
+  <div class="loading" *ngIf="loading && !showNewsModal">
+    <div class="spinner"></div>
+    <p>Loading news...</p>
+  </div>
+
+  <div class="news-grid" *ngIf="!loading">
+    <div class="news-card" *ngFor="let news of newsList">
+      <div class="news-image" *ngIf="news.image">
+        <img [src]="news.image" [alt]="news.title">
+      </div>
+      <div class="news-content">
+        <div class="news-header">
+          <h3>{{ news.title }}</h3>
+          <div class="news-badges">
+            <span class="badge badge-featured" *ngIf="news.isFeatured">⭐ Featured</span>
+            <span class="badge badge-published" *ngIf="news.isPublished">✓ Published</span>
+            <span class="badge badge-draft" *ngIf="!news.isPublished">✎ Draft</span>
+          </div>
+        </div>
+        <p class="news-summary">{{ news.summary || 'No summary provided' }}</p>
+        <div class="news-meta">
+          <span class="meta-item" *ngIf="news.source"><strong>Source:</strong> {{ news.source }}</span>
+          <span class="meta-item"><strong>Category:</strong> {{ news.category }}</span>
+          <span class="meta-item"><strong>Views:</strong> {{ news.views || 0 }}</span>
+        </div>
+        <div class="news-tags" *ngIf="news.tags && news.tags.length > 0">
+          <span class="tag" *ngFor="let tag of news.tags">{{ tag }}</span>
+        </div>
+        <div class="news-footer">
+          <span class="news-date">{{ formatDate(news.publishedAt) }}</span>
+          <div class="news-actions">
+            <button class="btn-edit" (click)="openNewsModal(news)">Edit</button>
+            <button class="btn-delete" (click)="deleteNews(news.id)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && newsList.length === 0">
+    <div class="empty-icon">📰</div>
+    <h2>No news yet</h2>
+    <p>Create your first news article to get started!</p>
+    <button class="btn-primary" (click)="openNewsModal()">+ Add New Article</button>
+  </div>
+</div>
+
+<!-- News Modal -->
+<div class="modal-overlay" *ngIf="showNewsModal" (click)="closeNewsModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ selectedNews?.id ? 'Edit News' : 'Add New Article' }}</h2>
+      <button class="modal-close" (click)="closeNewsModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <form *ngIf="selectedNews">
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Title *</label>
+            <input type="text" [(ngModel)]="selectedNews.title" name="title" placeholder="News title">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Slug</label>
+            <input type="text" [(ngModel)]="selectedNews.slug" name="slug" placeholder="Auto-generated from title">
+            <small>Leave empty to auto-generate from title</small>
+          </div>
+          <div class="form-group">
+            <label>Display Order</label>
+            <input type="number" [(ngModel)]="selectedNews.displayOrder" name="displayOrder" placeholder="0">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Summary</label>
+            <textarea [(ngModel)]="selectedNews.summary" name="summary" rows="3" placeholder="Brief summary"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Content *</label>
+            <textarea [(ngModel)]="selectedNews.content" name="content" rows="8" placeholder="Full article content"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group full-width">
+            <label>Image URL</label>
+            <input type="text" [(ngModel)]="selectedNews.image" name="image" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Source</label>
+            <input type="text" [(ngModel)]="selectedNews.source" name="source" placeholder="Source name">
+          </div>
+          <div class="form-group">
+            <label>Source URL</label>
+            <input type="text" [(ngModel)]="selectedNews.sourceUrl" name="sourceUrl" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select [(ngModel)]="selectedNews.category" name="category">
+              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tags (comma-separated)</label>
+            <input type="text" [(ngModel)]="tagsString" name="tags" placeholder="coworking, news, update">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="selectedNews.isFeatured" name="isFeatured">
+              Featured Article
+            </label>
+          </div>
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" [(ngModel)]="selectedNews.isPublished" name="isPublished">
+              Published
+            </label>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeNewsModal()">Cancel</button>
+      <button class="btn-primary" (click)="saveNews()" [disabled]="loading">
+        {{ loading ? 'Saving...' : 'Save Article' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,401 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+  <!-- Header with Back Button -->
+  <div class="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
+        <div class="flex items-start sm:items-center space-x-3 sm:space-x-4 w-full sm:w-auto">
+          <button 
+            type="button" 
+            (click)="cancel()" 
+            class="inline-flex items-center px-2.5 sm:px-3 py-2 border border-gray-300 rounded-lg text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors touch-manipulation flex-shrink-0"
+          >
+            <svg class="w-4 h-4 sm:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            <span class="hidden sm:inline">Back</span>
+          </button>
+          <div class="flex-1 min-w-0">
+            <h1 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 truncate">
+              {{ isEditMode ? '✏️ Edit Property' : '➕ Add New Property' }}
+            </h1>
+            <p class="text-xs sm:text-sm text-gray-500 mt-0.5 sm:mt-1">
+              {{ isEditMode ? 'Update property details' : 'Create a new listing' }}
+            </p>
+          </div>
+        </div>
+        
+        <!-- Save Button -->
+        <button 
+          type="submit"
+          form="propertyForm"
+          [disabled]="loading || propertyForm.invalid"
+          class="inline-flex items-center justify-center w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 border border-transparent rounded-lg sm:rounded-xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transition-all active:scale-95 touch-manipulation min-h-[44px]"
+        >
+          <svg *ngIf="!loading" class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <svg *ngIf="loading" class="animate-spin w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span *ngIf="!loading" class="whitespace-nowrap">{{ isEditMode ? 'Update' : 'Create' }}</span>
+          <span *ngIf="loading" class="whitespace-nowrap">Processing...</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alert Messages -->
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4" *ngIf="error || success">
+    <div 
+      *ngIf="error" 
+      class="bg-red-50 border-l-4 border-red-500 rounded-lg p-3 sm:p-4 shadow-sm"
+    >
+      <div class="flex items-start sm:items-center">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-red-500 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
+        <p class="text-xs sm:text-sm font-medium text-red-800">{{ error }}</p>
+      </div>
+    </div>
+
+    <div 
+      *ngIf="success" 
+      class="bg-green-50 border-l-4 border-green-500 rounded-lg p-3 sm:p-4 shadow-sm"
+    >
+      <div class="flex items-start sm:items-center">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-2 sm:mr-3 flex-shrink-0 mt-0.5 sm:mt-0" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <p class="text-xs sm:text-sm font-medium text-green-800">{{ success }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Form Content -->
+  <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8 pb-16 sm:pb-24">
+    <form id="propertyForm" [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+        
+        <!-- Main Content Column -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- Basic Information Card -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 px-6 py-4">
+              <h2 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Basic Information
+              </h2>
+            </div>
+            
+            <div class="p-6 space-y-6">
+              <!-- Title -->
+              <div>
+                <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">
+                  Property Title *
+                </label>
+                <input
+                  type="text"
+                  id="title"
+                  formControlName="title"
+                  placeholder="e.g., Premium Virtual Office - Connaught Place"
+                  class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  [class.border-red-300]="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched"
+                />
+                <p class="text-xs text-red-500 mt-1" *ngIf="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched">
+                  Title is required (min 5 characters)
+                </p>
+              </div>
+
+              <!-- Category and City -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="category" class="block text-sm font-semibold text-gray-700 mb-2">Category *</label>
+                  <select id="category" formControlName="category" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    <option value="">Select Category</option>
+                    <option *ngFor="let cat of categories" [value]="cat.value">{{ cat.label }}</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="city" class="block text-sm font-semibold text-gray-700 mb-2">City *</label>
+                  <input type="text" id="city" formControlName="city" placeholder="e.g., Delhi" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                </div>
+              </div>
+
+              <!-- Address -->
+              <div>
+                <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">Full Address *</label>
+                <input type="text" id="address" formControlName="address" placeholder="e.g., Connaught Place, New Delhi" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Card -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
+              <h2 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Pricing
+              </h2>
+            </div>
+            
+            <div class="p-6 space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="price" class="block text-sm font-semibold text-gray-700 mb-2">Price *</label>
+                  <input type="number" id="price" formControlName="price" placeholder="0" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                </div>
+
+                <div>
+                  <label for="priceType" class="block text-sm font-semibold text-gray-700 mb-2">Price Type *</label>
+                  <select id="priceType" formControlName="priceType" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                    <option *ngFor="let type of priceTypes" [value]="type.value">{{ type.label }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description Card -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4">
+              <h2 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                Description
+              </h2>
+            </div>
+            
+            <div class="p-6">
+              <textarea id="description" formControlName="description" placeholder="Describe the property..." rows="5" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"></textarea>
+            </div>
+          </div>
+
+          <!-- Amenities Card -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-orange-500 to-red-600 px-6 py-4">
+              <h2 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                </svg>
+                Amenities
+              </h2>
+            </div>
+            
+            <div class="p-6 space-y-3" formArrayName="amenities">
+              <div *ngFor="let amenity of amenities.controls; let i = index" class="flex gap-3">
+                <input type="text" [formControlName]="i" placeholder="e.g., High-Speed WiFi" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                <button type="button" (click)="removeAmenity(i)" *ngIf="amenities.length > 1" class="px-4 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
+                </button>
+              </div>
+              <button type="button" (click)="addAmenity()" class="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add Amenity
+              </button>
+            </div>
+          </div>
+
+          <!-- Photos Card -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-4">
+              <h2 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                Photos
+              </h2>
+            </div>
+            
+            <div class="p-6 space-y-3" formArrayName="photos">
+              <div *ngFor="let photo of photos.controls; let i = index" class="flex gap-3">
+                <input type="url" [formControlName]="i" placeholder="https://example.com/image.jpg" class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                <button type="button" (click)="removePhoto(i)" *ngIf="photos.length > 1" class="px-4 py-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
+                </button>
+              </div>
+              <button type="button" (click)="addPhoto()" class="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-xl text-gray-600 hover:border-blue-500 hover:text-blue-600 transition-colors flex items-center justify-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                </svg>
+                Add Photo URL
+              </button>
+            </div>
+          </div>
+
+          <!-- Location Card -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="bg-gradient-to-r from-teal-500 to-green-600 px-6 py-4">
+              <h2 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Location Coordinates
+              </h2>
+            </div>
+            
+            <div class="p-6 space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="latitude" class="block text-sm font-semibold text-gray-700 mb-2">Latitude *</label>
+                  <input type="number" id="latitude" formControlName="latitude" placeholder="28.6139" step="0.0001" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                </div>
+
+                <div>
+                  <label for="longitude" class="block text-sm font-semibold text-gray-700 mb-2">Longitude *</label>
+                  <input type="number" id="longitude" formControlName="longitude" placeholder="77.2090" step="0.0001" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Column -->
+        <div class="lg:col-span-1 space-y-6">
+          <!-- Settings Card -->
+          <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden sticky top-24">
+            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-6 py-4">
+              <h2 class="text-lg font-semibold text-white flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                Settings
+              </h2>
+            </div>
+            
+            <div class="p-6 space-y-6">
+              <!-- Availability -->
+              <div>
+                <label for="availability" class="block text-sm font-semibold text-gray-700 mb-2">Availability *</label>
+                <select id="availability" formControlName="availability" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                  <option *ngFor="let opt of availabilityOptions" [value]="opt.value">{{ opt.label }}</option>
+                </select>
+              </div>
+
+              <!-- Featured -->
+              <div class="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border-2 border-yellow-200">
+                <div class="flex items-center">
+                  <svg class="w-6 h-6 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <div>
+                    <label for="featured" class="text-sm font-semibold text-gray-800 cursor-pointer">Featured Property</label>
+                    <p class="text-xs text-gray-600">Show on homepage</p>
+                  </div>
+                </div>
+                <input type="checkbox" id="featured" formControlName="featured" class="w-6 h-6 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"/>
+              </div>
+
+              <!-- Rating -->
+              <div>
+                <label for="rating" class="block text-sm font-semibold text-gray-700 mb-2">Rating (0-5)</label>
+                <input type="number" id="rating" formControlName="rating" placeholder="4.5" min="0" max="5" step="0.1" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+              </div>
+
+              <!-- Reviews -->
+              <div>
+                <label for="reviews" class="block text-sm font-semibold text-gray-700 mb-2">Number of Reviews</label>
+                <input type="number" id="reviews" formControlName="reviews" placeholder="0" min="0" class="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+              </div>
+            </div>
+
+            <!-- Pricing Options Section -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+              <h3 class="text-sm font-semibold text-gray-900 mb-4 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                Additional Fees
+              </h3>
+              
+              <!-- Service Fee Toggle -->
+              <div class="mb-4">
+                <div class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200">
+                  <div class="flex items-center">
+                    <svg class="w-6 h-6 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    <div>
+                      <label for="includeServiceFee" class="text-sm font-semibold text-gray-800 cursor-pointer">Include Service Fee</label>
+                      <p class="text-xs text-gray-600">Show service fee in price breakdown</p>
+                    </div>
+                  </div>
+                  <input type="checkbox" id="includeServiceFee" formControlName="includeServiceFee" class="w-6 h-6 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"/>
+                </div>
+                
+                <!-- Service Fee Percentage -->
+                <div *ngIf="propertyForm.get('includeServiceFee')?.value" class="mt-3 pl-4">
+                  <label for="serviceFeePercent" class="block text-sm font-medium text-gray-700 mb-2">Service Fee Percentage</label>
+                  <div class="relative">
+                    <input type="number" id="serviceFeePercent" formControlName="serviceFeePercent" placeholder="10" min="0" max="100" step="0.1" class="w-full px-4 py-2 pr-10 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                    <span class="absolute right-3 top-2.5 text-gray-500 text-sm">%</span>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">Default: 10% of base price</p>
+                </div>
+              </div>
+
+              <!-- Tax Toggle -->
+              <div>
+                <div class="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-2 border-green-200">
+                  <div class="flex items-center">
+                    <svg class="w-6 h-6 text-green-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z"/>
+                    </svg>
+                    <div>
+                      <label for="includeTax" class="text-sm font-semibold text-gray-800 cursor-pointer">Include Tax (GST)</label>
+                      <p class="text-xs text-gray-600">Show tax in price breakdown</p>
+                    </div>
+                  </div>
+                  <input type="checkbox" id="includeTax" formControlName="includeTax" class="w-6 h-6 text-green-600 border-gray-300 rounded focus:ring-green-500 cursor-pointer"/>
+                </div>
+                
+                <!-- Tax Percentage -->
+                <div *ngIf="propertyForm.get('includeTax')?.value" class="mt-3 pl-4">
+                  <label for="taxPercent" class="block text-sm font-medium text-gray-700 mb-2">Tax Percentage (GST)</label>
+                  <div class="relative">
+                    <input type="number" id="taxPercent" formControlName="taxPercent" placeholder="18" min="0" max="100" step="0.1" class="w-full px-4 py-2 pr-10 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"/>
+                    <span class="absolute right-3 top-2.5 text-gray-500 text-sm">%</span>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-1">Default: 18% GST</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Help Card -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border-2 border-blue-100">
+            <div class="flex items-start">
+              <svg class="w-6 h-6 text-blue-600 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+              <div>
+                <h3 class="text-sm font-semibold text-gray-900 mb-2">Need Help?</h3>
+                <p class="text-xs text-gray-600 mb-3">Fill in all required fields marked with *</p>
+                <ul class="text-xs text-gray-600 space-y-1">
+                  <li>• Use high-quality images</li>
+                  <li>• Write detailed descriptions</li>
+                  <li>• Add accurate coordinates</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

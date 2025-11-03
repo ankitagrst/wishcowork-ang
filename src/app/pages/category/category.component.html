@@ -1,0 +1,120 @@
+<!-- Header Section -->
+<section class="bg-white border-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <!-- Breadcrumb -->
+    <nav class="mb-4 sm:mb-6">
+      <ol class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-600 overflow-x-auto">
+        <li class="whitespace-nowrap"><a routerLink="/" class="hover:text-primary-600">Home</a></li>
+        <li><span class="mx-1 sm:mx-2">/</span></li>
+        <li *ngIf="currentCategory" class="whitespace-nowrap"><a [routerLink]="['/category', currentCategory]" class="hover:text-primary-600">{{categoryDisplay}}</a></li>
+        <li *ngIf="currentCity"><span class="mx-1 sm:mx-2">/</span></li>
+        <li *ngIf="currentCity" class="text-gray-900 font-medium whitespace-nowrap">{{cityDisplay}}</li>
+      </ol>
+    </nav>
+
+    <!-- Page Title -->
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+        <span *ngIf="currentCategory && currentCity">{{categoryDisplay}} in {{cityDisplay}}</span>
+        <span *ngIf="currentCategory && !currentCity">{{categoryDisplay}} Spaces</span>
+        <span *ngIf="!currentCategory">All Workspace Solutions</span>
+      </h1>
+      <p class="text-sm sm:text-base text-gray-600">
+        <span *ngIf="currentCategory && currentCity">
+          Find the perfect {{categoryDisplay.toLowerCase()}} in {{cityDisplay}} with modern amenities and flexible terms.
+        </span>
+        <span *ngIf="currentCategory && !currentCity">
+          Discover premium {{categoryDisplay.toLowerCase()}} spaces across India.
+        </span>
+        <span *ngIf="!currentCategory">
+          Explore our complete range of workspace solutions across India.
+        </span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Filters Section -->
+<section class="bg-gray-50 border-b">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+    <div class="flex flex-col space-y-4">
+      <!-- Category Filter -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+        <span class="text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap">Category:</span>
+        <div class="flex flex-wrap gap-2">
+          <a routerLink="/properties" 
+             [class]="!currentCategory ? 'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+             class="px-3 py-1.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium border transition-colors whitespace-nowrap touch-manipulation active:scale-95">
+            All
+          </a>
+          <a *ngFor="let category of categories" 
+             [routerLink]="['/category', category.slug]"
+             [class]="currentCategory === category.slug ? 'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+             class="px-3 py-1.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium border transition-colors whitespace-nowrap touch-manipulation active:scale-95">
+            {{category.name}}
+          </a>
+        </div>
+      </div>
+
+      <!-- City Filter -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3" *ngIf="currentCategory">
+        <span class="text-xs sm:text-sm font-medium text-gray-700 whitespace-nowrap">City:</span>
+        <div class="flex flex-wrap gap-2">
+          <a [routerLink]="['/category', currentCategory]" 
+             [class]="!currentCity ? 'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+             class="px-3 py-1.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium border transition-colors whitespace-nowrap touch-manipulation active:scale-95">
+            All Cities
+          </a>
+          <a *ngFor="let city of cities" 
+             [routerLink]="['/category', currentCategory, city.slug]"
+             [class]="currentCity === city.slug ? 'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+             class="px-3 py-1.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium border transition-colors whitespace-nowrap touch-manipulation active:scale-95">
+            {{city.name}}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Results Section -->
+<section class="py-8 sm:py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+      <p class="mt-4 text-sm sm:text-base text-gray-600">Loading properties...</p>
+    </div>
+
+    <!-- Results -->
+    <div *ngIf="!loading">
+      <!-- Results Count -->
+      <div class="mb-4 sm:mb-6">
+        <p class="text-sm sm:text-base text-gray-600">
+          <span class="font-medium text-gray-900">{{properties.length}}</span> 
+          {{properties.length === 1 ? 'property' : 'properties'}} found
+        </p>
+      </div>
+
+      <!-- No Results -->
+      <div *ngIf="properties.length === 0" class="text-center py-12">
+        <svg class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        </svg>
+        <h3 class="mt-4 text-base sm:text-lg font-medium text-gray-900">No properties found</h3>
+        <p class="mt-2 text-sm sm:text-base text-gray-600 px-4">
+          We couldn't find any properties matching your criteria. 
+          <a routerLink="/properties" class="text-primary-600 hover:text-primary-700 underline">Browse all properties</a>
+        </p>
+      </div>
+
+      <!-- Property Grid - Responsive: 1 col mobile, 2 cols sm-md, 3 cols lg, 4 cols xl -->
+      <div *ngIf="properties.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <app-property-card 
+          *ngFor="let property of properties" 
+          [property]="property">
+        </app-property-card>
+      </div>
+    </div>
+  </div>
+</section>

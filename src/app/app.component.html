@@ -1,0 +1,30 @@
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * Delete the template below * * * * * * * * * -->
+<!-- * * * * * * * to get started with your project! * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+
+
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * * -->
+<!-- * * * * * * * * * * and can be replaced.  * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * End of Placeholder  * * * * * * * * * * * * -->
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+
+
+<div class="min-h-screen flex flex-col">
+  <!-- Show header and footer only for non-admin routes -->
+  <app-header *ngIf="!isAdminRoute"></app-header>
+  
+  <main [class.flex-1]="!isAdminRoute">
+    <router-outlet />
+  </main>
+  
+  <app-footer *ngIf="!isAdminRoute"></app-footer>
+</div>

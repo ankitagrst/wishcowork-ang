@@ -1,0 +1,54 @@
+<section class="py-16 bg-gradient-to-br from-primary-50 to-blue-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        Business Services
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        Comprehensive business support services to help you establish, manage, and grow your business with complete legal compliance.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div *ngFor="let service of services" class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100">
+        <div class="text-4xl mb-4">{{service.icon}}</div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-4">{{service.title}}</h3>
+        <p class="text-gray-600 mb-6">{{service.description}}</p>
+        
+        <ul class="space-y-2 mb-6">
+          <li *ngFor="let feature of service.features" class="flex items-center text-gray-700">
+            <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+            </svg>
+            {{feature}}
+          </li>
+        </ul>
+        
+        <div class="border-t pt-6">
+          <div class="flex justify-between items-center">
+            <span class="text-lg font-semibold text-primary-600">{{service.price}}</span>
+            <button class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg transition-colors">
+              Get Started
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-bold text-gray-900 mb-8">Need Custom Business Solutions?</h2>
+    <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+      Our expert team can provide tailored business services to meet your specific requirements.
+    </p>
+    <button routerLink="/contact" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
+      Contact Our Experts
+    </button>
+  </div>
+</section>

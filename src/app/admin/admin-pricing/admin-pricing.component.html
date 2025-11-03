@@ -1,0 +1,391 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <button 
+            (click)="goToDashboard()"
+            class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+          </button>
+          <div>
+            <h1 class="text-2xl font-bold text-gray-900">Pricing Management</h1>
+            <p class="text-sm text-gray-500">Manage workspace plans, services, and FAQs</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-3">
+          <button 
+            (click)="logout()"
+            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- Success/Error Messages -->
+    <div *ngIf="success" class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+      {{ success }}
+    </div>
+    <div *ngIf="error" class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+      {{ error }}
+    </div>
+
+    <!-- Tabs -->
+    <div class="bg-white rounded-lg shadow mb-6">
+      <div class="border-b border-gray-200">
+        <nav class="flex -mb-px">
+          <button
+            (click)="activeTab = 'plans'"
+            [class.border-primary-500]="activeTab === 'plans'"
+            [class.text-primary-600]="activeTab === 'plans'"
+            [class.border-transparent]="activeTab !== 'plans'"
+            [class.text-gray-500]="activeTab !== 'plans'"
+            class="py-4 px-6 border-b-2 font-medium text-sm hover:text-primary-600 transition-colors"
+          >
+            Plans ({{ plans.length }})
+          </button>
+          <button
+            (click)="activeTab = 'services'"
+            [class.border-primary-500]="activeTab === 'services'"
+            [class.text-primary-600]="activeTab === 'services'"
+            [class.border-transparent]="activeTab !== 'services'"
+            [class.text-gray-500]="activeTab !== 'services'"
+            class="py-4 px-6 border-b-2 font-medium text-sm hover:text-primary-600 transition-colors"
+          >
+            Services ({{ services.length }})
+          </button>
+          <button
+            (click)="activeTab = 'faqs'"
+            [class.border-primary-500]="activeTab === 'faqs'"
+            [class.text-primary-600]="activeTab === 'faqs'"
+            [class.border-transparent]="activeTab !== 'faqs'"
+            [class.text-gray-500]="activeTab !== 'faqs'"
+            class="py-4 px-6 border-b-2 font-medium text-sm hover:text-primary-600 transition-colors"
+          >
+            FAQs ({{ faqs.length }})
+          </button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Plans Tab -->
+    <div *ngIf="activeTab === 'plans'" class="bg-white rounded-lg shadow">
+      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+        <h2 class="text-xl font-semibold">Workspace Plans</h2>
+        <button (click)="openPlanModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+          <span>+ Add Plan</span>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <div class="grid gap-4">
+          <div *ngFor="let plan of plans" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center gap-3">
+                  <h3 class="text-lg font-semibold">{{ plan.name }}</h3>
+                  <span [class]="'text-xs px-2 py-1 rounded ' + (plan.category === 'coworking' ? 'bg-green-100 text-green-800' : plan.category === 'private' ? 'bg-blue-100 text-blue-800' : plan.category === 'virtual' ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800')">
+                    {{ plan.category }}
+                  </span>
+                  <span *ngIf="plan.isPopular" class="text-xs px-2 py-1 rounded bg-yellow-100 text-yellow-800">Popular</span>
+                  <span [class]="'text-xs px-2 py-1 rounded ' + (plan.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')">
+                    {{ plan.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1">{{ plan.description }}</p>
+                <div class="mt-2">
+                  <span class="text-2xl font-bold text-primary-600">₹{{ plan.price }}</span>
+                  <span class="text-gray-600">/{{ plan.unit }}</span>
+                </div>
+                <div class="mt-2 flex flex-wrap gap-1">
+                  <span *ngFor="let feature of plan.features" class="text-xs bg-gray-100 px-2 py-1 rounded">{{ feature }}</span>
+                </div>
+              </div>
+              <div class="flex gap-2 ml-4">
+                <button (click)="openPlanModal(plan)" class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm">
+                  Edit
+                </button>
+                <button (click)="deletePlan(plan.id!)" class="text-red-600 hover:text-red-800 px-3 py-1 text-sm">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Services Tab -->
+    <div *ngIf="activeTab === 'services'" class="bg-white rounded-lg shadow">
+      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+        <h2 class="text-xl font-semibold">Additional Services</h2>
+        <button (click)="openServiceModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+          <span>+ Add Service</span>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <div class="grid gap-4">
+          <div *ngFor="let service of services" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center gap-3">
+                  <h3 class="text-lg font-semibold">{{ service.name }}</h3>
+                  <span [class]="'text-xs px-2 py-1 rounded ' + (service.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')">
+                    {{ service.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </div>
+                <p class="text-gray-600 text-sm mt-1">{{ service.description }}</p>
+                <div class="mt-2">
+                  <span class="text-2xl font-bold text-primary-600">₹{{ service.price }}</span>
+                  <span class="text-gray-600">/{{ service.unit }}</span>
+                </div>
+              </div>
+              <div class="flex gap-2 ml-4">
+                <button (click)="openServiceModal(service)" class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm">
+                  Edit
+                </button>
+                <button (click)="deleteService(service.id!)" class="text-red-600 hover:text-red-800 px-3 py-1 text-sm">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQs Tab -->
+    <div *ngIf="activeTab === 'faqs'" class="bg-white rounded-lg shadow">
+      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
+        <h2 class="text-xl font-semibold">Frequently Asked Questions</h2>
+        <button (click)="openFaqModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+          <span>+ Add FAQ</span>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <div class="grid gap-4">
+          <div *ngFor="let faq of faqs" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                  <h3 class="text-lg font-semibold">{{ faq.question }}</h3>
+                  <span [class]="'text-xs px-2 py-1 rounded ' + (faq.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')">
+                    {{ faq.isActive ? 'Active' : 'Inactive' }}
+                  </span>
+                </div>
+                <p class="text-gray-600 text-sm">{{ faq.answer }}</p>
+              </div>
+              <div class="flex gap-2 ml-4">
+                <button (click)="openFaqModal(faq)" class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm">
+                  Edit
+                </button>
+                <button (click)="deleteFaq(faq.id!)" class="text-red-600 hover:text-red-800 px-3 py-1 text-sm">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Plan Modal -->
+<div *ngIf="showPlanModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" (click)="showPlanModal = false">
+  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-2xl font-bold">{{ selectedPlan?.id ? 'Edit Plan' : 'Add New Plan' }}</h2>
+    </div>
+    
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Plan Name *</label>
+        <input [(ngModel)]="selectedPlan!.name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+        <textarea [(ngModel)]="selectedPlan!.description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
+          <select [(ngModel)]="selectedPlan!.category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+            <option value="coworking">Coworking</option>
+            <option value="private">Private Office</option>
+            <option value="virtual">Virtual Office</option>
+            <option value="meeting">Meeting Room</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
+          <input [(ngModel)]="selectedPlan!.price" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Unit *</label>
+          <select [(ngModel)]="selectedPlan!.unit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+            <option value="hour">Hour</option>
+            <option value="day">Day</option>
+            <option value="month">Month</option>
+            <option value="year">Year</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+          <input [(ngModel)]="selectedPlan!.displayOrder" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Features</label>
+        <div class="space-y-2">
+          <div *ngFor="let feature of selectedPlan?.features; let i = index; trackBy: trackFeature" class="flex gap-2">
+            <input [(ngModel)]="selectedPlan!.features[i]" type="text" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="Feature description">
+            <button (click)="removeFeature(i)" class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg">Remove</button>
+          </div>
+        </div>
+        <button (click)="addFeature()" class="mt-2 text-primary-600 hover:text-primary-700 text-sm font-medium">+ Add Feature</button>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input [(ngModel)]="selectedPlan!.isPopular" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+          <span class="text-sm font-medium text-gray-700">Mark as Popular</span>
+        </label>
+
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input [(ngModel)]="selectedPlan!.isActive" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+          <span class="text-sm font-medium text-gray-700">Active</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
+      <button (click)="showPlanModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+      <button (click)="savePlan()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg">Save Plan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Service Modal -->
+<div *ngIf="showServiceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" (click)="showServiceModal = false">
+  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-2xl font-bold">{{ selectedService?.id ? 'Edit Service' : 'Add New Service' }}</h2>
+    </div>
+    
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Service Name *</label>
+        <input [(ngModel)]="selectedService!.name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+        <textarea [(ngModel)]="selectedService!.description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
+          <input [(ngModel)]="selectedService!.price" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Unit *</label>
+          <select [(ngModel)]="selectedService!.unit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+            <option value="hour">Hour</option>
+            <option value="day">Day</option>
+            <option value="month">Month</option>
+            <option value="pass">Pass</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Icon (optional)</label>
+          <input [(ngModel)]="selectedService!.icon" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="e.g., video, calendar">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+          <input [(ngModel)]="selectedService!.displayOrder" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+        </div>
+      </div>
+
+      <div>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input [(ngModel)]="selectedService!.isActive" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+          <span class="text-sm font-medium text-gray-700">Active</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
+      <button (click)="showServiceModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+      <button (click)="saveService()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg">Save Service</button>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ Modal -->
+<div *ngIf="showFaqModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" (click)="showFaqModal = false">
+  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-2xl font-bold">{{ selectedFaq?.id ? 'Edit FAQ' : 'Add New FAQ' }}</h2>
+    </div>
+    
+    <div class="p-6 space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Question *</label>
+        <input [(ngModel)]="selectedFaq!.question" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Answer *</label>
+        <textarea [(ngModel)]="selectedFaq!.answer" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required></textarea>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
+        <input [(ngModel)]="selectedFaq!.displayOrder" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+      </div>
+
+      <div>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input [(ngModel)]="selectedFaq!.isActive" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
+          <span class="text-sm font-medium text-gray-700">Active</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
+      <button (click)="showFaqModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
+      <button (click)="saveFaq()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg">Save FAQ</button>
+    </div>
+  </div>
+</div>
