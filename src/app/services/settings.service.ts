@@ -13,7 +13,7 @@ export interface AppSettings {
 export class SettingsService {
   private settingsKey = 'wishcowork_settings';
   private defaultSettings: AppSettings = {
-    apiUrl: 'http://wishapi',
+    apiUrl: 'https://wishcoworker.com/api',
     useMockAPI: false  // Use real API by default
   };
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 import { SettingsService } from './settings.service';
 
 export interface Event {
@@ -47,12 +48,32 @@ export class EventsService {
     if (upcoming) {
       params = params.set('upcoming', 'true');
     }
-    return this.http.get<Event[]>(`${this.apiUrl}/events`, { params });
+    
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+    
+    return this.http.get<Event[]>(`${this.apiUrl}/events`, { params, headers })
+      .pipe(
+        retry(2),
+        catchError(error => {
+          console.error('Error fetching events:', error);
+          return of([]);
+        })
+      );
   }
 
   // Get event by ID
   getEventById(id: number): Observable<Event> {
-    return this.http.get<Event>(`${this.apiUrl}/events/${id}`);
+    return this.http.get<Event>(`${this.apiUrl}/events/${id}`)
+      .pipe(
+        retry(2),
+        catchError(error => {
+          console.error('Error fetching event:', error);
+          throw error;
+        })
+      );
   }
 
   // Create new event

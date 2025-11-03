@@ -35,16 +35,44 @@ export class NewsComponent implements OnInit {
     this.loading = true;
     this.newsService.getNews(false).subscribe({
       next: (news) => {
-        this.newsList = news;
-        this.featuredNews = news.find(n => n.isFeatured) || null;
+        if (news && news.length > 0) {
+          this.newsList = news;
+          this.featuredNews = news.find(n => n.isFeatured) || null;
+        } else {
+          // Fallback to mock data if API returns empty
+          this.loadMockNews();
+        }
         this.filterNews();
         this.loading = false;
       },
       error: (err) => {
         console.error('Error loading news:', err);
+        // Load mock data as fallback
+        this.loadMockNews();
+        this.filterNews();
         this.loading = false;
       }
     });
+  }
+
+  private loadMockNews() {
+    // Fallback mock data when API is unavailable
+    this.newsList = [
+      {
+        id: 1,
+        title: 'Welcome to WishCowork News',
+        slug: 'welcome-to-wishcowork-news',
+        summary: 'Stay updated with the latest coworking trends and insights.',
+        content: 'This is a sample news article. The API will be available soon.',
+        category: 'Company News',
+        isFeatured: true,
+        isPublished: true,
+        publishedAt: new Date().toISOString(),
+        views: 0,
+        tags: ['update', 'welcome']
+      }
+    ];
+    this.featuredNews = this.newsList[0];
   }
 
   selectCategory(categoryValue: string) {

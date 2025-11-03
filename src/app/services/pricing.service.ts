@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 import { SettingsService } from './settings.service';
 
 export interface Plan {
@@ -52,7 +53,19 @@ export class PricingService {
   // Plans CRUD
   getPlans(includeInactive = false): Observable<Plan[]> {
     const url = `${this.apiUrl}/pricing/plans?active=${!includeInactive}`;
-    return this.http.get<Plan[]>(url);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+    
+    return this.http.get<Plan[]>(url, { headers })
+      .pipe(
+        retry(2),
+        catchError(error => {
+          console.error('Error fetching pricing plans:', error);
+          return of([]);
+        })
+      );
   }
 
   createPlan(plan: Plan): Observable<any> {
@@ -70,7 +83,19 @@ export class PricingService {
   // Services CRUD
   getServices(includeInactive = false): Observable<AdditionalService[]> {
     const url = `${this.apiUrl}/pricing/services?active=${!includeInactive}`;
-    return this.http.get<AdditionalService[]>(url);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+    
+    return this.http.get<AdditionalService[]>(url, { headers })
+      .pipe(
+        retry(2),
+        catchError(error => {
+          console.error('Error fetching additional services:', error);
+          return of([]);
+        })
+      );
   }
 
   createService(service: AdditionalService): Observable<any> {

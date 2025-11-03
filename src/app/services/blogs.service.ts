@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { retry, catchError } from 'rxjs/operators';
 import { SettingsService } from './settings.service';
 
 export interface Blog {
@@ -77,7 +78,20 @@ export class BlogsService {
       params = params.set('search', search);
     }
 
-    return this.http.get<Blog[]>(`${this.apiUrl}/blogs`, { params });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    return this.http.get<Blog[]>(`${this.apiUrl}/blogs`, { params, headers })
+      .pipe(
+        retry(2), // Retry up to 2 times
+        catchError(error => {
+          console.error('Error fetching blogs:', error);
+          // Return empty array as fallback
+          return of([]);
+        })
+      );
   }
 
   /**

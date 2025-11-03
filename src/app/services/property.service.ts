@@ -1,8 +1,8 @@
 import { Injectable, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { tap, catchError, map } from 'rxjs/operators';
+import { tap, catchError, map, retry } from 'rxjs/operators';
 import { Property, Category, City, Booking } from '../models/property.model';
 import { environment } from '@env';
 import { SettingsService } from './settings.service';
@@ -323,7 +323,13 @@ export class PropertyService {
       return this.properties$;
     }
     
-    return this.http.get<any>(`${this.apiUrl}/properties`).pipe(
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+    
+    return this.http.get<any>(`${this.apiUrl}/properties`, { headers }).pipe(
+      retry(2),
       map(response => {
         // Handle both response formats: {data: [...]} or {properties: [...]}
         const properties = response.data || response.properties || [];
