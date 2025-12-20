@@ -1,42 +1,48 @@
-<header class="bg-white shadow-md sticky top-0 z-50 border-b border-gray-200 backdrop-blur-md bg-white/98">
+<header class="bg-white shadow-sm fixed top-0 left-0 right-0 z-50 border-b border-gray-100 backdrop-blur-md bg-white/98">
+  <!-- Scroll progress bar -->
+  <div class="h-1 w-full brand-surface relative overflow-hidden">
+    <div class="h-full bg-accent transition-all duration-150" [style.width]="scrollProgress + '%'" aria-hidden="true"></div>
+  </div>
   <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between items-center h-16 lg:h-20">
-      <!-- Logo - Enhanced -->
+      <!-- Logo -->
       <div class="flex items-center">
-        <a routerLink="/" class="flex items-center space-x-2 sm:space-x-3 group">
-          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-primary-600 via-primary-500 to-blue-600 rounded-2xl flex items-center justify-center group-hover:shadow-xl group-hover:scale-105 transition-all duration-300">
-            <span class="text-white font-bold text-xl sm:text-2xl">W</span>
-          </div>
-          <div class="hidden xs:block">
-            <span class="font-bold text-xl sm:text-2xl bg-gradient-to-r from-primary-600 to-blue-600 bg-clip-text text-transparent group-hover:from-primary-700 group-hover:to-blue-700 transition-all duration-300">WishCowork</span>
-            <div class="text-xs text-gray-500 -mt-1 hidden sm:block">Premium Workspaces</div>
+        <a routerLink="/" class="flex items-center group">
+          <div class="flex items-center justify-center overflow-hidden">
+            <img 
+              src="assets/wish_logo.png" 
+              [alt]="appName + ' Logo'" 
+              class="object-contain p-1 logo-img h-10 lg:h-12"
+              (error)="onLogoError($event)"
+              loading="lazy"
+            />
           </div>
         </a>
       </div>
 
-      <!-- Desktop Navigation - Enhanced -->
-      <div class="hidden lg:flex items-center space-x-4 xl:space-x-8">
-        <!-- Solutions Dropdown - Improved -->
+      <!-- Desktop Navigation -->
+      <div class="hidden lg:flex items-center space-x-2 xl:space-x-4">
+        <!-- Solutions Dropdown -->
         <div class="relative group">
-          <button class="text-gray-700 hover:text-primary-600 font-semibold flex items-center space-x-1 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50 transition-all duration-200">
+          <button class="text-black hover:text-accent font-semibold flex items-center space-x-1 uppercase text-xs tracking-wider py-2 px-3 rounded-lg hover:bg-accent/5 transition-all duration-200">
             <span>Solutions</span>
             <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
-          <div class="absolute top-full left-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2 border border-gray-100">
+          <div class="absolute top-full left-0 mt-2 w-72 bg-white rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2 border border-gray-100">
             <div class="p-6">
-              <h3 class="font-bold text-gray-900 mb-4 text-sm uppercase tracking-wider">Workspace Solutions</h3>
+              <h3 class="font-bold text-black mb-4 text-xs uppercase tracking-widest">Workspace Solutions</h3>
               <div class="space-y-1">
                 <a *ngFor="let category of categories" 
                    [routerLink]="['/category', category.slug]"
-                   class="flex items-center space-x-3 p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 transition-all duration-200 group/item">
+                   class="flex items-center space-x-3 p-3 rounded-xl hover:bg-accent/5 text-black hover:text-accent transition-all duration-200 group/item">
                   <span class="text-2xl transform group-hover/item:scale-110 transition-transform duration-200">{{category.icon}}</span>
                   <div class="flex-1">
-                    <div class="font-semibold">{{category.name}}</div>
-                    <div class="text-xs text-gray-500">{{category.description}}</div>
+                    <div class="font-semibold text-sm">{{category.name}}</div>
+                    <div class="text-[10px] text-muted uppercase tracking-tight">{{category.description}}</div>
                   </div>
-                  <svg class="w-4 h-4 text-primary-600 opacity-0 group-hover/item:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="w-4 h-4 text-accent opacity-0 group-hover/item:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                   </svg>
                 </a>
@@ -45,49 +51,48 @@
           </div>
         </div>
 
-        <!-- Business Services - Improved -->
+        <!-- Business Services -->
         <div class="relative group">
-          <button class="text-gray-700 hover:text-primary-600 font-semibold flex items-center space-x-1 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50 transition-all duration-200">
+          <button class="text-black hover:text-accent font-semibold flex items-center space-x-1 uppercase text-xs tracking-wider py-2 px-3 rounded-lg hover:bg-accent/5 transition-all duration-200">
             <span>Services</span>
             <svg class="w-4 h-4 transform group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
             </svg>
           </button>
-          <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2 border border-gray-100">
+          <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform group-hover:translate-y-0 -translate-y-2 border border-gray-100">
             <div class="p-4 space-y-1">
-              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Business Services</a>
-              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Incorporation Services</a>
-              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Tax and Accounting</a>
-              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-gradient-to-r hover:from-primary-50 hover:to-blue-50 text-gray-700 hover:text-primary-600 font-medium transition-all duration-200">Visa and Work Permits</a>
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-accent/5 text-black hover:text-accent font-medium text-sm transition-all duration-200">Business Services</a>
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-accent/5 text-black hover:text-accent font-medium text-sm transition-all duration-200">Incorporation Services</a>
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-accent/5 text-black hover:text-accent font-medium text-sm transition-all duration-200">Tax and Accounting</a>
+              <a routerLink="/business-services" class="block p-3 rounded-xl hover:bg-accent/5 text-black hover:text-accent font-medium text-sm transition-all duration-200">Visa and Work Permits</a>
             </div>
           </div>
         </div>
 
-        <!-- Direct Navigation Links - Improved -->
-        <a routerLink="/plans" class="text-gray-700 hover:text-primary-600 font-semibold transition-all duration-200 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50">
+        <!-- Direct Navigation Links -->
+        <a routerLink="/plans" class="text-black hover:text-accent font-semibold transition-all duration-200 uppercase text-xs tracking-wider py-2 px-3 rounded-lg hover:bg-accent/5">
           Plans
         </a>
 
-        <a routerLink="/about" class="text-gray-700 hover:text-primary-600 font-semibold transition-all duration-200 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50">
+        <a routerLink="/about" class="text-black hover:text-accent font-semibold transition-all duration-200 uppercase text-xs tracking-wider py-2 px-3 rounded-lg hover:bg-accent/5">
           About
         </a>
 
-        <a routerLink="/contact" class="text-gray-700 hover:text-primary-600 font-semibold transition-all duration-200 uppercase text-sm tracking-wide py-2 px-3 rounded-lg hover:bg-primary-50">
+        <a routerLink="/contact" class="text-black hover:text-accent font-semibold transition-all duration-200 uppercase text-xs tracking-wider py-2 px-3 rounded-lg hover:bg-accent/5">
           Contact
         </a>
       </div>
 
-      <!-- CTA Button - Enhanced -->
-      <div class="hidden lg:flex items-center space-x-4">
-        <button routerLink="/contact" class="relative bg-gradient-to-r from-primary-600 via-primary-500 to-blue-600 hover:from-primary-700 hover:to-blue-700 text-white font-bold px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-2xl text-sm xl:text-base overflow-hidden group">
-          <span class="relative z-10">Book a Space</span>
-          <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-primary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+      <!-- CTA Button -->
+      <div class="hidden lg:flex items-center">
+        <button routerLink="/contact" class="btn-primary px-6 py-2.5 text-sm xl:text-base">
+          Book a Space
         </button>
       </div>
 
       <!-- Mobile Menu Button -->
       <div class="lg:hidden">
-        <button (click)="toggleMobileMenu()" class="p-2 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-gray-100 transition-all duration-200">
+        <button (click)="toggleMobileMenu()" class="p-2 rounded-lg text-black hover:text-accent hover:brand-surface transition-all duration-200">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path *ngIf="!isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             <path *ngIf="isMobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -98,16 +103,16 @@
 
     <!-- Mobile Menu -->
     <div class="lg:hidden" [class.hidden]="!isMobileMenuOpen">
-      <div class="bg-white border-t border-gray-200 shadow-lg">
+      <div class="bg-white border-t border-gray-100 shadow-xl">
         <div class="px-4 py-6 space-y-6 max-h-[calc(100vh-5rem)] overflow-y-auto">
           <!-- Workspace Categories -->
           <div>
-            <h3 class="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Workspace Solutions</h3>
+            <h3 class="font-bold text-black mb-4 uppercase text-[10px] tracking-widest">Workspace Solutions</h3>
             <div class="space-y-1">
               <a *ngFor="let category of categories" 
                  [routerLink]="['/category', category.slug]"
                  (click)="closeMobileMenu()"
-                 class="flex items-center space-x-3 py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 active:bg-primary-100">
+                 class="flex items-center space-x-3 py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 active:bg-accent/10">
                 <span class="text-xl">{{category.icon}}</span>
                 <span class="font-medium text-sm">{{category.name}}</span>
               </a>
@@ -115,31 +120,31 @@
           </div>
 
           <!-- Business Services -->
-          <div class="border-t border-gray-100 pt-4">
-            <h3 class="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Business Services</h3>
+          <div class="border-t border-gray-50 pt-4">
+            <h3 class="font-bold text-black mb-4 uppercase text-[10px] tracking-widest">Business Services</h3>
             <div class="space-y-1">
-              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-sm active:bg-primary-100">Business Services</a>
-              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-sm active:bg-primary-100">Incorporation Services</a>
-              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-sm active:bg-primary-100">Tax and Accounting</a>
+              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-sm active:bg-accent/10">Business Services</a>
+              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-sm active:bg-accent/10">Incorporation Services</a>
+              <a routerLink="/business-services" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-sm active:bg-accent/10">Tax and Accounting</a>
             </div>
           </div>
 
           <!-- Main Navigation -->
-          <div class="border-t border-gray-100 pt-4">
-            <h3 class="font-bold text-gray-900 mb-4 uppercase text-xs tracking-wider">Quick Links</h3>
+          <div class="border-t border-gray-50 pt-4">
+            <h3 class="font-bold text-black mb-4 uppercase text-[10px] tracking-widest">Quick Links</h3>
             <div class="grid grid-cols-2 gap-2">
-              <a href="/plans" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Plans</a>
-              <a href="/about" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">About</a>
-              <a href="/gallery" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Gallery</a>
-              <a href="/events" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Events</a>
-              <a href="/news" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">News</a>
-              <a href="/contact" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-gray-700 hover:text-primary-600 hover:bg-primary-50 transition-all duration-200 font-medium text-center uppercase text-xs tracking-wide active:bg-primary-100">Contact</a>
+              <a href="/plans" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-center uppercase text-[10px] tracking-widest active:bg-accent/10">Plans</a>
+              <a href="/about" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-center uppercase text-[10px] tracking-widest active:bg-accent/10">About</a>
+              <a href="/gallery" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-center uppercase text-[10px] tracking-widest active:bg-accent/10">Gallery</a>
+              <a href="/events" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-center uppercase text-[10px] tracking-widest active:bg-accent/10">Events</a>
+              <a href="/news" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-center uppercase text-[10px] tracking-widest active:bg-accent/10">News</a>
+              <a href="/contact" (click)="closeMobileMenu()" class="block py-3 px-3 rounded-lg text-black/70 hover:text-accent hover:bg-accent/5 transition-all duration-200 font-medium text-center uppercase text-[10px] tracking-widest active:bg-accent/10">Contact</a>
             </div>
           </div>
 
           <!-- CTA Buttons -->
-          <div class="pt-4 border-t border-gray-100">
-            <button (click)="closeMobileMenu()" routerLink="/contact" class="w-full bg-gradient-to-r from-primary-600 to-blue-600 hover:from-primary-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-200 shadow-lg uppercase tracking-wide text-sm active:scale-95">
+          <div class="pt-4 border-t border-gray-50">
+            <button (click)="closeMobileMenu()" routerLink="/contact" class="btn-primary w-full py-4 text-sm">
               Book a Space
             </button>
           </div>

@@ -1,150 +1,214 @@
-<div class="settings-container">
-  <div class="settings-header">
-    <button class="back-btn" (click)="goBack()">
-      <span>←</span> Back to Dashboard
-    </button>
-    <h1>⚙️ API Settings</h1>
-    <p>Configure your backend API connection</p>
-  </div>
-
-  <div class="settings-card">
-    <div class="alert alert-info">
-      <strong>ℹ️ Note:</strong> These settings are saved in your browser's local storage.
-      You may need to refresh the page after saving for changes to take effect.
+<div class="min-h-screen bg-brand-surface p-8">
+  <div class="max-w-4xl mx-auto">
+    <div class="mb-10">
+      <button (click)="goBack()" class="group flex items-center gap-2 text-xs font-bold text-deep/40 hover:text-accent transition-colors mb-6 uppercase tracking-widest">
+        <svg class="w-3 h-3 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Back to Dashboard
+      </button>
+      <h1 class="text-4xl font-bold text-deep tracking-tight">System Settings</h1>
+      <p class="text-deep/40 font-medium mt-2">Configure your backend API and application environment</p>
     </div>
 
-    <form (ngSubmit)="saveSettings()">
-      <!-- API URL -->
-      <div class="form-group">
-        <label for="apiUrl">
-          <strong>API URL</strong>
-          <span class="hint">The base URL of your PHP backend (without trailing slash)</span>
-        </label>
-        <input
-          type="text"
-          id="apiUrl"
-          name="apiUrl"
-          [(ngModel)]="apiUrl"
-          class="form-control"
-          placeholder="http://localhost/wishcowork/api"
-          required
-        />
-        <div class="examples">
-          <small>Examples:</small>
-          <ul>
-            <li><code>http://localhost/wishcowork/api</code> (Local XAMPP/WAMP)</li>
-            <li><code>https://your-domain.com/api</code> (Production)</li>
-            <li><code>http://192.168.1.100/wishcowork/api</code> (Local network)</li>
-          </ul>
+    <div class="bg-white rounded-[2rem] shadow-xl shadow-deep/5 border border-deep/5 p-10 mb-8">
+      <div class="p-6 rounded-2xl bg-sand/30 text-deep border border-deep/5 mb-10 flex items-start gap-4">
+        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm shrink-0">
+          <span class="text-xl">ℹ️</span>
         </div>
+        <p class="text-sm leading-relaxed text-deep/70">
+          <strong class="text-deep block mb-1">Local Storage Configuration</strong>
+          These settings are saved in your browser's local storage. You may need to refresh the page after saving for changes to take effect across the application.
+        </p>
       </div>
 
-      <!-- Use Mock API -->
-      <div class="form-group checkbox-group">
-        <label class="checkbox-label">
+      <form (ngSubmit)="saveSettings()" class="space-y-10">
+        <!-- API URL -->
+        <div class="space-y-4">
+          <label for="apiUrl" class="block">
+            <span class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">API Base URL *</span>
+            <span class="block text-xs text-deep/30 font-medium mt-1 ml-1">The base URL of your PHP backend (without trailing slash)</span>
+          </label>
           <input
-            type="checkbox"
-            name="useMockAPI"
-            [(ngModel)]="useMockAPI"
+            type="text"
+            id="apiUrl"
+            name="apiUrl"
+            [(ngModel)]="apiUrl"
+            class="w-full bg-sand/10 border border-deep/10 rounded-xl px-5 py-4 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors"
+            placeholder="http://localhost/wishcowork/api"
+            required
           />
-          <span>
-            <strong>Use Mock API (Frontend Only)</strong>
-            <span class="hint">Enable this to test without a backend. Uses sample data.</span>
-          </span>
-        </label>
-      </div>
+          <div class="p-6 bg-sand/20 rounded-2xl border border-deep/5">
+            <span class="text-[10px] font-bold uppercase tracking-widest text-deep/40 block mb-4">Configuration Examples</span>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3 text-sm text-deep/60">
+                <code class="bg-white px-3 py-1 rounded-lg text-accent font-bold border border-deep/5 shadow-sm">http://localhost/wishcowork/api</code>
+                <span>Local XAMPP/WAMP</span>
+              </li>
+              <li class="flex items-center gap-3 text-sm text-deep/60">
+                <code class="bg-white px-3 py-1 rounded-lg text-accent font-bold border border-deep/5 shadow-sm">https://your-domain.com/api</code>
+                <span>Production Server</span>
+              </li>
+            </ul>
+          </div>
+        </div>
 
-      <!-- Connection Status -->
-      <div class="connection-status" *ngIf="connectionStatus !== 'idle'">
-        <div class="status-badge" [class.success]="connectionStatus === 'success'" [class.error]="connectionStatus === 'error'">
-          <span *ngIf="connectionStatus === 'success'">✓ Connected</span>
-          <span *ngIf="connectionStatus === 'error'">✗ Connection Failed</span>
+        <div class="grid gap-8 md:grid-cols-2">
+          <!-- App Name -->
+          <div class="space-y-4">
+            <label for="appName" class="block">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Application Name</span>
+              <span class="block text-xs text-deep/30 font-medium mt-1 ml-1">Displayed in header and footer</span>
+            </label>
+            <input
+              type="text"
+              id="appName"
+              name="appName"
+              [(ngModel)]="appName"
+              class="w-full bg-sand/10 border border-deep/10 rounded-xl px-5 py-4 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors"
+              placeholder="WishCowork"
+            />
+          </div>
+
+          <!-- Support Email -->
+          <div class="space-y-4">
+            <label for="supportEmail" class="block">
+              <span class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Support Email</span>
+              <span class="block text-xs text-deep/30 font-medium mt-1 ml-1">Used for contact forms</span>
+            </label>
+            <input
+              type="email"
+              id="supportEmail"
+              name="supportEmail"
+              [(ngModel)]="supportEmail"
+              class="w-full bg-sand/10 border border-deep/10 rounded-xl px-5 py-4 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors"
+              placeholder="support@wishcowork.com"
+            />
+          </div>
+        </div>
+
+        <!-- Use Mock API -->
+        <div class="p-6 bg-sand/10 rounded-2xl border border-deep/5 flex items-start gap-4">
+          <div class="relative mt-1">
+            <input
+              type="checkbox"
+              name="useMockAPI"
+              [(ngModel)]="useMockAPI"
+              class="sr-only peer"
+            />
+            <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors peer-checked:bg-accent"></div>
+            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm peer-checked:translate-x-4"></div>
+          </div>
+          <div>
+            <strong class="text-sm font-bold text-deep block">Use Mock API (Frontend Only)</strong>
+            <span class="text-xs text-deep/40 font-medium">Enable this to test the UI without a running PHP backend.</span>
+          </div>
+        </div>
+
+        <!-- Connection Status -->
+        <div *ngIf="connectionStatus !== 'idle'" class="flex items-center gap-3">
+          <span [class]="'px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest ' + (connectionStatus === 'success' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-red-50 text-red-600 border border-red-100')">
+            {{ connectionStatus === 'success' ? '✓ Connection Successful' : '✗ Connection Failed' }}
+          </span>
+        </div>
+
+        <!-- Save Message -->
+        <div class="p-4 rounded-xl bg-green-50 text-green-600 border border-green-100 text-sm font-bold flex items-center gap-3" *ngIf="saveMessage">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          {{ saveMessage }}
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-4 pt-6 border-t border-deep/5">
+          <button
+            type="button"
+            (click)="testConnection()"
+            [disabled]="testingConnection || !apiUrl"
+            class="px-8 py-4 rounded-xl bg-sand text-deep font-bold text-sm hover:bg-sand/80 transition-all disabled:opacity-50 uppercase tracking-widest"
+          >
+            {{ testingConnection ? 'Testing...' : 'Test Connection' }}
+          </button>
+
+          <button
+            type="submit"
+            [disabled]="!apiUrl"
+            class="px-8 py-4 rounded-xl bg-deep text-white font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 disabled:opacity-50 uppercase tracking-widest"
+          >
+            Save Settings
+          </button>
+
+          <button
+            type="button"
+            (click)="resetToDefaults()"
+            class="px-8 py-4 rounded-xl bg-white text-red-600 border border-red-100 font-bold text-sm hover:bg-red-50 transition-all uppercase tracking-widest ml-auto"
+          >
+            Reset Defaults
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Current Configuration -->
+    <div class="bg-white rounded-[2rem] shadow-xl shadow-deep/5 border border-deep/5 p-10 mb-8">
+      <h3 class="text-xl font-bold text-deep mb-8">Current Configuration</h3>
+      <div class="space-y-4">
+        <div class="flex items-center justify-between py-4 border-b border-deep/5">
+          <span class="text-xs font-bold uppercase tracking-widest text-deep/40">API Endpoint</span>
+          <code class="bg-sand/30 px-4 py-2 rounded-lg text-accent font-bold text-sm">{{ apiUrl || 'Not configured' }}</code>
+        </div>
+        <div class="flex items-center justify-between py-4">
+          <span class="text-xs font-bold uppercase tracking-widest text-deep/40">Environment Mode</span>
+          <span [class]="'px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest ' + (useMockAPI ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-600')">
+            {{ useMockAPI ? 'Mock API (Testing)' : 'Real API (Production)' }}
+          </span>
         </div>
       </div>
-
-      <!-- Save Message -->
-      <div class="alert alert-success" *ngIf="saveMessage">
-        {{ saveMessage }}
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="button-group">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="testConnection()"
-          [disabled]="testingConnection || !apiUrl"
-        >
-          <span *ngIf="!testingConnection">🔍 Test Connection</span>
-          <span *ngIf="testingConnection">Testing...</span>
-        </button>
-
-        <button
-          type="submit"
-          class="btn btn-primary"
-          [disabled]="!apiUrl"
-        >
-          💾 Save Settings
-        </button>
-
-        <button
-          type="button"
-          class="btn btn-danger"
-          (click)="resetToDefaults()"
-        >
-          🔄 Reset to Defaults
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Current Configuration -->
-  <div class="info-card">
-    <h3>📋 Current Configuration</h3>
-    <div class="config-info">
-      <div class="config-row">
-        <span class="config-label">API URL:</span>
-        <code>{{ apiUrl || 'Not set' }}</code>
-      </div>
-      <div class="config-row">
-        <span class="config-label">Mode:</span>
-        <span class="badge" [class.badge-warning]="useMockAPI" [class.badge-success]="!useMockAPI">
-          {{ useMockAPI ? 'Mock API (Testing)' : 'Real API (Production)' }}
-        </span>
-      </div>
     </div>
-  </div>
 
-  <!-- Help Section -->
-  <div class="help-card">
-    <h3>❓ Need Help?</h3>
-    <div class="help-content">
-      <h4>Setting up Local Development:</h4>
-      <ol>
-        <li>Install XAMPP or WAMP on your computer</li>
-        <li>Copy the <code>api</code> folder to <code>htdocs/wishcowork/api</code></li>
-        <li>Create database and run <code>init-database.php</code></li>
-        <li>Set API URL to: <code>http://localhost/wishcowork/api</code></li>
-        <li>Uncheck "Use Mock API" and save</li>
-        <li>Click "Test Connection" to verify</li>
-      </ol>
+    <!-- Help Section -->
+    <div class="bg-white rounded-[2rem] shadow-xl shadow-deep/5 border border-deep/5 p-10">
+      <h3 class="text-xl font-bold text-deep mb-8">Setup Guide</h3>
+      <div class="grid gap-10 md:grid-cols-2">
+        <div class="space-y-6">
+          <h4 class="text-sm font-bold text-deep uppercase tracking-widest flex items-center gap-2">
+            <span class="w-6 h-6 bg-sand rounded-full flex items-center justify-center text-[10px]">1</span>
+            Local Development
+          </h4>
+          <ol class="space-y-4 text-sm text-deep/60">
+            <li class="flex gap-3">
+              <span class="text-accent font-bold">•</span>
+              <span>Install XAMPP/WAMP and copy the <code class="text-accent font-bold">api</code> folder to your web root.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent font-bold">•</span>
+              <span>Run <code class="text-accent font-bold">auto-setup.php</code> to initialize the database.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent font-bold">•</span>
+              <span>Set API URL to <code class="text-accent font-bold">http://localhost/wishcowork/api</code></span>
+            </li>
+          </ol>
+        </div>
 
-      <h4>Setting up Production:</h4>
-      <ol>
-        <li>Upload <code>api</code> folder to your hosting</li>
-        <li>Configure database in <code>api/config/database.php</code></li>
-        <li>Set API URL to: <code>https://your-domain.com/api</code></li>
-        <li>Uncheck "Use Mock API" and save</li>
-        <li>Test the connection</li>
-      </ol>
-
-      <h4>Troubleshooting:</h4>
-      <ul>
-        <li><strong>CORS Error:</strong> Update CORS headers in <code>api/config/database.php</code></li>
-        <li><strong>404 Error:</strong> Check if <code>.htaccess</code> file exists in api folder</li>
-        <li><strong>Connection Refused:</strong> Verify your server is running</li>
-        <li><strong>Database Error:</strong> Check database credentials in config</li>
-      </ul>
+        <div class="space-y-6">
+          <h4 class="text-sm font-bold text-deep uppercase tracking-widest flex items-center gap-2">
+            <span class="w-6 h-6 bg-sand rounded-full flex items-center justify-center text-[10px]">2</span>
+            Production Setup
+          </h4>
+          <ol class="space-y-4 text-sm text-deep/60">
+            <li class="flex gap-3">
+              <span class="text-accent font-bold">•</span>
+              <span>Upload the <code class="text-accent font-bold">api</code> folder and configure <code class="text-accent font-bold">database.php</code>.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent font-bold">•</span>
+              <span>Set API URL to your production domain.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="text-accent font-bold">•</span>
+              <span>Ensure <code class="text-accent font-bold">.htaccess</code> is present for routing.</span>
+            </li>
+          </ol>
+        </div>
+      </div>
     </div>
   </div>
 </div>

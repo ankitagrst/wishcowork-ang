@@ -1,26 +1,26 @@
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-sand/30">
   <!-- Header -->
-  <header class="bg-white shadow-sm border-b border-gray-200">
+  <header class="bg-white shadow-sm border-b border-deep/10 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center">
           <button 
             (click)="goToDashboard()"
-            class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            class="mr-4 p-2 hover:bg-sand rounded-xl transition-all text-deep/40 hover:text-deep"
           >
-            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
             </svg>
           </button>
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">Pricing Management</h1>
-            <p class="text-sm text-gray-500">Manage workspace plans, services, and FAQs</p>
+            <h1 class="text-2xl font-bold text-deep">Pricing Management</h1>
+            <p class="text-[10px] font-bold text-deep/40 uppercase tracking-widest mt-1">Manage workspace plans, services, and FAQs</p>
           </div>
         </div>
         <div class="flex items-center space-x-3">
           <button 
             (click)="logout()"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+            class="inline-flex items-center px-4 py-2 border border-deep/10 rounded-xl text-sm font-bold text-deep bg-white hover:bg-sand transition-all shadow-sm"
           >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -36,44 +36,45 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <!-- Success/Error Messages -->
-    <div *ngIf="success" class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
+    <div *ngIf="success" class="mb-8 bg-green-50 border border-green-100 text-green-800 px-6 py-4 rounded-2xl font-bold text-sm shadow-sm flex items-center">
+      <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+        <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+      </div>
       {{ success }}
     </div>
-    <div *ngIf="error" class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+    <div *ngIf="error" class="mb-8 bg-red-50 border border-red-100 text-red-800 px-6 py-4 rounded-2xl font-bold text-sm shadow-sm flex items-center">
+      <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mr-3">
+        <svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+        </svg>
+      </div>
       {{ error }}
     </div>
 
-    <!-- Tabs -->
-    <div class="bg-white rounded-lg shadow mb-6">
-      <div class="border-b border-gray-200">
-        <nav class="flex -mb-px">
+    <!-- Tabs Navigation -->
+    <div class="bg-white rounded-3xl shadow-xl shadow-deep/5 mb-8 border border-deep/5 overflow-hidden">
+      <div class="border-b border-deep/5">
+        <nav class="flex">
           <button
             (click)="activeTab = 'plans'"
-            [class.border-primary-500]="activeTab === 'plans'"
-            [class.text-primary-600]="activeTab === 'plans'"
-            [class.border-transparent]="activeTab !== 'plans'"
-            [class.text-gray-500]="activeTab !== 'plans'"
-            class="py-4 px-6 border-b-2 font-medium text-sm hover:text-primary-600 transition-colors"
+            [ngClass]="{'text-accent': activeTab === 'plans', 'bg-sand/30': activeTab === 'plans', 'text-deep/40': activeTab !== 'plans'}"
+            class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all border-r border-deep/5 last:border-r-0"
           >
             Plans ({{ plans.length }})
           </button>
           <button
             (click)="activeTab = 'services'"
-            [class.border-primary-500]="activeTab === 'services'"
-            [class.text-primary-600]="activeTab === 'services'"
-            [class.border-transparent]="activeTab !== 'services'"
-            [class.text-gray-500]="activeTab !== 'services'"
-            class="py-4 px-6 border-b-2 font-medium text-sm hover:text-primary-600 transition-colors"
+            [ngClass]="{'text-accent': activeTab === 'services', 'bg-sand/30': activeTab === 'services', 'text-deep/40': activeTab !== 'services'}"
+            class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all border-r border-deep/5 last:border-r-0"
           >
             Services ({{ services.length }})
           </button>
           <button
             (click)="activeTab = 'faqs'"
-            [class.border-primary-500]="activeTab === 'faqs'"
-            [class.text-primary-600]="activeTab === 'faqs'"
-            [class.border-transparent]="activeTab !== 'faqs'"
-            [class.text-gray-500]="activeTab !== 'faqs'"
-            class="py-4 px-6 border-b-2 font-medium text-sm hover:text-primary-600 transition-colors"
+            [ngClass]="{'text-accent': activeTab === 'faqs', 'bg-sand/30': activeTab === 'faqs', 'text-deep/40': activeTab !== 'faqs'}"
+            class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all"
           >
             FAQs ({{ faqs.length }})
           </button>
@@ -82,44 +83,48 @@
     </div>
 
     <!-- Plans Tab -->
-    <div *ngIf="activeTab === 'plans'" class="bg-white rounded-lg shadow">
-      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-xl font-semibold">Workspace Plans</h2>
-        <button (click)="openPlanModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+    <div *ngIf="activeTab === 'plans'" class="bg-white rounded-3xl shadow-xl shadow-deep/5 border border-deep/5 overflow-hidden">
+      <div class="p-8 border-b border-deep/5 flex justify-between items-center bg-sand/30">
+        <h2 class="text-sm font-bold text-deep uppercase tracking-widest">Workspace Plans</h2>
+        <button (click)="openPlanModal()" class="bg-deep text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 flex items-center gap-2">
           <span>+ Add Plan</span>
         </button>
       </div>
 
-      <div class="p-6">
-        <div class="grid gap-4">
-          <div *ngFor="let plan of plans" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+      <div class="p-8">
+        <div class="grid gap-6">
+          <div *ngFor="let plan of plans" class="bg-white border border-deep/5 rounded-2xl p-6 hover:shadow-xl hover:shadow-deep/5 transition-all group">
             <div class="flex justify-between items-start">
               <div class="flex-1">
-                <div class="flex items-center gap-3">
-                  <h3 class="text-lg font-semibold">{{ plan.name }}</h3>
-                  <span [class]="'text-xs px-2 py-1 rounded ' + (plan.category === 'coworking' ? 'bg-green-100 text-green-800' : plan.category === 'private' ? 'bg-blue-100 text-blue-800' : plan.category === 'virtual' ? 'bg-purple-100 text-purple-800' : 'bg-orange-100 text-orange-800')">
+                <div class="flex items-center gap-3 mb-3">
+                  <h3 class="text-lg font-bold text-deep">{{ plan.name }}</h3>
+                  <span [class]="'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md ' + (plan.category === 'coworking' ? 'bg-green-50 text-green-600' : plan.category === 'private' ? 'bg-blue-50 text-blue-600' : plan.category === 'virtual' ? 'bg-purple-50 text-purple-600' : 'bg-orange-50 text-orange-600')">
                     {{ plan.category }}
                   </span>
-                  <span *ngIf="plan.isPopular" class="text-xs px-2 py-1 rounded bg-yellow-100 text-yellow-800">Popular</span>
-                  <span [class]="'text-xs px-2 py-1 rounded ' + (plan.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')">
+                  <span *ngIf="plan.isPopular" class="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md bg-accent/10 text-accent">Popular</span>
+                  <span [class]="'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md ' + (plan.isActive ? 'bg-green-50 text-green-600' : 'bg-deep/5 text-deep/40')">
                     {{ plan.isActive ? 'Active' : 'Inactive' }}
                   </span>
                 </div>
-                <p class="text-gray-600 text-sm mt-1">{{ plan.description }}</p>
-                <div class="mt-2">
-                  <span class="text-2xl font-bold text-primary-600">₹{{ plan.price }}</span>
-                  <span class="text-gray-600">/{{ plan.unit }}</span>
+                <p class="text-deep/60 text-sm leading-relaxed mb-4">{{ plan.description }}</p>
+                <div class="flex items-baseline gap-1 mb-4">
+                  <span class="text-2xl font-bold text-deep">₹{{ plan.price }}</span>
+                  <span class="text-deep/40 font-medium text-sm">/{{ plan.unit }}</span>
                 </div>
-                <div class="mt-2 flex flex-wrap gap-1">
-                  <span *ngFor="let feature of plan.features" class="text-xs bg-gray-100 px-2 py-1 rounded">{{ feature }}</span>
+                <div class="flex flex-wrap gap-2">
+                  <span *ngFor="let feature of plan.features" class="text-[10px] font-bold uppercase tracking-wider bg-sand px-3 py-1 rounded-md text-deep/60 border border-deep/5">{{ feature }}</span>
                 </div>
               </div>
               <div class="flex gap-2 ml-4">
-                <button (click)="openPlanModal(plan)" class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm">
-                  Edit
+                <button (click)="openPlanModal(plan)" class="p-2 text-deep/40 hover:text-deep hover:bg-sand rounded-lg transition-all" title="Edit Plan">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                  </svg>
                 </button>
-                <button (click)="deletePlan(plan.id!)" class="text-red-600 hover:text-red-800 px-3 py-1 text-sm">
-                  Delete
+                <button (click)="deletePlan(plan.id!)" class="p-2 text-deep/40 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete Plan">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -129,37 +134,41 @@
     </div>
 
     <!-- Services Tab -->
-    <div *ngIf="activeTab === 'services'" class="bg-white rounded-lg shadow">
-      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-xl font-semibold">Additional Services</h2>
-        <button (click)="openServiceModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+    <div *ngIf="activeTab === 'services'" class="bg-white rounded-3xl shadow-xl shadow-deep/5 border border-deep/5 overflow-hidden">
+      <div class="p-8 border-b border-deep/5 flex justify-between items-center bg-sand/30">
+        <h2 class="text-sm font-bold text-deep uppercase tracking-widest">Additional Services</h2>
+        <button (click)="openServiceModal()" class="bg-deep text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 flex items-center gap-2">
           <span>+ Add Service</span>
         </button>
       </div>
 
-      <div class="p-6">
-        <div class="grid gap-4">
-          <div *ngFor="let service of services" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+      <div class="p-8">
+        <div class="grid gap-6">
+          <div *ngFor="let service of services" class="bg-white border border-deep/5 rounded-2xl p-6 hover:shadow-xl hover:shadow-deep/5 transition-all group">
             <div class="flex justify-between items-start">
               <div class="flex-1">
-                <div class="flex items-center gap-3">
-                  <h3 class="text-lg font-semibold">{{ service.name }}</h3>
-                  <span [class]="'text-xs px-2 py-1 rounded ' + (service.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')">
+                <div class="flex items-center gap-3 mb-3">
+                  <h3 class="text-lg font-bold text-deep">{{ service.name }}</h3>
+                  <span [class]="'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md ' + (service.isActive ? 'bg-green-50 text-green-600' : 'bg-deep/5 text-deep/40')">
                     {{ service.isActive ? 'Active' : 'Inactive' }}
                   </span>
                 </div>
-                <p class="text-gray-600 text-sm mt-1">{{ service.description }}</p>
-                <div class="mt-2">
-                  <span class="text-2xl font-bold text-primary-600">₹{{ service.price }}</span>
-                  <span class="text-gray-600">/{{ service.unit }}</span>
+                <p class="text-deep/60 text-sm leading-relaxed mb-4">{{ service.description }}</p>
+                <div class="flex items-baseline gap-1">
+                  <span class="text-2xl font-bold text-deep">₹{{ service.price }}</span>
+                  <span class="text-deep/40 font-medium text-sm">/{{ service.unit }}</span>
                 </div>
               </div>
               <div class="flex gap-2 ml-4">
-                <button (click)="openServiceModal(service)" class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm">
-                  Edit
+                <button (click)="openServiceModal(service)" class="p-2 text-deep/40 hover:text-deep hover:bg-sand rounded-lg transition-all" title="Edit Service">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                  </svg>
                 </button>
-                <button (click)="deleteService(service.id!)" class="text-red-600 hover:text-red-800 px-3 py-1 text-sm">
-                  Delete
+                <button (click)="deleteService(service.id!)" class="p-2 text-deep/40 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete Service">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -169,33 +178,37 @@
     </div>
 
     <!-- FAQs Tab -->
-    <div *ngIf="activeTab === 'faqs'" class="bg-white rounded-lg shadow">
-      <div class="p-6 border-b border-gray-200 flex justify-between items-center">
-        <h2 class="text-xl font-semibold">Frequently Asked Questions</h2>
-        <button (click)="openFaqModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+    <div *ngIf="activeTab === 'faqs'" class="bg-white rounded-3xl shadow-xl shadow-deep/5 border border-deep/5 overflow-hidden">
+      <div class="p-8 border-b border-deep/5 flex justify-between items-center bg-sand/30">
+        <h2 class="text-sm font-bold text-deep uppercase tracking-widest">Frequently Asked Questions</h2>
+        <button (click)="openFaqModal()" class="bg-deep text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 flex items-center gap-2">
           <span>+ Add FAQ</span>
         </button>
       </div>
 
-      <div class="p-6">
-        <div class="grid gap-4">
-          <div *ngFor="let faq of faqs" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+      <div class="p-8">
+        <div class="grid gap-6">
+          <div *ngFor="let faq of faqs" class="bg-white border border-deep/5 rounded-2xl p-6 hover:shadow-xl hover:shadow-deep/5 transition-all group">
             <div class="flex justify-between items-start">
               <div class="flex-1">
-                <div class="flex items-center gap-3 mb-2">
-                  <h3 class="text-lg font-semibold">{{ faq.question }}</h3>
-                  <span [class]="'text-xs px-2 py-1 rounded ' + (faq.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')">
+                <div class="flex items-center gap-3 mb-3">
+                  <h3 class="text-lg font-bold text-deep">{{ faq.question }}</h3>
+                  <span [class]="'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md ' + (faq.isActive ? 'bg-green-50 text-green-600' : 'bg-deep/5 text-deep/40')">
                     {{ faq.isActive ? 'Active' : 'Inactive' }}
                   </span>
                 </div>
-                <p class="text-gray-600 text-sm">{{ faq.answer }}</p>
+                <p class="text-deep/60 text-sm leading-relaxed">{{ faq.answer }}</p>
               </div>
               <div class="flex gap-2 ml-4">
-                <button (click)="openFaqModal(faq)" class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm">
-                  Edit
+                <button (click)="openFaqModal(faq)" class="p-2 text-deep/40 hover:text-deep hover:bg-sand rounded-lg transition-all" title="Edit FAQ">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                  </svg>
                 </button>
-                <button (click)="deleteFaq(faq.id!)" class="text-red-600 hover:text-red-800 px-3 py-1 text-sm">
-                  Delete
+                <button (click)="deleteFaq(faq.id!)" class="p-2 text-deep/40 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete FAQ">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -285,38 +298,42 @@
 
     <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
       <button (click)="showPlanModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
-      <button (click)="savePlan()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg">Save Plan</button>
+      <button (click)="savePlan()" class="px-4 py-2 bg-accent-500 hover:bg-accent-600 text-black rounded-lg">Save Plan</button>
     </div>
   </div>
 </div>
 
 <!-- Service Modal -->
-<div *ngIf="showServiceModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" (click)="showServiceModal = false">
-  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
-    <div class="p-6 border-b border-gray-200">
-      <h2 class="text-2xl font-bold">{{ selectedService?.id ? 'Edit Service' : 'Add New Service' }}</h2>
+<div *ngIf="showServiceModal" class="fixed inset-0 bg-deep/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="showServiceModal = false">
+  <div class="bg-white rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-white/20" (click)="$event.stopPropagation()">
+    <div class="p-8 border-b border-deep/5 bg-brand-surface">
+      <h2 class="text-2xl font-bold text-deep tracking-tight">{{ selectedService?.id ? 'Edit Service' : 'Add New Service' }}</h2>
+      <p class="text-sm font-medium text-deep/40 mt-1">Configure your service offering details.</p>
     </div>
     
-    <div class="p-6 space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Service Name *</label>
-        <input [(ngModel)]="selectedService!.name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+    <div class="p-8 space-y-8 overflow-y-auto">
+      <div class="space-y-2">
+        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Service Name *</label>
+        <input [(ngModel)]="selectedService!.name" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., Dedicated Desk">
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
-        <textarea [(ngModel)]="selectedService!.description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required></textarea>
+      <div class="space-y-2">
+        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Description *</label>
+        <textarea [(ngModel)]="selectedService!.description" rows="3" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Describe what's included..."></textarea>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
-          <input [(ngModel)]="selectedService!.price" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+      <div class="grid grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Price *</label>
+          <div class="relative">
+            <span class="absolute left-5 top-1/2 -translate-y-1/2 text-deep/40 font-bold">₹</span>
+            <input [(ngModel)]="selectedService!.price" type="number" class="w-full pl-10 pr-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required>
+          </div>
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Unit *</label>
-          <select [(ngModel)]="selectedService!.unit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+        <div class="space-y-2">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Unit *</label>
+          <select [(ngModel)]="selectedService!.unit" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all appearance-none">
             <option value="hour">Hour</option>
             <option value="day">Day</option>
             <option value="month">Month</option>
@@ -325,67 +342,76 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Icon (optional)</label>
-          <input [(ngModel)]="selectedService!.icon" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="e.g., video, calendar">
+      <div class="grid grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Icon (Lucide Name)</label>
+          <input [(ngModel)]="selectedService!.icon" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" placeholder="e.g., video, calendar">
         </div>
 
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
-          <input [(ngModel)]="selectedService!.displayOrder" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+        <div class="space-y-2">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
+          <input [(ngModel)]="selectedService!.displayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
         </div>
       </div>
 
-      <div>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input [(ngModel)]="selectedService!.isActive" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-          <span class="text-sm font-medium text-gray-700">Active</span>
+      <div class="flex items-center gap-4 py-2">
+        <label class="flex items-center space-x-3 cursor-pointer group">
+          <div class="relative">
+            <input type="checkbox" class="sr-only" [(ngModel)]="selectedService!.isActive">
+            <div class="w-12 h-6 bg-deep/10 rounded-full shadow-inner transition-colors group-hover:bg-deep/20" [ngClass]="{'bg-green-500': selectedService!.isActive}"></div>
+            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform" [ngClass]="{'translate-x-6': selectedService!.isActive}"></div>
+          </div>
+          <span class="text-sm font-bold text-deep uppercase tracking-wider">Active Status</span>
         </label>
       </div>
     </div>
 
-    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
-      <button (click)="showServiceModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
-      <button (click)="saveService()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg">Save Service</button>
+    <div class="p-8 border-t border-deep/5 bg-brand-surface flex justify-end gap-4">
+      <button (click)="showServiceModal = false" class="px-8 py-3 rounded-xl border border-deep/10 text-deep font-bold text-sm hover:bg-sand transition-all uppercase tracking-widest">Cancel</button>
+      <button (click)="saveService()" class="px-8 py-3 rounded-xl bg-deep text-white font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 uppercase tracking-widest">Save Service</button>
     </div>
   </div>
 </div>
 
 <!-- FAQ Modal -->
-<div *ngIf="showFaqModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" (click)="showFaqModal = false">
-  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
-    <div class="p-6 border-b border-gray-200">
-      <h2 class="text-2xl font-bold">{{ selectedFaq?.id ? 'Edit FAQ' : 'Add New FAQ' }}</h2>
+<div *ngIf="showFaqModal" class="fixed inset-0 bg-deep/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="showFaqModal = false">
+  <div class="bg-white rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-white/20" (click)="$event.stopPropagation()">
+    <div class="p-8 border-b border-deep/5 bg-brand-surface">
+      <h2 class="text-2xl font-bold text-deep tracking-tight">{{ selectedFaq?.id ? 'Edit FAQ' : 'Add New FAQ' }}</h2>
+      <p class="text-sm font-medium text-deep/40 mt-1">Manage frequently asked questions.</p>
     </div>
     
-    <div class="p-6 space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Question *</label>
-        <input [(ngModel)]="selectedFaq!.question" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+    <div class="p-8 space-y-8 overflow-y-auto">
+      <div class="space-y-2">
+        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Question *</label>
+        <input [(ngModel)]="selectedFaq!.question" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., What are the operating hours?">
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Answer *</label>
-        <textarea [(ngModel)]="selectedFaq!.answer" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required></textarea>
+      <div class="space-y-2">
+        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Answer *</label>
+        <textarea [(ngModel)]="selectedFaq!.answer" rows="4" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Provide a detailed answer..."></textarea>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
-        <input [(ngModel)]="selectedFaq!.displayOrder" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+      <div class="space-y-2">
+        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
+        <input [(ngModel)]="selectedFaq!.displayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
       </div>
 
-      <div>
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input [(ngModel)]="selectedFaq!.isActive" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-          <span class="text-sm font-medium text-gray-700">Active</span>
+      <div class="flex items-center gap-4 py-2">
+        <label class="flex items-center space-x-3 cursor-pointer group">
+          <div class="relative">
+            <input type="checkbox" class="sr-only" [(ngModel)]="selectedFaq!.isActive">
+            <div class="w-12 h-6 bg-deep/10 rounded-full shadow-inner transition-colors group-hover:bg-deep/20" [ngClass]="{'bg-green-500': selectedFaq!.isActive}"></div>
+            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform" [ngClass]="{'translate-x-6': selectedFaq!.isActive}"></div>
+          </div>
+          <span class="text-sm font-bold text-deep uppercase tracking-wider">Active Status</span>
         </label>
       </div>
     </div>
 
-    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
-      <button (click)="showFaqModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
-      <button (click)="saveFaq()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg">Save FAQ</button>
+    <div class="p-8 border-t border-deep/5 bg-brand-surface flex justify-end gap-4">
+      <button (click)="showFaqModal = false" class="px-8 py-3 rounded-xl border border-deep/10 text-deep font-bold text-sm hover:bg-sand transition-all uppercase tracking-widest">Cancel</button>
+      <button (click)="saveFaq()" class="px-8 py-3 rounded-xl bg-deep text-white font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 uppercase tracking-widest">Save FAQ</button>
     </div>
   </div>
 </div>

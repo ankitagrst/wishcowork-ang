@@ -1,14 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from '../../services/seo.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
-  selector: 'app-business-services',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './business-services.component.html'
+    selector: 'app-business-services',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './business-services.component.html'
 })
-export class BusinessServicesComponent {
+export class BusinessServicesComponent implements OnInit {
+  constructor(
+    private seoService: SeoService,
+    private settingsService: SettingsService
+  ) {}
+
+  ngOnInit() {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `Business Services - Support for Your Growth | ${appName}`,
+      description: `Explore our range of business services including incorporation, tax, accounting, and legal support to help your business grow.`,
+      keywords: 'business services, company registration, tax filing, legal support'
+    });
+  }
+
   services = [
     {
       title: 'Incorporation Services',

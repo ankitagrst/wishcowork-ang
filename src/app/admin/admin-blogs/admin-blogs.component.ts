@@ -6,11 +6,9 @@ import { BlogsService, Blog } from '../../services/blogs.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-admin-blogs',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './admin-blogs.component.html',
-  styleUrls: ['./admin-blogs.component.css']
+    selector: 'app-admin-blogs',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './admin-blogs.component.html',
 })
 export class AdminBlogsComponent implements OnInit {
   blogs: Blog[] = [];

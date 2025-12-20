@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SettingsService } from '../../services/settings.service';
+import { SeoService } from '../../services/seo.service';
 
 interface Plan {
   id?: number;
@@ -37,18 +38,17 @@ interface FAQ {
 }
 
 @Component({
-  selector: 'app-plans',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
+    selector: 'app-plans',
+    imports: [CommonModule, RouterModule],
+    template: `
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-50 via-blue-50 to-indigo-100 pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16">
+    <section class="brand-surface pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4 sm:mb-6">
             Flexible Workspace Plans & Pricing
           </h1>
-          <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-6 sm:mb-8">
+          <p class="text-base sm:text-lg md:text-xl text-muted max-w-3xl mx-auto mb-6 sm:mb-8">
             Simple, transparent pricing for every business need. From day passes to private offices, 
             find the perfect workspace solution at WishCowork with no hidden fees.
           </p>
@@ -59,8 +59,8 @@ interface FAQ {
               *ngFor="let category of categories" 
               (click)="selectedCategory = category.value"
               [class]="selectedCategory === category.value ? 
-                'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
-              class="px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 border text-sm sm:text-base touch-manipulation active:scale-95"
+                'bg-accent text-black' : 'bg-white text-black hover:bg-accent/10'"
+              class="px-4 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl font-medium transition-all duration-200 border border-accent/10 text-sm sm:text-base touch-manipulation active:scale-95"
             >
               {{ category.label }}
             </button>
@@ -75,8 +75,8 @@ interface FAQ {
         
         <!-- Loading State -->
         <div *ngIf="loading" class="text-center py-12">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-          <p class="mt-4 text-gray-600">Loading plans...</p>
+          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+          <p class="mt-4 text-muted">Loading plans...</p>
         </div>
 
         <!-- Error State -->
@@ -88,14 +88,14 @@ interface FAQ {
         <div *ngIf="!loading && !error" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
           <div 
             *ngFor="let plan of filteredPlans" 
-            class="relative bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group"
+            class="relative bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group border border-accent/10"
             [class.ring-4]="plan.isPopular"
-            [class.ring-primary-500]="plan.isPopular"
+            [class.ring-accent]="plan.isPopular"
           >
             <!-- Popular Badge -->
             <div 
               *ngIf="plan.isPopular" 
-              class="absolute top-0 right-0 bg-primary-600 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-bl-xl sm:rounded-bl-2xl text-xs sm:text-sm font-bold"
+              class="absolute top-0 right-0 bg-accent text-black px-3 py-1.5 sm:px-4 sm:py-2 rounded-bl-xl sm:rounded-bl-2xl text-xs sm:text-sm font-bold"
             >
               MOST POPULAR
             </div>
@@ -111,12 +111,12 @@ interface FAQ {
                 </svg>
               </div>
               
-              <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">{{ plan.name }}</h3>
-              <p class="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">{{ plan.description }}</p>
+              <h3 class="text-lg sm:text-xl md:text-2xl font-bold text-black mb-1 sm:mb-2">{{ plan.name }}</h3>
+              <p class="text-xs sm:text-sm text-muted mb-3 sm:mb-4">{{ plan.description }}</p>
               
               <div class="mb-4 sm:mb-6">
-                <span class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">₹{{ plan.price | number }}</span>
-                <span class="text-sm sm:text-base text-gray-600">/{{ plan.unit }}</span>
+                <span class="text-2xl sm:text-3xl md:text-4xl font-bold text-black">₹{{ plan.price | number }}</span>
+                <span class="text-sm sm:text-base text-muted">/{{ plan.unit }}</span>
               </div>
             </div>
 
@@ -124,19 +124,19 @@ interface FAQ {
             <div class="px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8">
               <ul class="space-y-2 sm:space-y-3">
                 <li *ngFor="let feature of plan.features" class="flex items-start space-x-2 sm:space-x-3">
-                  <div class="w-4 h-4 sm:w-5 sm:h-5 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <div class="w-4 h-4 sm:w-5 sm:h-5 bg-accent/10 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-accent" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                     </svg>
                   </div>
-                  <span class="text-xs sm:text-sm text-gray-700">{{ feature }}</span>
+                  <span class="text-xs sm:text-sm text-muted">{{ feature }}</span>
                 </li>
               </ul>
               
               <!-- CTA Button -->
               <button 
                 routerLink="/contact"
-                class="w-full mt-6 sm:mt-8 bg-gradient-to-r from-primary-600 to-blue-600 hover:from-primary-700 hover:to-blue-700 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 active:scale-95 shadow-lg text-sm sm:text-base touch-manipulation"
+                class="w-full mt-6 sm:mt-8 btn-primary touch-manipulation"
               >
                 Get Started
               </button>
@@ -147,23 +147,23 @@ interface FAQ {
     </section>
 
     <!-- Additional Services Section -->
-    <section class="py-12 sm:py-16 md:py-20 bg-gray-50">
+    <section class="py-12 sm:py-16 md:py-20 bg-sand">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8 sm:mb-12 md:mb-16">
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Additional Services & Add-ons</h2>
-          <p class="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
+          <h2 class="text-2xl sm:text-3xl font-bold text-black mb-3 sm:mb-4">Additional Services & Add-ons</h2>
+          <p class="text-sm sm:text-base md:text-lg text-muted max-w-2xl mx-auto">
             Enhance your workspace experience with our premium add-on services and flexible options.
           </p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          <div *ngFor="let service of additionalServices" class="text-center p-6 sm:p-8 bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
-            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">{{ service.name }}</h3>
-            <div class="text-2xl sm:text-3xl font-bold text-primary-600 mb-3 sm:mb-4">
-              ₹{{ service.price | number }}<span class="text-sm sm:text-base text-gray-600">/{{ service.unit }}</span>
+          <div *ngFor="let service of additionalServices" class="text-center p-6 sm:p-8 bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-accent/10">
+            <h3 class="text-lg sm:text-xl font-bold text-black mb-2">{{ service.name }}</h3>
+            <div class="text-2xl sm:text-3xl font-bold text-black mb-3 sm:mb-4">
+              ₹{{ service.price | number }}<span class="text-sm sm:text-base text-muted">/{{ service.unit }}</span>
             </div>
-            <p class="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">{{ service.description }}</p>
-            <button routerLink="/contact" class="bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-4 sm:px-6 rounded-lg transition-colors text-sm sm:text-base touch-manipulation active:scale-95">
+            <p class="text-xs sm:text-sm text-muted mb-4 sm:mb-6">{{ service.description }}</p>
+            <button routerLink="/contact" class="btn-primary py-2 px-4 sm:px-6 rounded-lg transition-colors text-sm sm:text-base touch-manipulation active:scale-95">
               Learn More
             </button>
           </div>
@@ -175,31 +175,31 @@ interface FAQ {
     <section class="py-12 sm:py-16 bg-white">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-8 sm:mb-12">
-          <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Frequently Asked Questions</h2>
-          <p class="text-sm sm:text-base text-gray-600">Get answers to common questions about our workspace plans.</p>
+          <h2 class="text-2xl sm:text-3xl font-bold text-black mb-3 sm:mb-4">Frequently Asked Questions</h2>
+          <p class="text-sm sm:text-base text-muted">Get answers to common questions about our workspace plans.</p>
         </div>
         
         <div class="space-y-4 sm:space-y-6">
-          <div *ngFor="let faq of faqs" class="bg-gray-50 rounded-lg sm:rounded-xl p-4 sm:p-6 shadow-md hover:shadow-lg transition-shadow">
-            <h4 class="font-semibold text-sm sm:text-base text-gray-900 mb-2">{{ faq.question }}</h4>
-            <p class="text-xs sm:text-sm text-gray-600">{{ faq.answer }}</p>
+          <div *ngFor="let faq of faqs" class="bg-sand rounded-lg sm:rounded-xl p-4 sm:p-6 border border-accent/10 shadow-sm hover:shadow-md transition-shadow">
+            <h4 class="font-semibold text-sm sm:text-base text-black mb-2">{{ faq.question }}</h4>
+            <p class="text-xs sm:text-sm text-muted">{{ faq.answer }}</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Contact CTA -->
-    <section class="py-12 sm:py-16 bg-primary-600">
+    <section class="py-12 sm:py-16 brand-surface">
       <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl sm:text-3xl font-bold text-white mb-3 sm:mb-4">Need a Custom Plan?</h2>
-        <p class="text-sm sm:text-base md:text-lg text-primary-100 mb-6 sm:mb-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-black mb-3 sm:mb-4">Need a Custom Plan?</h2>
+        <p class="text-sm sm:text-base md:text-lg text-muted mb-6 sm:mb-8">
           Contact our workspace experts to create a tailored solution for your business needs.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-          <button routerLink="/contact" class="bg-white text-primary-600 hover:bg-gray-50 font-bold py-3 px-6 sm:px-8 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base touch-manipulation active:scale-95">
+          <button routerLink="/contact" class="btn-primary py-3 px-6 sm:px-8 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base touch-manipulation active:scale-95">
             Contact Sales
           </button>
-          <button routerLink="/contact" class="border-2 border-white text-white hover:bg-white hover:text-primary-600 font-bold py-3 px-6 sm:px-8 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base touch-manipulation active:scale-95">
+          <button routerLink="/contact" class="btn-secondary py-3 px-6 sm:px-8 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base touch-manipulation active:scale-95">
             Schedule Tour
           </button>
         </div>
@@ -229,10 +229,17 @@ export class PlansComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private seoService: SeoService
   ) {}
 
   ngOnInit() {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `Plans & Pricing - Flexible Workspace Solutions | ${appName}`,
+      description: `Explore our flexible workspace plans and pricing. From virtual offices to private cabins, find the perfect solution for your business needs.`,
+      keywords: 'coworking pricing, office space plans, virtual office cost, workspace membership'
+    });
     this.loadPlans();
     this.loadServices();
     this.loadFaqs();
@@ -286,11 +293,11 @@ export class PlansComponent implements OnInit {
 
   getCategoryColor(category: string): string {
     const colors: { [key: string]: string } = {
-      'coworking': 'bg-green-500',
-      'private': 'bg-blue-500',
-      'virtual': 'bg-purple-500',
-      'meeting': 'bg-orange-500'
+      'coworking': 'bg-accent',
+      'private': 'bg-deep',
+      'virtual': 'bg-accent',
+      'meeting': 'bg-deep'
     };
-    return colors[category] || 'bg-gray-500';
+    return colors[category] || 'bg-accent';
   }
 }

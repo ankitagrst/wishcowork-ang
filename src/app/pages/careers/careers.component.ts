@@ -1,14 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from '../../services/seo.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
-  selector: 'app-careers',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './careers.component.html'
+    selector: 'app-careers',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './careers.component.html'
 })
-export class CareersComponent {
+export class CareersComponent implements OnInit {
+  constructor(
+    private seoService: SeoService,
+    private settingsService: SettingsService
+  ) {}
+
+  ngOnInit() {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `Careers - Join Our Team | ${appName}`,
+      description: `Join the WishCowork team and help us revolutionize the way India works. Explore open positions and career opportunities.`,
+      keywords: 'coworking careers, office space jobs, wishcowork hiring'
+    });
+  }
+
   openPositions = [
     {
       title: 'Community Manager',

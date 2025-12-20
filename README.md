@@ -27,3 +27,15 @@ Visit: `http://localhost:4200/`
 - TypeScript for type safety
 - Angular Universal for SSR/SEO
 - Real images from placeholder services
+
+## Configuration & Security Notes
+
+- Backend environment variables (recommended for production):
+	- `JWT_SECRET` — set a strong secret for signing JWT tokens (overrides the default in `api/config/database.php`).
+	- `CORS_ORIGIN` — set allowed CORS origin(s) instead of `*`.
+	- `INITIAL_SUPERUSER_EMAIL`, `INITIAL_SUPERUSER_PASSWORD`, `INITIAL_SUPERUSER_NAME` — optional values used by `api/setup/auto-setup.php` to create an initial `superuser` account if none exists.
+
+- Frontend configuration:
+	- App settings (API URL, mock mode, Application Name, Support Email) are editable via Admin → Settings and stored in localStorage.
+
+Security reminder: change default demo credentials and seeded superuser password before deploying. Avoid using default secrets in production.

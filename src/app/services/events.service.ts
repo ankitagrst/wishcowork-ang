@@ -19,6 +19,7 @@ export interface Event {
   displayOrder: number;
   maxAttendees?: number;
   currentAttendees: number;
+  price?: number;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -11,7 +11,7 @@ export interface User {
   id: string;
   email: string;
   name: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'superuser';
   avatar?: string;
 }
 
@@ -33,13 +33,13 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  private tokenKey = 'wishcowork_auth_token';
-  private userKey = 'wishcowork_user';
+  private tokenKey = 'app_auth_token';
+  private userKey = 'app_user';
 
   // Mock admin credentials (for frontend-only testing)
   private mockAdminCredentials = {
-    email: 'admin@wishcowork.com',
-    password: 'admin123'
+    email: 'admin@example.com',
+    password: 'admin'
   };
 
   constructor(
@@ -152,6 +152,14 @@ export class AuthService {
   isAdmin(): boolean {
     const user = this.currentUserSubject.value;
     return user?.role === 'admin';
+  }
+
+  /**
+   * Check if user is superuser
+   */
+  isSuperuser(): boolean {
+    const user = this.currentUserSubject.value;
+    return user?.role === 'superuser';
   }
 
   /**

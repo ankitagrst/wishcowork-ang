@@ -3,12 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NewsService, News } from '../../services/news.service';
+import { SeoService } from '../../services/seo.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
-  selector: 'app-news',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './news.component.html'
+    selector: 'app-news',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './news.component.html'
 })
 export class NewsComponent implements OnInit {
   newsList: News[] = [];
@@ -25,9 +26,19 @@ export class NewsComponent implements OnInit {
 
   selectedCategory = 'all';
 
-  constructor(private newsService: NewsService) {}
+  constructor(
+    private newsService: NewsService,
+    private seoService: SeoService,
+    private settingsService: SettingsService
+  ) {}
 
   ngOnInit() {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `News & Updates - Stay Informed | ${appName}`,
+      description: `Stay updated with the latest news, announcements, and industry trends from WishCowork.`,
+      keywords: 'coworking news, office space updates, wishcowork announcements'
+    });
     this.loadNews();
   }
 

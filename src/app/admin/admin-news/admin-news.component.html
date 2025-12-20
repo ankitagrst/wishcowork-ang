@@ -1,163 +1,211 @@
-<div class="admin-news">
-  <div class="header">
-    <div class="header-left">
-      <h1>📰 News Management</h1>
-      <button class="btn-back" (click)="goToDashboard()">← Back to Dashboard</button>
-    </div>
-    <div class="header-right">
-      <button class="btn-primary" (click)="openNewsModal()">+ Add New Article</button>
-      <button class="btn-logout" (click)="logout()">Logout</button>
-    </div>
-  </div>
-
-  <div class="alerts">
-    <div class="alert alert-success" *ngIf="success">{{ success }}</div>
-    <div class="alert alert-error" *ngIf="error">{{ error }}</div>
-  </div>
-
-  <div class="loading" *ngIf="loading && !showNewsModal">
-    <div class="spinner"></div>
-    <p>Loading news...</p>
-  </div>
-
-  <div class="news-grid" *ngIf="!loading">
-    <div class="news-card" *ngFor="let news of newsList">
-      <div class="news-image" *ngIf="news.image">
-        <img [src]="news.image" [alt]="news.title">
-      </div>
-      <div class="news-content">
-        <div class="news-header">
-          <h3>{{ news.title }}</h3>
-          <div class="news-badges">
-            <span class="badge badge-featured" *ngIf="news.isFeatured">⭐ Featured</span>
-            <span class="badge badge-published" *ngIf="news.isPublished">✓ Published</span>
-            <span class="badge badge-draft" *ngIf="!news.isPublished">✎ Draft</span>
-          </div>
-        </div>
-        <p class="news-summary">{{ news.summary || 'No summary provided' }}</p>
-        <div class="news-meta">
-          <span class="meta-item" *ngIf="news.source"><strong>Source:</strong> {{ news.source }}</span>
-          <span class="meta-item"><strong>Category:</strong> {{ news.category }}</span>
-          <span class="meta-item"><strong>Views:</strong> {{ news.views || 0 }}</span>
-        </div>
-        <div class="news-tags" *ngIf="news.tags && news.tags.length > 0">
-          <span class="tag" *ngFor="let tag of news.tags">{{ tag }}</span>
-        </div>
-        <div class="news-footer">
-          <span class="news-date">{{ formatDate(news.publishedAt) }}</span>
-          <div class="news-actions">
-            <button class="btn-edit" (click)="openNewsModal(news)">Edit</button>
-            <button class="btn-delete" (click)="deleteNews(news.id)">Delete</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="empty-state" *ngIf="!loading && newsList.length === 0">
-    <div class="empty-icon">📰</div>
-    <h2>No news yet</h2>
-    <p>Create your first news article to get started!</p>
-    <button class="btn-primary" (click)="openNewsModal()">+ Add New Article</button>
-  </div>
-</div>
-
-<!-- News Modal -->
-<div class="modal-overlay" *ngIf="showNewsModal" (click)="closeNewsModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h2>{{ selectedNews?.id ? 'Edit News' : 'Add New Article' }}</h2>
-      <button class="modal-close" (click)="closeNewsModal()">×</button>
-    </div>
-
-    <div class="modal-body">
-      <form *ngIf="selectedNews">
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label>Title *</label>
-            <input type="text" [(ngModel)]="selectedNews.title" name="title" placeholder="News title">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Slug</label>
-            <input type="text" [(ngModel)]="selectedNews.slug" name="slug" placeholder="Auto-generated from title">
-            <small>Leave empty to auto-generate from title</small>
-          </div>
-          <div class="form-group">
-            <label>Display Order</label>
-            <input type="number" [(ngModel)]="selectedNews.displayOrder" name="displayOrder" placeholder="0">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label>Summary</label>
-            <textarea [(ngModel)]="selectedNews.summary" name="summary" rows="3" placeholder="Brief summary"></textarea>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label>Content *</label>
-            <textarea [(ngModel)]="selectedNews.content" name="content" rows="8" placeholder="Full article content"></textarea>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group full-width">
-            <label>Image URL</label>
-            <input type="text" [(ngModel)]="selectedNews.image" name="image" placeholder="https://...">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Source</label>
-            <input type="text" [(ngModel)]="selectedNews.source" name="source" placeholder="Source name">
-          </div>
-          <div class="form-group">
-            <label>Source URL</label>
-            <input type="text" [(ngModel)]="selectedNews.sourceUrl" name="sourceUrl" placeholder="https://...">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label>Category</label>
-            <select [(ngModel)]="selectedNews.category" name="category">
-              <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Tags (comma-separated)</label>
-            <input type="text" [(ngModel)]="tagsString" name="tags" placeholder="coworking, news, update">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group checkbox-group">
-            <label>
-              <input type="checkbox" [(ngModel)]="selectedNews.isFeatured" name="isFeatured">
-              Featured Article
-            </label>
-          </div>
-          <div class="form-group checkbox-group">
-            <label>
-              <input type="checkbox" [(ngModel)]="selectedNews.isPublished" name="isPublished">
-              Published
-            </label>
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn-secondary" (click)="closeNewsModal()">Cancel</button>
-      <button class="btn-primary" (click)="saveNews()" [disabled]="loading">
-        {{ loading ? 'Saving...' : 'Save Article' }}
+<div class="min-h-screen bg-brand-surface p-8">
+  <!-- Header Section -->
+  <div class="flex flex-wrap items-center justify-between gap-6 bg-white rounded-3xl shadow-xl shadow-deep/5 border border-deep/5 p-8 mb-8">
+    <div>
+      <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-deep/40 mb-2">Management Console</div>
+      <h1 class="text-3xl font-bold text-deep tracking-tight">News & Updates</h1>
+      <button (click)="goToDashboard()" class="group flex items-center gap-2 text-xs font-bold text-deep/40 hover:text-accent transition-colors mt-3 uppercase tracking-widest">
+        <svg class="w-3 h-3 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Back to Dashboard
       </button>
+    </div>
+    <div class="flex gap-3">
+      <button (click)="openNewsModal()" class="bg-deep text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 flex items-center gap-2">
+        <span>+ Add Article</span>
+      </button>
+      <button (click)="logout()" class="bg-white text-red-600 border border-red-100 px-6 py-3 rounded-xl font-bold text-sm hover:bg-red-50 transition-all flex items-center gap-2">
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Status Messages -->
+  <div class="flex flex-col gap-4 mb-8" *ngIf="success || error">
+    <div class="p-4 rounded-2xl bg-green-50 text-green-600 border border-green-100 text-sm font-medium flex items-center gap-3" *ngIf="success">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      {{ success }}
+    </div>
+    <div class="p-4 rounded-2xl bg-red-50 text-red-600 border border-red-100 text-sm font-medium flex items-center gap-3" *ngIf="error">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      {{ error }}
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading && !showNewsModal" class="flex flex-col items-center justify-center py-20">
+    <div class="w-12 h-12 border-4 border-sand border-t-accent rounded-full animate-spin mb-4"></div>
+    <p class="text-deep/40 font-medium tracking-wide">Fetching latest news...</p>
+  </div>
+
+  <!-- News Grid -->
+  <div *ngIf="!loading" class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+    <article *ngFor="let news of newsList" class="bg-white rounded-3xl shadow-xl shadow-deep/5 overflow-hidden flex flex-col border border-deep/5 hover:shadow-2xl hover:shadow-deep/10 transition-all duration-300 group">
+      <figure class="h-56 bg-sand/30 relative overflow-hidden" *ngIf="news.image">
+        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" [src]="news.image" [alt]="news.title">
+        <div class="absolute top-4 right-4 flex flex-col gap-2">
+          <span *ngIf="news.isFeatured" class="px-3 py-1 rounded-lg bg-accent text-white text-[10px] font-bold uppercase tracking-wider shadow-lg">Featured</span>
+          <span [class]="'px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-lg ' + (news.isPublished ? 'bg-green-500 text-white' : 'bg-white text-deep')">
+            {{ news.isPublished ? 'Published' : 'Draft' }}
+          </span>
+        </div>
+      </figure>
+      
+      <div class="p-6 flex-1 flex flex-col">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-[10px] font-bold uppercase tracking-widest text-accent bg-accent/5 px-2 py-1 rounded">{{ news.category }}</span>
+          <span class="text-[10px] font-bold uppercase tracking-widest text-deep/40">{{ formatDate(news.publishedAt) }}</span>
+        </div>
+        
+        <h3 class="text-xl font-bold text-deep leading-tight mb-3 group-hover:text-accent transition-colors">{{ news.title }}</h3>
+        <p class="text-sm text-deep/60 leading-relaxed mb-6 line-clamp-2">{{ news.summary || 'No summary provided' }}</p>
+        
+        <div class="flex flex-wrap gap-2 mb-6">
+          <span class="px-2 py-1 rounded-md bg-sand/50 text-deep/40 text-[10px] font-bold uppercase tracking-wider" *ngFor="let tag of news.tags">#{{ tag }}</span>
+        </div>
+
+        <div class="mt-auto pt-6 border-t border-deep/5 flex items-center justify-between">
+          <div class="flex items-center gap-4 text-deep/40">
+            <div class="flex items-center gap-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+              <span class="text-xs font-bold">{{ news.views || 0 }}</span>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <button (click)="openNewsModal(news)" class="p-2 text-deep/40 hover:text-deep hover:bg-sand rounded-lg transition-all" title="Edit Article">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+            </button>
+            <button (click)="deleteNews(news.id)" class="p-2 text-deep/40 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete Article">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && newsList.length === 0" class="text-center bg-white rounded-3xl shadow-xl shadow-deep/5 p-16 mt-8 border border-deep/5">
+    <div class="w-24 h-24 bg-sand/30 rounded-full flex items-center justify-center mx-auto mb-6">
+      <span class="text-4xl">📰</span>
+    </div>
+    <h2 class="text-2xl font-bold text-deep mb-2">No news articles found</h2>
+    <p class="text-deep/60 mb-8 max-w-md mx-auto">Start sharing updates and news with your community by creating your first article.</p>
+    <button (click)="openNewsModal()" class="bg-deep text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20">
+      + Create First Article
+    </button>
+  </div>
+
+  <!-- News Modal -->
+  <div *ngIf="showNewsModal" class="fixed inset-0 bg-deep/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeNewsModal()">
+    <div class="bg-white rounded-[2rem] w-full max-w-4xl shadow-2xl overflow-hidden border border-deep/5" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between px-8 py-6 border-b border-deep/5 bg-sand/30">
+        <div>
+          <h2 class="text-xl font-bold text-deep">{{ selectedNews?.id ? 'Edit Article' : 'Create New Article' }}</h2>
+          <p class="text-xs text-deep/40 font-bold uppercase tracking-widest mt-1">Article Details</p>
+        </div>
+        <button (click)="closeNewsModal()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-deep/5 text-deep/40 hover:text-deep transition-all">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      
+      <div class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+        <form *ngIf="selectedNews" class="space-y-8">
+          <!-- Basic Info -->
+          <div class="grid gap-6">
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Article Title *</label>
+              <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="text" [(ngModel)]="selectedNews.title" name="title" placeholder="Enter a catchy title">
+            </div>
+            
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">URL Slug</label>
+                <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="text" [(ngModel)]="selectedNews.slug" name="slug" placeholder="auto-generated-slug">
+                <p class="text-[10px] text-deep/30 italic ml-1">Leave empty to auto-generate from title</p>
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
+                <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="number" [(ngModel)]="selectedNews.displayOrder" name="displayOrder" placeholder="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="space-y-6">
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Brief Summary</label>
+              <textarea class="w-full bg-sand/10 border border-deep/10 rounded-xl p-4 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" rows="3" [(ngModel)]="selectedNews.summary" name="summary" placeholder="A short description for the card view..."></textarea>
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Full Content *</label>
+              <textarea class="w-full bg-sand/10 border border-deep/10 rounded-xl p-4 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" rows="8" [(ngModel)]="selectedNews.content" name="content" placeholder="Write your article content here..."></textarea>
+            </div>
+          </div>
+
+          <!-- Media & Source -->
+          <div class="grid gap-6">
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Featured Image URL</label>
+              <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="text" [(ngModel)]="selectedNews.image" name="image" placeholder="https://images.unsplash.com/...">
+            </div>
+            
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Source Name</label>
+                <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="text" [(ngModel)]="selectedNews.source" name="source" placeholder="e.g. TechCrunch">
+              </div>
+              <div class="space-y-2">
+                <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Source URL</label>
+                <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="text" [(ngModel)]="selectedNews.sourceUrl" name="sourceUrl" placeholder="https://...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Classification -->
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Category</label>
+              <select class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep focus:outline-none focus:border-accent transition-colors appearance-none" [(ngModel)]="selectedNews.category" name="category">
+                <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+              </select>
+            </div>
+            <div class="space-y-2">
+              <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Tags (comma-separated)</label>
+              <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="text" [(ngModel)]="tagsString" name="tags" placeholder="coworking, news, update">
+            </div>
+          </div>
+
+          <!-- Options -->
+          <div class="flex flex-wrap gap-8 pt-4">
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <div class="relative">
+                <input type="checkbox" class="sr-only" [(ngModel)]="selectedNews.isFeatured" name="isFeatured">
+                <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors group-hover:border-accent/50" [class.bg-accent]="selectedNews.isFeatured"></div>
+                <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm" [class.translate-x-4]="selectedNews.isFeatured"></div>
+              </div>
+              <span class="text-xs font-bold text-deep/60 uppercase tracking-widest">Featured Article</span>
+            </label>
+            
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <div class="relative">
+                <input type="checkbox" class="sr-only" [(ngModel)]="selectedNews.isPublished" name="isPublished">
+                <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors group-hover:border-accent/50" [class.bg-green-500]="selectedNews.isPublished"></div>
+                <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm" [class.translate-x-4]="selectedNews.isPublished"></div>
+              </div>
+              <span class="text-xs font-bold text-deep/60 uppercase tracking-widest">Published</span>
+            </label>
+          </div>
+        </form>
+      </div>
+      
+      <div class="px-8 py-6 bg-sand/30 border-t border-deep/5 flex justify-end gap-4">
+        <button (click)="closeNewsModal()" class="px-6 py-3 rounded-xl text-deep/40 font-bold text-sm hover:text-deep hover:bg-deep/5 transition-all uppercase tracking-widest">
+          Cancel
+        </button>
+        <button (click)="saveNews()" [disabled]="loading" class="bg-deep text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 disabled:opacity-50 disabled:cursor-not-allowed min-w-[140px]">
+          {{ loading ? 'Saving...' : 'Save Article' }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

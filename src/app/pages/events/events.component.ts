@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EventsService, Event as ApiEvent } from '../../services/events.service';
+import { SeoService } from '../../services/seo.service';
+import { SettingsService } from '../../services/settings.service';
 
 interface Event {
   id: string;
@@ -23,18 +25,17 @@ interface Event {
 }
 
 @Component({
-  selector: 'app-events',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
+    selector: 'app-events',
+    imports: [CommonModule, RouterModule],
+    template: `
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-50 via-blue-50 to-indigo-100 pt-24 pb-16">
+    <section class="brand-surface pt-24 pb-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 class="text-4xl md:text-5xl font-bold text-black mb-6">
             Events & Networking
           </h1>
-          <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+          <p class="text-xl text-muted max-w-3xl mx-auto mb-8">
             Join our vibrant community events, workshops, and networking sessions. 
             Connect with like-minded professionals and grow your business network.
           </p>
@@ -45,7 +46,7 @@ interface Event {
               *ngFor="let category of categories" 
               (click)="selectedCategory = category.value"
               [class]="selectedCategory === category.value ? 
-                'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+                'bg-accent text-black' : 'bg-white text-muted hover:bg-accent/10'"
               class="px-6 py-3 rounded-xl font-medium transition-all duration-200 border shadow-sm"
             >
               {{ category.label }}
@@ -58,7 +59,7 @@ interface Event {
               *ngFor="let status of statusFilters" 
               (click)="selectedStatus = status.value"
               [class]="selectedStatus === status.value ? 
-                'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-gray-600 hover:bg-gray-50'"
+                'bg-accent/10 text-black border-accent/30' : 'bg-white text-muted hover:brand-surface'"
               class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border"
             >
               {{ status.label }}
@@ -71,32 +72,32 @@ interface Event {
     <!-- Featured Event -->
     <section class="py-16 bg-white" *ngIf="getFeaturedEvent()">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-gradient-to-r from-primary-600 to-blue-600 rounded-3xl overflow-hidden shadow-2xl">
+        <div class="brand-surface rounded-3xl overflow-hidden shadow-2xl">
           <div class="grid grid-cols-1 lg:grid-cols-2">
-            <div class="p-8 lg:p-12 text-white">
-              <div class="inline-block bg-white bg-opacity-20 rounded-full px-4 py-2 text-sm font-medium mb-4">
+            <div class="p-8 lg:p-12">
+              <div class="inline-block bg-accent text-black rounded-full px-4 py-2 text-sm font-medium mb-4">
                 Featured Event
               </div>
-              <h2 class="text-3xl lg:text-4xl font-bold mb-4">{{ getFeaturedEvent()?.title }}</h2>
-              <p class="text-primary-100 mb-6 text-lg">{{ getFeaturedEvent()?.description }}</p>
+              <h2 class="text-3xl lg:text-4xl font-bold mb-4 text-black">{{ getFeaturedEvent()?.title }}</h2>
+              <p class="text-muted mb-6 text-lg">{{ getFeaturedEvent()?.description }}</p>
               
               <div class="grid grid-cols-2 gap-4 mb-8">
                 <div>
-                  <div class="text-primary-200 text-sm">Date & Time</div>
-                  <div class="font-semibold">{{ getFeaturedEvent()?.date }}</div>
-                  <div class="font-semibold">{{ getFeaturedEvent()?.time }}</div>
+                  <div class="text-muted text-sm">Date & Time</div>
+                  <div class="font-semibold text-black">{{ getFeaturedEvent()?.date }}</div>
+                  <div class="font-semibold text-black">{{ getFeaturedEvent()?.time }}</div>
                 </div>
                 <div>
-                  <div class="text-primary-200 text-sm">Location</div>
-                  <div class="font-semibold">{{ getFeaturedEvent()?.location }}</div>
+                  <div class="text-muted text-sm">Location</div>
+                  <div class="font-semibold text-black">{{ getFeaturedEvent()?.location }}</div>
                 </div>
               </div>
 
               <div class="flex flex-col sm:flex-row gap-4">
-                <button class="bg-white text-primary-600 hover:bg-gray-50 font-bold py-3 px-8 rounded-xl transition-all duration-300">
+                <button class="btn-primary font-bold py-3 px-8 rounded-xl transition-all duration-300">
                   Register Now
                 </button>
-                <button class="border-2 border-white text-white hover:bg-white hover:text-primary-600 font-bold py-3 px-8 rounded-xl transition-all duration-300">
+                <button class="btn-secondary font-bold py-3 px-8 rounded-xl transition-all duration-300">
                   Learn More
                 </button>
               </div>
@@ -118,11 +119,11 @@ interface Event {
     </section>
 
     <!-- Events Grid -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 brand-surface">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">All Events</h2>
-          <p class="text-lg text-gray-600">Discover events that match your interests</p>
+          <h2 class="text-3xl font-bold text-black mb-4">All Events</h2>
+          <p class="text-lg text-muted">Discover events that match your interests</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -150,7 +151,7 @@ interface Event {
 
               <!-- Price Badge -->
               <div class="absolute top-4 right-4 bg-white bg-opacity-90 rounded-full px-3 py-1">
-                <span class="text-sm font-bold text-gray-900">
+                <span class="text-sm font-bold text-black">
                   {{ event.price === 0 ? 'Free' : '₹' + event.price }}
                 </span>
               </div>
@@ -168,22 +169,22 @@ interface Event {
                 </span>
               </div>
 
-              <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary-600 transition-colors">
+              <h3 class="text-xl font-bold text-black mb-3 group-hover:text-accent transition-colors">
                 {{ event.title }}
               </h3>
               
-              <p class="text-gray-600 mb-4 line-clamp-2">{{ event.description }}</p>
+              <p class="text-muted mb-4 line-clamp-2">{{ event.description }}</p>
 
               <!-- Event Details -->
               <div class="space-y-2 mb-4">
-                <div class="flex items-center text-sm text-gray-600">
+                <div class="flex items-center text-sm text-muted">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                   </svg>
                   {{ event.date }} at {{ event.time }}
                 </div>
                 
-                <div class="flex items-center text-sm text-gray-600">
+                <div class="flex items-center text-sm text-muted">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -191,7 +192,7 @@ interface Event {
                   {{ event.location }}
                 </div>
 
-                <div class="flex items-center text-sm text-gray-600">
+                <div class="flex items-center text-sm text-muted">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                   </svg>
@@ -203,7 +204,7 @@ interface Event {
               <div class="flex flex-wrap gap-2 mb-4">
                 <span 
                   *ngFor="let tag of event.tags.slice(0, 3)" 
-                  class="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs"
+                  class="bg-sand text-muted px-2 py-1 rounded text-xs"
                 >
                   {{ tag }}
                 </span>
@@ -213,8 +214,8 @@ interface Event {
               <button 
                 [disabled]="event.status === 'completed' || event.currentAttendees >= event.maxAttendees"
                 [class]="event.status === 'completed' || event.currentAttendees >= event.maxAttendees ? 
-                  'bg-gray-400 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-700'"
-                class="w-full text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300"
+                  'bg-deep/20 text-muted cursor-not-allowed' : 'btn-primary'"
+                class="w-full font-semibold py-3 px-6 rounded-xl transition-all duration-300"
               >
                 <span *ngIf="event.status === 'completed'">Event Completed</span>
                 <span *ngIf="event.status !== 'completed' && event.currentAttendees >= event.maxAttendees">Fully Booked</span>
@@ -230,7 +231,7 @@ interface Event {
         <div class="text-center mt-12" *ngIf="hasMoreEvents">
           <button 
             (click)="loadMoreEvents()"
-            class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
+            class="btn-primary font-semibold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
           >
             Load More Events
           </button>
@@ -241,15 +242,15 @@ interface Event {
     <!-- Event Hosting CTA -->
     <section class="py-16 bg-white">
       <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 mb-4">Want to Host Your Own Event?</h2>
-        <p class="text-lg text-gray-600 mb-8">
+        <h2 class="text-3xl font-bold text-black mb-4">Want to Host Your Own Event?</h2>
+        <p class="text-lg text-muted mb-8">
           Use our premium spaces and professional support to host memorable events for your community.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <button routerLink="/contact" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-xl transition-all duration-300">
+          <button routerLink="/contact" class="btn-primary font-bold py-3 px-8 rounded-xl transition-all duration-300">
             Host an Event
           </button>
-          <button class="border-2 border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white font-bold py-3 px-8 rounded-xl transition-all duration-300">
+          <button class="btn-secondary font-bold py-3 px-8 rounded-xl transition-all duration-300">
             Learn More
           </button>
         </div>
@@ -281,9 +282,19 @@ export class EventsComponent implements OnInit {
     { label: 'Completed', value: 'completed' }
   ];
 
-  constructor(private eventsService: EventsService) {}
+  constructor(
+    private eventsService: EventsService,
+    private seoService: SeoService,
+    private settingsService: SettingsService
+  ) {}
 
   ngOnInit(): void {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `Events & Networking - Join Our Community | ${appName}`,
+      description: `Join our vibrant community events, workshops, and networking sessions. Connect with like-minded professionals and grow your business network.`,
+      keywords: 'coworking events, networking sessions, business workshops, community events'
+    });
     this.loadEvents();
   }
 
@@ -546,10 +557,10 @@ export class EventsComponent implements OnInit {
   getStatusColor(status: string): string {
     const colorMap: { [key: string]: string } = {
       'upcoming': 'bg-green-500',
-      'ongoing': 'bg-blue-500',
-      'completed': 'bg-gray-500'
+      'ongoing': 'bg-accent',
+      'completed': 'bg-deep/60'
     };
-    return colorMap[status] || 'bg-gray-500';
+    return colorMap[status] || 'bg-deep/60';
   }
 
   getStatusLabel(status: string): string {
@@ -563,13 +574,13 @@ export class EventsComponent implements OnInit {
 
   getCategoryColor(category: string): string {
     const colorMap: { [key: string]: string } = {
-      'networking': 'bg-blue-100 text-blue-800',
+      'networking': 'bg-accent/10 text-black',
       'workshop': 'bg-green-100 text-green-800',
       'seminar': 'bg-purple-100 text-purple-800',
       'social': 'bg-orange-100 text-orange-800',
       'business': 'bg-red-100 text-red-800'
     };
-    return colorMap[category] || 'bg-gray-100 text-gray-800';
+    return colorMap[category] || 'bg-sand text-deep';
   }
 
   getCategoryLabel(category: string): string {

@@ -1,155 +1,153 @@
-<div class="min-h-screen bg-gradient-to-br from-primary-50 via-white to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
+<div class="min-h-screen bg-brand-surface flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+  <!-- Decorative Background Elements -->
+  <div class="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-sand/30 rounded-full blur-3xl"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+  </div>
+
+  <div class="max-w-md w-full space-y-10 relative z-10">
     <!-- Logo and Header -->
     <div class="text-center">
-      <div class="flex justify-center mb-6">
-        <div class="w-16 h-16 bg-gradient-to-r from-primary-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+      <div class="flex justify-center mb-8">
+        <div class="w-20 h-20 bg-deep rounded-[2rem] flex items-center justify-center shadow-2xl shadow-deep/20 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+          <svg class="w-10 h-10 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
           </svg>
         </div>
       </div>
-      <h2 class="text-3xl font-bold text-gray-900">Admin Portal</h2>
-      <p class="mt-2 text-sm text-gray-600">Sign in to manage your workspace</p>
+      <h2 class="text-4xl font-bold text-deep tracking-tight">Admin Portal</h2>
+      <p class="mt-3 text-sm font-medium text-deep/40 uppercase tracking-widest">Secure Management Access</p>
     </div>
 
     <!-- Login Form -->
-    <div class="bg-white rounded-2xl shadow-2xl p-8 space-y-6">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
+    <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-deep/10 p-10 border border-deep/5">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-8">
         
         <!-- Error Message -->
-        <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg" role="alert">
-          <div class="flex items-center">
-            <svg class="w-5 h-5 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-            </svg>
-            <p class="text-sm text-red-700 font-medium">{{ error }}</p>
-          </div>
+        <div *ngIf="error" class="bg-red-50 border border-red-100 p-4 rounded-2xl flex items-center gap-3" role="alert">
+          <svg class="w-5 h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <p class="text-xs font-bold text-red-600 uppercase tracking-wider">{{ error }}</p>
         </div>
 
         <!-- Email Field -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="space-y-2">
+          <label for="email" class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">
             Email Address
           </label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-deep/20 group-focus-within:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
               </svg>
             </div>
             <input
               id="email"
               type="email"
               formControlName="email"
-              class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              class="block w-full pl-12 pr-4 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-all"
               [class.border-red-500]="email?.invalid && email?.touched"
               placeholder="admin@wishcowork.com"
               autocomplete="email"
             />
           </div>
-          <p *ngIf="email?.invalid && email?.touched" class="mt-1 text-sm text-red-600">
+          <p *ngIf="email?.invalid && email?.touched" class="mt-1 text-[10px] font-bold text-red-500 uppercase tracking-wider ml-1">
             <span *ngIf="email?.errors?.['required']">Email is required</span>
-            <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+            <span *ngIf="email?.errors?.['email']">Invalid email format</span>
           </p>
         </div>
 
         <!-- Password Field -->
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="space-y-2">
+          <label for="password" class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">
             Password
           </label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <svg class="h-5 w-5 text-deep/20 group-focus-within:text-accent transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
               </svg>
             </div>
             <input
               id="password"
               [type]="showPassword ? 'text' : 'password'"
               formControlName="password"
-              class="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              class="block w-full pl-12 pr-12 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-all"
               [class.border-red-500]="password?.invalid && password?.touched"
-              placeholder="Enter your password"
+              placeholder="••••••••"
               autocomplete="current-password"
             />
             <button
               type="button"
               (click)="togglePasswordVisibility()"
-              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+              class="absolute inset-y-0 right-0 pr-4 flex items-center text-deep/20 hover:text-accent transition-colors"
             >
               <svg *ngIf="!showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-              </svg>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
               <svg *ngIf="showPassword" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-              </svg>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
             </button>
           </div>
-          <p *ngIf="password?.invalid && password?.touched" class="mt-1 text-sm text-red-600">
+          <p *ngIf="password?.invalid && password?.touched" class="mt-1 text-[10px] font-bold text-red-500 uppercase tracking-wider ml-1">
             <span *ngIf="password?.errors?.['required']">Password is required</span>
-            <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+            <span *ngIf="password?.errors?.['minlength']">Minimum 6 characters required</span>
           </p>
         </div>
 
-        <!-- Remember Me -->
+        <!-- Remember Me & Forgot Password -->
         <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <input
-              id="remember-me"
-              type="checkbox"
-              formControlName="rememberMe"
-              class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded cursor-pointer"
-            />
-            <label for="remember-me" class="ml-2 block text-sm text-gray-700 cursor-pointer">
-              Remember me
-            </label>
-          </div>
-          <div class="text-sm">
-            <a href="#" class="font-medium text-primary-600 hover:text-primary-500">
-              Forgot password?
-            </a>
-          </div>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <div class="relative">
+              <input type="checkbox" formControlName="rememberMe" class="sr-only peer">
+              <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors peer-checked:bg-accent"></div>
+              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm peer-checked:translate-x-4"></div>
+            </div>
+            <span class="text-[10px] font-bold text-deep/40 uppercase tracking-widest">Remember me</span>
+          </label>
+          <a href="#" class="text-[10px] font-bold text-accent uppercase tracking-widest hover:text-deep transition-colors">
+            Forgot Password?
+          </a>
         </div>
 
         <!-- Submit Button -->
         <button
           type="submit"
           [disabled]="loading"
-          class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-lg text-sm font-semibold text-white bg-gradient-to-r from-primary-600 to-blue-600 hover:from-primary-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105"
+          class="w-full bg-deep text-white py-5 rounded-2xl font-bold text-sm hover:bg-deep/90 transition-all shadow-xl shadow-deep/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-[0.2em] flex items-center justify-center gap-3"
         >
           <span *ngIf="!loading">Sign In</span>
-          <span *ngIf="loading" class="flex items-center">
-            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+          <span *ngIf="loading" class="flex items-center gap-2">
+            <svg class="animate-spin h-5 w-5 text-accent" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
-            Signing in...
+            Authenticating...
           </span>
         </button>
       </form>
 
       <!-- Demo Credentials -->
-      <div class="mt-6 border-t border-gray-200 pt-6">
+      <div class="mt-10 pt-8 border-t border-deep/5 text-center">
         <button
           type="button"
           (click)="showDemoCredentials()"
-          class="w-full text-center text-sm text-gray-600 hover:text-primary-600 font-medium transition-colors"
+          class="text-[10px] font-bold text-deep/40 hover:text-accent uppercase tracking-widest transition-colors"
         >
-          🔑 Click here for demo credentials
+          🔑 View Demo Credentials
         </button>
-        <p class="mt-2 text-xs text-center text-gray-500">
-          Email: admin&#64;wishcowork.com | Password: admin123
-        </p>
+        <div class="mt-3 p-3 bg-sand/30 rounded-xl border border-deep/5">
+          <p class="text-[10px] font-bold text-deep/60 uppercase tracking-wider">
+            admin&#64;example.com <span class="mx-2 text-deep/20">|</span> admin
+          </p>
+        </div>
       </div>
     </div>
 
     <!-- Back to Website Link -->
     <div class="text-center">
-      <a routerLink="/" class="inline-flex items-center text-sm font-medium text-gray-600 hover:text-primary-600 transition-colors">
-        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <a routerLink="/" class="inline-flex items-center gap-2 text-[10px] font-bold text-deep/40 hover:text-accent uppercase tracking-[0.2em] transition-colors group">
+        <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
         </svg>
         Back to Website

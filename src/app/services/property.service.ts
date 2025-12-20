@@ -353,7 +353,7 @@ export class PropertyService {
     return this.http.get<any>(`${this.apiUrl}/properties`, { params }).pipe(
       map(response => {
         const properties = response.data || response.properties || [];
-        console.log('Category filter response:', { category, count: properties.length, properties });
+        // console.log('Category filter response:', { category, count: properties.length, properties });
         return properties;
       }),
       catchError((error) => {
@@ -466,7 +466,7 @@ export class PropertyService {
   createProperty(property: Partial<Property>): Observable<Property | null> {
     return this.http.post<any>(`${this.apiUrl}/properties`, property).pipe(
       map(response => {
-        console.log('API Response:', response);
+        // console.log('API Response:', response);
         // API returns: {success: true, message: string, propertyId: string}
         if (response.success && response.propertyId) {
           // Refresh properties list
@@ -487,7 +487,7 @@ export class PropertyService {
     const params = new HttpParams().set('id', id);
     return this.http.put<any>(`${this.apiUrl}/properties`, property, { params }).pipe(
       map(response => {
-        console.log('Update API Response:', response);
+        // console.log('Update API Response:', response);
         // API returns: {success: true, message: string}
         if (response.success) {
           // Refresh properties list
@@ -507,7 +507,7 @@ export class PropertyService {
     const params = new HttpParams().set('id', id);
     return this.http.delete<any>(`${this.apiUrl}/properties`, { params }).pipe(
       map(response => {
-        console.log('Delete API Response:', response);
+        // console.log('Delete API Response:', response);
         // API returns: {success: true, message: string}
         if (response.success) {
           // Refresh properties list

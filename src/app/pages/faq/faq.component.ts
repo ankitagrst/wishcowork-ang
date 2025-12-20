@@ -1,14 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from '../../services/seo.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
-  selector: 'app-faq',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './faq.component.html'
+    selector: 'app-faq',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './faq.component.html'
 })
-export class FaqComponent {
+export class FaqComponent implements OnInit {
+  constructor(
+    private seoService: SeoService,
+    private settingsService: SettingsService
+  ) {}
+
+  ngOnInit() {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `Frequently Asked Questions | ${appName}`,
+      description: `Find answers to common questions about WishCowork's workspace solutions, pricing, and services.`,
+      keywords: 'coworking faq, office space questions, wishcowork help'
+    });
+  }
+
   faqs = [
     {
       category: 'General',

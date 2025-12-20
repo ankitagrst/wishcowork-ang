@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { SeoService } from '../../services/seo.service';
+import { SettingsService } from '../../services/settings.service';
 
 interface GalleryImage {
   id: string;
@@ -20,17 +22,16 @@ interface Location {
 }
 
 @Component({
-  selector: 'app-gallery',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  template: `
+    selector: 'app-gallery',
+    imports: [CommonModule, RouterModule],
+    template: `
     <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-primary-50 via-blue-50 to-indigo-100 pt-24 pb-16">
+    <section class="brand-surface pt-24 pb-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-black mb-6">
           Explore Our Premium Workspaces
         </h1>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+        <p class="text-xl text-muted max-w-3xl mx-auto mb-8">
           Take a virtual tour of our thoughtfully designed coworking spaces, private offices, 
           and meeting rooms across India's major cities.
         </p>
@@ -41,7 +42,7 @@ interface Location {
             *ngFor="let category of categories" 
             (click)="selectedCategory = category.value"
             [class]="selectedCategory === category.value ? 
-              'bg-primary-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+              'bg-accent text-black' : 'bg-white text-muted hover:brand-surface'"
             class="px-6 py-3 rounded-xl font-medium transition-all duration-200 border shadow-sm"
           >
             {{ category.label }}
@@ -54,7 +55,7 @@ interface Location {
             *ngFor="let location of locations" 
             (click)="selectedLocation = location.slug"
             [class]="selectedLocation === location.slug ? 
-              'bg-primary-100 text-primary-800 border-primary-300' : 'bg-white text-gray-600 hover:bg-gray-50'"
+              'bg-accent/10 text-black border-accent/30' : 'bg-white text-muted hover:brand-surface'"
             class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 border"
           >
             {{ location.name }}, {{ location.city }}
@@ -82,11 +83,11 @@ interface Location {
             </div>
             
             <!-- Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               <div class="absolute bottom-0 left-0 right-0 p-4 text-white">
                 <h3 class="font-semibold text-lg mb-1">{{ image.title }}</h3>
-                <p class="text-sm text-gray-200 mb-2">{{ image.location }}</p>
-                <p class="text-xs text-gray-300">{{ image.description }}</p>
+                <p class="text-sm text-white/80 mb-2">{{ image.location }}</p>
+                <p class="text-xs text-white/60">{{ image.description }}</p>
               </div>
             </div>
 
@@ -106,7 +107,7 @@ interface Location {
         <div class="text-center mt-12" *ngIf="hasMoreImages">
           <button 
             (click)="loadMoreImages()"
-            class="bg-primary-600 hover:bg-primary-700 text-white font-semibold px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105"
+            class="btn-primary px-8 py-3"
           >
             Load More Images
           </button>
@@ -115,11 +116,11 @@ interface Location {
     </section>
 
     <!-- Featured Locations -->
-    <section class="py-16 bg-gray-50">
+    <section class="py-16 brand-surface">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-          <h2 class="text-3xl font-bold text-gray-900 mb-4">Featured Locations</h2>
-          <p class="text-lg text-gray-600">
+          <h2 class="text-3xl font-bold text-black mb-4">Featured Locations</h2>
+          <p class="text-lg text-muted">
             Discover our premium workspace locations across India
           </p>
         </div>
@@ -138,9 +139,9 @@ interface Location {
               />
             </div>
             <div class="p-6">
-              <h3 class="text-xl font-bold text-gray-900 mb-2">{{ location.name }}</h3>
-              <p class="text-gray-600 mb-4">{{ location.city }}</p>
-              <div class="flex items-center text-primary-600 font-medium">
+              <h3 class="text-xl font-bold text-black mb-2">{{ location.name }}</h3>
+              <p class="text-muted mb-4">{{ location.city }}</p>
+              <div class="flex items-center text-accent font-medium">
                 <span>View Gallery</span>
                 <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -153,17 +154,17 @@ interface Location {
     </section>
 
     <!-- Virtual Tour CTA -->
-    <section class="py-16 bg-primary-600">
+    <section class="py-16 bg-deep">
       <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-bold text-white mb-4">Want to See More?</h2>
-        <p class="text-primary-100 mb-8 text-lg">
+        <p class="text-white/90 mb-8 text-lg">
           Schedule a virtual or in-person tour to experience our workspaces firsthand.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
-          <button routerLink="/contact" class="bg-white text-primary-600 hover:bg-gray-50 font-bold py-3 px-8 rounded-xl transition-all duration-300">
+          <button routerLink="/contact" class="btn-primary py-3 px-8">
             Schedule a Tour
           </button>
-          <button routerLink="/plans" class="border-2 border-white text-white hover:bg-white hover:text-primary-600 font-bold py-3 px-8 rounded-xl transition-all duration-300">
+          <button routerLink="/plans" class="btn-secondary py-3 px-8">
             View Our Plans
           </button>
         </div>
@@ -194,10 +195,10 @@ interface Location {
         </button>
 
         <!-- Image Info -->
-        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent text-white p-6 rounded-b-lg">
+        <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-6 rounded-b-lg">
           <h3 class="text-xl font-bold mb-2">{{ selectedImage.title }}</h3>
-          <p class="text-gray-200 mb-1">{{ selectedImage.location }}</p>
-          <p class="text-gray-300 text-sm">{{ selectedImage.description }}</p>
+          <p class="text-white/80 mb-1">{{ selectedImage.location }}</p>
+          <p class="text-white/60 text-sm">{{ selectedImage.description }}</p>
         </div>
 
         <!-- Navigation Arrows -->
@@ -224,13 +225,27 @@ interface Location {
     </div>
   `
 })
-export class GalleryComponent {
+export class GalleryComponent implements OnInit {
   selectedCategory: string = 'all';
   selectedLocation: string = 'all';
   selectedImage: GalleryImage | null = null;
   currentImageIndex: number = 0;
   displayedImagesCount: number = 16;
   hasMoreImages: boolean = true;
+
+  constructor(
+    private seoService: SeoService,
+    private settingsService: SettingsService
+  ) {}
+
+  ngOnInit() {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `Gallery - Explore Our Premium Workspaces | ${appName}`,
+      description: `Take a virtual tour of our thoughtfully designed coworking spaces, private offices, and meeting rooms across India's major cities.`,
+      keywords: 'workspace gallery, coworking photos, office space images, premium workspaces'
+    });
+  }
 
   categories = [
     { label: 'All Spaces', value: 'all' },
@@ -481,12 +496,12 @@ export class GalleryComponent {
   getCategoryColor(category: string): string {
     const colorMap: { [key: string]: string } = {
       'coworking': 'bg-green-500',
-      'private-office': 'bg-blue-500',
+      'private-office': 'bg-accent-500',
       'meeting-room': 'bg-purple-500',
       'common-area': 'bg-orange-500',
       'reception': 'bg-red-500'
     };
-    return colorMap[category] || 'bg-gray-500';
+    return colorMap[category] || 'bg-deep';
   }
 
   getCategoryLabel(category: string): string {

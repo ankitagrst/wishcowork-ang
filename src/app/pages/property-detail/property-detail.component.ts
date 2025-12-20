@@ -7,11 +7,10 @@ import { ViewTrackingService } from '../../services/view-tracking.service';
 import { Property } from '../../models/property.model';
 
 @Component({
-  selector: 'app-property-detail',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './property-detail.component.html',
-  styleUrl: './property-detail.component.scss'
+    selector: 'app-property-detail',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './property-detail.component.html',
+    styleUrl: './property-detail.component.scss'
 })
 export class PropertyDetailComponent implements OnInit {
   property: Property | null = null;

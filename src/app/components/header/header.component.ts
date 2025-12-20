@@ -1,22 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
+import { SettingsService } from '../../services/settings.service';
+import { LocomotiveScrollService } from '../../services/locomotive-scroll.service';
+import { Subscription } from 'rxjs';
 import { Category, City } from '../../models/property.model';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+    selector: 'app-header',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   cities: City[] = [];
   isMobileMenuOpen = false;
+  scrollProgress = 0; // percentage 0..100
+  private scrollSubscription?: Subscription;
 
-  constructor(private propertyService: PropertyService) {}
+  appName = '';
+
+  constructor(private propertyService: PropertyService, private locoService: LocomotiveScrollService, private settings: SettingsService) {
+    this.appName = this.settings.getAppName();
+  }
 
   ngOnInit() {
     // Load categories dynamically from actual database properties
@@ -24,6 +32,12 @@ export class HeaderComponent implements OnInit {
     
     // Load cities dynamically from actual database properties
     this.loadCitiesFromDatabase();
+
+    // subscribe to global scroll progress, if locomotive scroll is active
+    this.scrollSubscription = this.locoService.scrollProgress$.subscribe(p => {
+      // convert to percentage
+      this.scrollProgress = Math.round((p || 0) * 100);
+    });
   }
   
   private loadCategoriesFromDatabase() {
@@ -41,8 +55,12 @@ export class HeaderComponent implements OnInit {
         featured: true
       }));
       
-      console.log('Header categories loaded from database:', this.categories);
+      // console.log('Header categories loaded from database:', this.categories);
     });
+  }
+
+  ngOnDestroy(): void {
+    this.scrollSubscription?.unsubscribe();
   }
   
   private loadCitiesFromDatabase() {
@@ -61,7 +79,7 @@ export class HeaderComponent implements OnInit {
         coordinates: { lat: 0, lng: 0 }
       }));
       
-      console.log('Header cities loaded from database:', this.cities);
+      // console.log('Header cities loaded from database:', this.cities);
     });
   }
 
@@ -79,6 +97,30 @@ export class HeaderComponent implements OnInit {
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
     document.body.style.overflow = 'auto';
+  }
+
+  /**
+   * Handle logo image load error and fallback to gradient background
+   */
+  onLogoError(event: any) {
+    const imgElement = event.target as HTMLImageElement;
+    // Hide the failed image
+    imgElement.style.display = 'none';
+    
+    // Add fallback brand background to parent
+    const logoContainer = imgElement.parentElement;
+    if (logoContainer) {
+      logoContainer.classList.add('bg-accent');
+      logoContainer.classList.remove('bg-white', 'border', 'border-gray-200');
+      
+      // Add fallback text
+      const fallbackSpan = document.createElement('span');
+      fallbackSpan.className = 'text-black font-bold text-lg sm:text-xl';
+      fallbackSpan.textContent = 'W';
+      logoContainer.appendChild(fallbackSpan);
+      
+      // console.warn('Logo image failed to load, using fallback gradient');
+    }
   }
   
   private normalizeValue(value: string): string {

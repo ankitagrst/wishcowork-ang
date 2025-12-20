@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Locomotive Scroll & Swiper CSS */
+/* These assets are now pulled in via angular.json to avoid deprecated Sass imports. */
 
 /* Bootstrap for additional components - disabled for now */
 /* @import 'bootstrap/scss/bootstrap'; */
@@ -19,20 +22,53 @@
 body {
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
-  color: #1f2937;
+  color: #022124; /* Deep color */
+  background-color: #fdf8f1; /* Sand color */
+}
+
+/* Brand Colors & Utilities */
+:root {
+  --color-sand: #fdf8f1;
+  --color-accent: #f7b355;
+  --color-deep: #022124;
+  --color-muted: #6b7280;
+}
+
+.brand-surface {
+  background-color: var(--color-sand);
+}
+
+.bg-deep {
+  background-color: var(--color-deep) !important;
+}
+
+.text-black {
+  color: var(--color-deep) !important;
+}
+
+.text-muted {
+  color: var(--color-muted) !important;
+}
+
+.text-accent {
+  color: var(--color-accent) !important;
+}
+
+.bg-accent {
+  background-color: var(--color-accent) !important;
 }
 
 /* Custom components */
 .btn-primary {
-  @apply bg-primary-600 hover:bg-primary-700 text-white font-medium px-4 py-2.5 sm:px-6 sm:py-3 rounded-lg transition-colors duration-200 text-sm sm:text-base;
+  @apply bg-accent hover:bg-accent-600 text-deep font-bold px-4 py-2.5 sm:px-6 sm:py-3 rounded-lg transition-all duration-200 text-sm sm:text-base shadow-md hover:shadow-lg active:scale-95;
 }
 
 .btn-secondary {
-  @apply bg-white hover:bg-gray-50 text-primary-600 border border-primary-600 font-medium px-4 py-2.5 sm:px-6 sm:py-3 rounded-lg transition-colors duration-200 text-sm sm:text-base;
+  @apply bg-white hover:bg-sand text-deep border-2 border-deep font-bold px-4 py-2.5 sm:px-6 sm:py-3 rounded-lg transition-all duration-200 text-sm sm:text-base active:scale-95;
 }
 
 .card {
-  @apply bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300;
+  @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 border border-deep/10;
 }
 
 .section-padding {

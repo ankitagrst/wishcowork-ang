@@ -6,15 +6,15 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-admin-settings',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './admin-settings.component.html',
-  styleUrl: './admin-settings.component.scss'
+    selector: 'app-admin-settings',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './admin-settings.component.html'
 })
 export class AdminSettingsComponent implements OnInit {
   apiUrl: string = '';
   useMockAPI: boolean = true;
+  appName: string = '';
+  supportEmail: string = '';
   saveMessage: string = '';
   testingConnection: boolean = false;
   connectionStatus: 'idle' | 'success' | 'error' = 'idle';
@@ -29,6 +29,8 @@ export class AdminSettingsComponent implements OnInit {
     const settings = this.settingsService.getSettings();
     this.apiUrl = settings.apiUrl;
     this.useMockAPI = settings.useMockAPI;
+    this.appName = settings.appName || '';
+    this.supportEmail = settings.supportEmail || '';
   }
 
   saveSettings(): void {
@@ -48,7 +50,9 @@ export class AdminSettingsComponent implements OnInit {
     // Update settings
     this.settingsService.updateSettings({
       apiUrl: this.apiUrl,
-      useMockAPI: this.useMockAPI
+      useMockAPI: this.useMockAPI,
+      appName: this.appName,
+      supportEmail: this.supportEmail
     });
 
     this.showMessage('Settings saved successfully! Please refresh to apply changes.', 'success');

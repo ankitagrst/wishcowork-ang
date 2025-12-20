@@ -7,11 +7,10 @@ import { Property, Category, City } from '../../models/property.model';
 import { PropertyCardComponent } from '../../components/property-card/property-card.component';
 
 @Component({
-  selector: 'app-category',
-  standalone: true,
-  imports: [CommonModule, RouterModule, PropertyCardComponent],
-  templateUrl: './category.component.html',
-  styleUrl: './category.component.scss'
+    selector: 'app-category',
+    imports: [CommonModule, RouterModule, PropertyCardComponent],
+    templateUrl: './category.component.html',
+    styleUrl: './category.component.scss'
 })
 export class CategoryComponent implements OnInit {
   properties: Property[] = [];

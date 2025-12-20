@@ -6,11 +6,10 @@ import { EventsService, Event } from '../../services/events.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-admin-events',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './admin-events.component.html',
-  styleUrls: ['./admin-events.component.css']
+    selector: 'app-admin-events',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './admin-events.component.html',
+    styleUrls: ['./admin-events.component.css']
 })
 export class AdminEventsComponent implements OnInit {
   events: Event[] = [];
@@ -65,7 +64,8 @@ export class AdminEventsComponent implements OnInit {
         isActive: true,
         displayOrder: this.events.length + 1,
         maxAttendees: 0,
-        currentAttendees: 0
+        currentAttendees: 0,
+        price: 0
       };
     }
     this.showEventModal = true;

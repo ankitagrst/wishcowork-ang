@@ -13,10 +13,9 @@ interface PricingPlan {
 }
 
 @Component({
-  selector: 'app-pricing',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './pricing.component.html'
+    selector: 'app-pricing',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './pricing.component.html'
 })
 export class PricingComponent {
   pricingPlans: PricingPlan[] = [

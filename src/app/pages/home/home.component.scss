@@ -1,0 +1,29 @@
+.btn-primary {
+  @apply bg-accent hover:bg-accent/90 text-deep font-medium px-4 py-2 rounded-md transition-colors;
+}
+
+/* Hero search specific styles */
+.hero-tabs button { @apply rounded-2xl p-5 text-sm font-semibold transition-all duration-200; }
+.hero-tabs .active { @apply bg-white shadow-2xl ring-1 ring-deep/5 text-deep; }
+.hero-tabs .inactive { @apply bg-black/30 text-white; }
+
+.search-card { @apply bg-white rounded-3xl shadow-2xl p-6 sm:p-8 -mt-6; }
+.search-pills button { @apply px-6 py-3 rounded-full border text-sm font-medium transition-all duration-200 flex items-center gap-3; }
+.search-pills .selected { @apply bg-white border-deep/10 shadow-md; }
+.search-pills .muted { @apply bg-sand border border-deep/5 text-muted; }
+
+.suggestions-list { @apply absolute left-0 right-0 mt-1 bg-white border border-deep/10 rounded-xl z-30 max-h-44 overflow-y-auto shadow-lg; }
+.suggestions-list li { @apply px-4 py-2 hover:bg-sand cursor-pointer; }
+.suggestions-list li.active { @apply bg-accent/10; }
+
+/* CTA adjustment to match screenshot visual weight */
+.btn-hero-cta { background: var(--color-accent); color: var(--color-deep); font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.75rem; box-shadow: 0 10px 25px -10px rgba(247, 179, 85, 0.4); transition: all 180ms ease; }
+.btn-hero-cta:hover { background: var(--color-accent-deep); transform: scale(1.05); box-shadow: 0 15px 35px -15px rgba(247, 179, 85, 0.5); }
+
+.search-card:hover { @apply translate-y-0; transform: translateY(-4px); transition: transform 180ms ease; }
+
+/* Responsive tweaks */
+@media (min-width: 768px) {
+  .hero-tabs button { @apply p-6; }
+  .search-card { @apply -mt-10; }
+}

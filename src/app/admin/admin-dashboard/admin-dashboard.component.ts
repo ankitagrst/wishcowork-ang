@@ -14,7 +14,7 @@ interface DashboardStats {
 
 interface RecentActivity {
   id: number;
-  type: 'property' | 'booking' | 'inquiry' | 'user';
+  type: 'property' | 'booking' | 'inquiry' | 'user' | 'event';
   title: string;
   description: string;
   time: string;
@@ -22,11 +22,10 @@ interface RecentActivity {
 }
 
 @Component({
-  selector: 'app-admin-dashboard',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.scss']
+    selector: 'app-admin-dashboard',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './admin-dashboard.component.html',
+    styleUrls: ['./admin-dashboard.component.scss']
 })
 export class AdminDashboardComponent implements OnInit {
   currentUser: any;
@@ -172,11 +171,12 @@ export class AdminDashboardComponent implements OnInit {
 
   getActivityIconColor(type: string): string {
     switch(type) {
-      case 'property': return 'bg-blue-100 text-blue-600';
-      case 'booking': return 'bg-green-100 text-green-600';
-      case 'inquiry': return 'bg-purple-100 text-purple-600';
-      case 'user': return 'bg-orange-100 text-orange-600';
-      default: return 'bg-gray-100 text-gray-600';
+      case 'property': return 'bg-deep/5 text-deep';
+      case 'event':
+      case 'booking': return 'bg-accent/10 text-accent';
+      case 'inquiry':
+      case 'user': return 'bg-green-50 text-green-600';
+      default: return 'bg-sand/30 text-deep';
     }
   }
 }

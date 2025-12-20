@@ -5,11 +5,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 
 @Component({
-  selector: 'app-property-form',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './property-form.component.html',
-  styleUrl: './property-form.component.scss'
+    selector: 'app-property-form',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './property-form.component.html',
+    styleUrl: './property-form.component.scss'
 })
 export class PropertyFormComponent implements OnInit {
   propertyForm!: FormGroup;

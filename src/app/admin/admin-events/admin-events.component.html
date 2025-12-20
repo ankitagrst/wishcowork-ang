@@ -1,237 +1,256 @@
-<div class="min-h-screen bg-gray-50">
-  <!-- Header -->
-  <header class="bg-white shadow-sm border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <button 
-            (click)="goToDashboard()"
-            class="mr-4 p-2 hover:bg-gray-100 rounded-lg transition-colors"
-          >
-            <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-            </svg>
-          </button>
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900">Events Management</h1>
-            <p class="text-sm text-gray-500">Manage community events and networking sessions</p>
-          </div>
-        </div>
-        <div class="flex items-center space-x-3">
-          <button 
-            (click)="logout()"
-            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-          >
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-            </svg>
-            Logout
-          </button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-    <!-- Success/Error Messages -->
-    <div *ngIf="success" class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
-      {{ success }}
-    </div>
-    <div *ngIf="error" class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-      {{ error }}
-    </div>
-
-    <!-- Add Event Button -->
-    <div class="mb-6 flex justify-between items-center">
-      <h2 class="text-xl font-semibold text-gray-900">All Events ({{ events.length }})</h2>
-      <button (click)="openEventModal()" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center gap-2">
-        <span>+ Add Event</span>
+<div class="min-h-screen bg-brand-surface p-8">
+  <!-- Header Section -->
+  <div class="flex flex-wrap items-center justify-between gap-6 bg-white rounded-3xl shadow-xl shadow-deep/5 border border-deep/5 p-8 mb-8">
+    <div>
+      <div class="text-[10px] font-bold uppercase tracking-[0.2em] text-deep/40 mb-2">Management Console</div>
+      <h1 class="text-3xl font-bold text-deep tracking-tight">Community Events</h1>
+      <button (click)="goToDashboard()" class="group flex items-center gap-2 text-xs font-bold text-deep/40 hover:text-accent transition-colors mt-3 uppercase tracking-widest">
+        <svg class="w-3 h-3 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Back to Dashboard
       </button>
     </div>
+    <div class="flex gap-3">
+      <button (click)="openEventModal()" class="bg-deep text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 flex items-center gap-2">
+        <span>+ Add Event</span>
+      </button>
+      <button (click)="logout()" class="bg-white text-red-600 border border-red-100 px-6 py-3 rounded-xl font-bold text-sm hover:bg-red-50 transition-all flex items-center gap-2">
+        <span>Logout</span>
+      </button>
+    </div>
+  </div>
 
-    <!-- Events List -->
-    <div class="bg-white rounded-lg shadow">
-      <div class="p-6">
-        <div class="grid gap-6">
-          <div *ngFor="let event of events" class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-            <div class="flex gap-4">
-              <!-- Event Image -->
-              <div class="flex-shrink-0">
-                <img [src]="event.image || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=200'" 
-                     [alt]="event.title" 
-                     class="w-32 h-32 object-cover rounded-lg">
+  <!-- Status Messages -->
+  <div class="flex flex-col gap-4 mb-8" *ngIf="success || error">
+    <div class="p-4 rounded-2xl bg-green-50 text-green-600 border border-green-100 text-sm font-medium flex items-center gap-3" *ngIf="success">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+      {{ success }}
+    </div>
+    <div class="p-4 rounded-2xl bg-red-50 text-red-600 border border-red-100 text-sm font-medium flex items-center gap-3" *ngIf="error">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      {{ error }}
+    </div>
+  </div>
+
+  <!-- Events List -->
+  <div class="grid gap-6">
+    <div *ngFor="let event of events" 
+         class="bg-white rounded-3xl border border-deep/5 p-8 hover:shadow-2xl hover:shadow-deep/10 transition-all duration-300 group">
+      <div class="flex flex-col md:flex-row gap-8">
+        <!-- Event Image -->
+        <div class="flex-shrink-0">
+          <div class="relative overflow-hidden rounded-2xl w-40 h-40 shadow-lg">
+            <img [src]="event.image || 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=200'" 
+                 [alt]="event.title" 
+                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-deep/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </div>
+        </div>
+
+        <!-- Event Details -->
+        <div class="flex-1">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <div class="flex flex-wrap items-center gap-3 mb-3">
+                <span class="text-[10px] font-bold uppercase tracking-widest text-accent bg-accent/5 px-2 py-1 rounded">{{ event.category }}</span>
+                <span *ngIf="event.isFeatured" class="text-[10px] font-bold uppercase tracking-widest text-white bg-accent px-2 py-1 rounded shadow-sm">Featured</span>
+                <span [class]="'text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ' + (event.isActive ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600')">
+                  {{ event.isActive ? 'Active' : 'Inactive' }}
+                </span>
+                <span [class]="'text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded ' + (isUpcoming(event.eventDate) ? 'bg-deep text-white' : 'bg-sand text-deep/40')">
+                  {{ isUpcoming(event.eventDate) ? 'Upcoming' : 'Past' }}
+                </span>
               </div>
-
-              <!-- Event Details -->
-              <div class="flex-1">
-                <div class="flex items-start justify-between mb-2">
-                  <div>
-                    <div class="flex items-center gap-2 mb-1">
-                      <h3 class="text-lg font-semibold">{{ event.title }}</h3>
-                      <span [class]="'text-xs px-2 py-1 rounded ' + (event.category === 'Networking' ? 'bg-blue-100 text-blue-800' : event.category === 'Workshop' ? 'bg-green-100 text-green-800' : event.category === 'Tech Talk' ? 'bg-purple-100 text-purple-800' : event.category === 'Social' ? 'bg-pink-100 text-pink-800' : 'bg-gray-100 text-gray-800')">
-                        {{ event.category }}
-                      </span>
-                      <span *ngIf="event.isFeatured" class="text-xs px-2 py-1 rounded bg-yellow-100 text-yellow-800">Featured</span>
-                      <span [class]="'text-xs px-2 py-1 rounded ' + (event.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')">
-                        {{ event.isActive ? 'Active' : 'Inactive' }}
-                      </span>
-                      <span [class]="'text-xs px-2 py-1 rounded ' + (isUpcoming(event.eventDate) ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800')">
-                        {{ isUpcoming(event.eventDate) ? 'Upcoming' : 'Past' }}
-                      </span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-2">{{ event.description }}</p>
-                  </div>
-                  <div class="flex gap-2 ml-4">
-                    <button (click)="openEventModal(event)" class="text-blue-600 hover:text-blue-800 px-3 py-1 text-sm">
-                      Edit
-                    </button>
-                    <button (click)="deleteEvent(event.id!)" class="text-red-600 hover:text-red-800 px-3 py-1 text-sm">
-                      Delete
-                    </button>
-                  </div>
+              <h3 class="text-2xl font-bold text-deep mb-2 group-hover:text-accent transition-colors">{{ event.title }}</h3>
+              <div class="flex flex-wrap items-center gap-6 text-deep/40 text-xs font-bold uppercase tracking-widest">
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  {{ formatDate(event.eventDate) }}
                 </div>
-
-                <!-- Event Meta Info -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span class="text-gray-600">{{ formatDate(event.eventDate) }}</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                    <span class="text-gray-600">{{ formatTime(event.eventTime) }}</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                    <span class="text-gray-600">{{ event.location }}</span>
-                  </div>
-                  <div class="flex items-center gap-2" *ngIf="event.maxAttendees">
-                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                    </svg>
-                    <span class="text-gray-600">{{ event.currentAttendees }}/{{ event.maxAttendees }} ({{ getAvailableSeats(event) }} left)</span>
-                  </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  {{ event.eventTime }}
+                </div>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                  {{ event.location }}
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Empty State -->
-          <div *ngIf="events.length === 0 && !loading" class="text-center py-12">
-            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900">No events</h3>
-            <p class="mt-1 text-sm text-gray-500">Get started by creating a new event.</p>
-            <div class="mt-6">
-              <button (click)="openEventModal()" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700">
-                + Add Event
+            <div class="flex gap-2 ml-4">
+              <button (click)="openEventModal(event)" class="p-2 text-deep/40 hover:text-deep hover:bg-sand rounded-lg transition-all" title="Edit Event">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+              </button>
+              <button (click)="deleteEvent(event.id!)" class="p-2 text-deep/40 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete Event">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
               </button>
             </div>
           </div>
+          <p class="text-deep/60 text-sm leading-relaxed line-clamp-2">{{ event.description }}</p>
+          
+          <div class="mt-6 pt-6 border-t border-deep/5 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-2 text-xs font-bold text-deep/40 uppercase tracking-widest">
+                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                {{ event.currentAttendees || 0 }}/{{ event.maxAttendees || '∞' }} Registered
+              </div>
+              <div class="flex items-center gap-2 text-xs font-bold text-deep/40 uppercase tracking-widest">
+                <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/></svg>
+                {{ event.price === 0 ? 'Free' : (event.price ? '₹' + event.price : 'Free') }}
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold text-deep/20 uppercase tracking-widest">Last Updated: {{ event.updatedAt ? formatDate(event.updatedAt) : '—' }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  </div>
 
-  </main>
+  <!-- Empty State -->
+  <div *ngIf="events.length === 0 && !loading" class="text-center bg-white rounded-[2.5rem] shadow-xl shadow-deep/5 p-20 mt-8 border border-deep/5">
+    <div class="w-24 h-24 bg-sand/30 rounded-full flex items-center justify-center mx-auto mb-8">
+      <svg class="w-12 h-12 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+    </div>
+    <h2 class="text-3xl font-bold text-deep mb-4">No events scheduled</h2>
+    <p class="text-deep/40 mb-10 max-w-md mx-auto font-medium">Start building your community by organizing networking sessions, workshops, and social gatherings.</p>
+    <button (click)="openEventModal()" class="bg-deep text-white px-10 py-4 rounded-2xl font-bold text-sm hover:bg-deep/90 transition-all shadow-xl shadow-deep/20 uppercase tracking-widest">
+      + Create First Event
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex flex-col items-center justify-center py-20">
+    <div class="w-12 h-12 border-4 border-deep/10 border-t-accent rounded-full animate-spin mb-4"></div>
+    <p class="text-deep/40 font-bold text-xs uppercase tracking-widest">Loading Events...</p>
+  </div>
 </div>
 
 <!-- Event Modal -->
-<div *ngIf="showEventModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" (click)="showEventModal = false">
-  <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
-    <div class="p-6 border-b border-gray-200">
-      <h2 class="text-2xl font-bold">{{ selectedEvent?.id ? 'Edit Event' : 'Add New Event' }}</h2>
+<div *ngIf="showEventModal" class="fixed inset-0 bg-deep/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="showEventModal = false">
+  <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="p-8 border-b border-deep/5 flex justify-between items-center bg-sand/30">
+      <div>
+        <h2 class="text-2xl font-bold text-deep">{{ selectedEvent?.id ? 'Edit Event' : 'Add New Event' }}</h2>
+        <p class="text-deep/40 text-sm mt-1">Fill in the details to publish your event.</p>
+      </div>
+      <button (click)="showEventModal = false" class="p-2 hover:bg-deep/5 rounded-full transition-colors">
+        <svg class="w-6 h-6 text-deep/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
     
-    <div class="p-6 space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Event Title *</label>
-        <input [(ngModel)]="selectedEvent!.title" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
-      </div>
+    <!-- Modal Body -->
+    <div class="p-8 space-y-6 overflow-y-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="md:col-span-2">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Event Title *</label>
+          <input [(ngModel)]="selectedEvent!.title" type="text" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
+                 placeholder="Enter a catchy title" required>
+        </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
-        <textarea [(ngModel)]="selectedEvent!.description" rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required></textarea>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Event Date *</label>
-          <input [(ngModel)]="selectedEvent!.eventDate" type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+        <div class="md:col-span-2">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Description *</label>
+          <textarea [(ngModel)]="selectedEvent!.description" rows="4" 
+                    class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium resize-none" 
+                    placeholder="What is this event about?" required></textarea>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Event Time *</label>
-          <input [(ngModel)]="selectedEvent!.eventTime" type="time" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Event Date *</label>
+          <input [(ngModel)]="selectedEvent!.eventDate" type="date" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" required>
         </div>
-      </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Location *</label>
-        <input [(ngModel)]="selectedEvent!.location" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="e.g., WishCoWork Hub, Sector 62, Noida" required>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-        <input [(ngModel)]="selectedEvent!.image" type="url" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="https://example.com/image.jpg">
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-          <select [(ngModel)]="selectedEvent!.category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Event Time *</label>
+          <input [(ngModel)]="selectedEvent!.eventTime" type="time" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" required>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Location *</label>
+          <input [(ngModel)]="selectedEvent!.location" type="text" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
+                 placeholder="e.g., WishCoWork Hub, Sector 62, Noida" required>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Image URL</label>
+          <input [(ngModel)]="selectedEvent!.image" type="url" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
+                 placeholder="https://images.unsplash.com/photo-...">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Category *</label>
+          <select [(ngModel)]="selectedEvent!.category" 
+                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium appearance-none">
             <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
-          <input [(ngModel)]="selectedEvent!.displayOrder" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Display Order</label>
+          <input [(ngModel)]="selectedEvent!.displayOrder" type="number" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium">
         </div>
-      </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Registration Link</label>
-        <input [(ngModel)]="selectedEvent!.registrationLink" type="url" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="https://forms.gle/example">
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Max Attendees</label>
-          <input [(ngModel)]="selectedEvent!.maxAttendees" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="0 = unlimited">
+        <div class="md:col-span-2">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Registration Link</label>
+          <input [(ngModel)]="selectedEvent!.registrationLink" type="url" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
+                 placeholder="https://forms.gle/example">
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Current Attendees</label>
-          <input [(ngModel)]="selectedEvent!.currentAttendees" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Max Attendees</label>
+          <input [(ngModel)]="selectedEvent!.maxAttendees" type="number" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
+                 placeholder="0 = unlimited">
         </div>
-      </div>
 
-      <div class="flex items-center gap-4">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input [(ngModel)]="selectedEvent!.isFeatured" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-          <span class="text-sm font-medium text-gray-700">Mark as Featured</span>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Current Attendees</label>
+          <input [(ngModel)]="selectedEvent!.currentAttendees" type="number" 
+                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium">
+        </div>
+
+      <div class="flex flex-wrap items-center gap-6 pt-4">
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <div class="relative">
+            <input [(ngModel)]="selectedEvent!.isFeatured" type="checkbox" class="peer sr-only">
+            <div class="w-10 h-6 bg-deep/10 rounded-full peer-checked:bg-accent transition-colors"></div>
+            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-4"></div>
+          </div>
+          <span class="text-sm font-bold text-deep/60 group-hover:text-deep transition-colors">Featured Event</span>
         </label>
 
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input [(ngModel)]="selectedEvent!.isActive" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-          <span class="text-sm font-medium text-gray-700">Active</span>
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <div class="relative">
+            <input [(ngModel)]="selectedEvent!.isActive" type="checkbox" class="peer sr-only">
+            <div class="w-10 h-6 bg-deep/10 rounded-full peer-checked:bg-green-500 transition-colors"></div>
+            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-4"></div>
+          </div>
+          <span class="text-sm font-bold text-deep/60 group-hover:text-deep transition-colors">Active Status</span>
         </label>
       </div>
     </div>
 
-    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
-      <button (click)="showEventModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
-      <button (click)="saveEvent()" class="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg">Save Event</button>
+    <!-- Modal Footer -->
+    <div class="p-8 border-t border-deep/5 bg-sand/30 flex justify-end gap-4">
+      <button (click)="showEventModal = false" 
+              class="px-6 py-3 text-deep/60 font-bold hover:text-deep transition-colors">
+        Cancel
+      </button>
+      <button (click)="saveEvent()" 
+              [disabled]="loading"
+              class="px-8 py-3 bg-deep text-white rounded-xl font-bold hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 disabled:opacity-50 disabled:cursor-not-allowed">
+        {{ loading ? 'Saving...' : (selectedEvent?.id ? 'Update Event' : 'Create Event') }}
+      </button>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost/wishcowork/api'
+  apiUrl: 'https://wishcoworker.com/api/'
 };

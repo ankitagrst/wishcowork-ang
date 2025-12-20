@@ -27,10 +27,17 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/robots.txt",
+              "src/sitemap.xml",
+              "src/manifest.json"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css",
+              "node_modules/locomotive-scroll/dist/locomotive-scroll.css",
+              "node_modules/swiper/swiper-bundle.css",
+              "node_modules/swiper/modules/navigation.css",
+              "node_modules/swiper/modules/pagination.css"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
@@ -65,6 +72,7 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
+              "ssr": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -107,7 +115,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.css",
+              "node_modules/locomotive-scroll/dist/locomotive-scroll.css",
+              "node_modules/swiper/swiper-bundle.css",
+              "node_modules/swiper/modules/navigation.css",
+              "node_modules/swiper/modules/pagination.css"
             ],
             "scripts": []
           }

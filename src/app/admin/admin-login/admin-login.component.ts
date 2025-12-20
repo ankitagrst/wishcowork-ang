@@ -5,11 +5,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-admin-login',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './admin-login.component.html',
-  styleUrls: ['./admin-login.component.scss']
+    selector: 'app-admin-login',
+    imports: [CommonModule, ReactiveFormsModule],
+    templateUrl: './admin-login.component.html',
+    styleUrls: ['./admin-login.component.scss']
 })
 export class AdminLoginComponent {
   loginForm: FormGroup;
@@ -84,7 +83,7 @@ export class AdminLoginComponent {
   // Demo credentials hint
   showDemoCredentials(): void {
     this.loginForm.patchValue({
-      email: 'admin@wishcowork.com',
+      email: 'admin@example.com',
       password: 'admin123'
     });
   }

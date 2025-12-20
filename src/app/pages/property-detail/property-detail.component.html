@@ -1,19 +1,19 @@
 <!-- Loading State -->
-<div *ngIf="loading" class="min-h-screen flex items-center justify-center">
+<div *ngIf="loading" class="min-h-screen flex items-center justify-center brand-surface">
   <div class="text-center">
-    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-    <p class="mt-4 text-gray-600">Loading property details...</p>
+    <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-accent"></div>
+    <p class="mt-4 text-muted">Loading property details...</p>
   </div>
 </div>
 
 <!-- Property Not Found -->
-<div *ngIf="!loading && !property" class="min-h-screen flex items-center justify-center">
+<div *ngIf="!loading && !property" class="min-h-screen flex items-center justify-center brand-surface">
   <div class="text-center">
-    <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg class="mx-auto h-16 w-16 text-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
     </svg>
-    <h3 class="mt-4 text-xl font-medium text-gray-900">Property not found</h3>
-    <p class="mt-2 text-gray-600">The property you're looking for doesn't exist.</p>
+    <h3 class="mt-4 text-xl font-medium text-black">Property not found</h3>
+    <p class="mt-2 text-muted">The property you're looking for doesn't exist.</p>
     <button routerLink="/" class="mt-4 btn-primary">Back to Home</button>
   </div>
 </div>
@@ -23,14 +23,14 @@
   <!-- Breadcrumb -->
   <nav class="bg-white border-b">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
-      <ol class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-600 overflow-x-auto">
-        <li class="whitespace-nowrap"><a routerLink="/" class="hover:text-primary-600">Home</a></li>
+      <ol class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-muted overflow-x-auto">
+        <li class="whitespace-nowrap"><a routerLink="/" class="hover:text-accent">Home</a></li>
         <li><span class="mx-1 sm:mx-2">/</span></li>
-        <li class="whitespace-nowrap"><a [routerLink]="['/category', property.category]" class="hover:text-primary-600">{{categoryDisplay}}</a></li>
+        <li class="whitespace-nowrap"><a [routerLink]="['/category', property.category]" class="hover:text-accent">{{categoryDisplay}}</a></li>
         <li><span class="mx-1 sm:mx-2">/</span></li>
-        <li class="whitespace-nowrap"><a [routerLink]="['/category', property.category, property.city]" class="hover:text-primary-600">{{cityDisplay}}</a></li>
+        <li class="whitespace-nowrap"><a [routerLink]="['/category', property.category, property.city]" class="hover:text-accent">{{cityDisplay}}</a></li>
         <li><span class="mx-1 sm:mx-2">/</span></li>
-        <li class="text-gray-900 font-medium truncate">{{property.title}}</li>
+        <li class="text-black font-medium truncate">{{property.title}}</li>
       </ol>
     </div>
   </nav>
@@ -86,21 +86,21 @@
           <!-- Header -->
           <div class="mb-6">
             <div class="flex flex-wrap items-center gap-2 mb-2 sm:mb-3">
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary-600 text-white">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-accent text-black">
                 {{categoryDisplay}}
               </span>
               <div class="flex items-center space-x-1">
                 <svg class="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                 </svg>
-                <span class="text-sm font-medium text-gray-700">{{property.rating}}</span>
-                <span class="text-xs sm:text-sm text-gray-500">({{property.reviews}} reviews)</span>
+                <span class="text-sm font-medium text-black">{{property.rating}}</span>
+                <span class="text-xs sm:text-sm text-muted">({{property.reviews}} reviews)</span>
               </div>
             </div>
             
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2 sm:mb-3">{{property.title}}</h1>
+            <h1 class="text-2xl sm:text-3xl font-bold text-black mb-2 sm:mb-3">{{property.title}}</h1>
             
-            <div class="flex items-start sm:items-center text-sm sm:text-base text-gray-600">
+            <div class="flex items-start sm:items-center text-sm sm:text-base text-muted">
               <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 flex-shrink-0 mt-0.5 sm:mt-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -111,19 +111,19 @@
 
           <!-- Description -->
           <div class="mb-6 sm:mb-8">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">About this space</h2>
-            <p class="text-sm sm:text-base text-gray-700 leading-relaxed">{{property.description}}</p>
+            <h2 class="text-lg sm:text-xl font-semibold text-black mb-3 sm:mb-4">About this space</h2>
+            <p class="text-sm sm:text-base text-black leading-relaxed">{{property.description}}</p>
           </div>
 
           <!-- Amenities -->
           <div class="mb-6 sm:mb-8">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Amenities</h2>
+            <h2 class="text-lg sm:text-xl font-semibold text-black mb-3 sm:mb-4">Amenities</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
               <div *ngFor="let amenity of property.amenities" class="flex items-center space-x-2 sm:space-x-3">
-                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                <span class="text-sm sm:text-base text-gray-700">{{amenity}}</span>
+                <span class="text-sm sm:text-base text-black">{{amenity}}</span>
               </div>
             </div>
           </div>
@@ -134,11 +134,11 @@
           <div class="card p-4 sm:p-6 lg:sticky lg:top-6">
             <div class="mb-4 sm:mb-6">
               <div class="flex items-baseline mb-2">
-                <span class="text-2xl sm:text-3xl font-bold text-gray-900">₹{{property.price.toLocaleString()}}</span>
-                <span class="text-base sm:text-lg text-gray-600 ml-2">/{{property.priceType}}</span>
+                <span class="text-2xl sm:text-3xl font-bold text-black">₹{{property.price.toLocaleString()}}</span>
+                <span class="text-base sm:text-lg text-muted ml-2">/{{property.priceType}}</span>
               </div>
               <div class="flex items-center space-x-2">
-                <span [class]="property.availability === 'available' ? 'text-green-600' : 'text-red-600'" 
+                <span [class]="property.availability === 'available' ? 'text-accent' : 'text-red-600'" 
                       class="text-xs sm:text-sm font-medium">
                   {{property.availability === 'available' ? '✓ Available' : '✗ Busy'}}
                 </span>
@@ -148,18 +148,18 @@
             <!-- Booking Form -->
             <div class="space-y-3 sm:space-y-4">
               <div>
-                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Check-in Date</label>
-                <input type="date" class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base touch-manipulation">
+                <label class="block text-xs sm:text-sm font-medium text-black mb-1.5 sm:mb-2">Check-in Date</label>
+                <input type="date" class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm sm:text-base touch-manipulation">
               </div>
               
               <div>
-                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Check-out Date</label>
-                <input type="date" class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base touch-manipulation">
+                <label class="block text-xs sm:text-sm font-medium text-black mb-1.5 sm:mb-2">Check-out Date</label>
+                <input type="date" class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm sm:text-base touch-manipulation">
               </div>
 
               <div>
-                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Guests</label>
-                <select class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base touch-manipulation">
+                <label class="block text-xs sm:text-sm font-medium text-black mb-1.5 sm:mb-2">Guests</label>
+                <select class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm sm:text-base touch-manipulation">
                   <option>1 person</option>
                   <option>2-5 people</option>
                   <option>6-10 people</option>
@@ -181,24 +181,24 @@
             <!-- Price Breakdown -->
             <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t" *ngIf="shouldShowServiceFee() || shouldShowTax()">
               <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-                <div class="flex justify-between text-gray-600">
+                <div class="flex justify-between text-muted">
                   <span>Base price</span>
                   <span class="font-medium">₹{{property.price | number:'1.0-0'}}</span>
                 </div>
-                <div class="flex justify-between text-gray-600" *ngIf="shouldShowServiceFee()">
+                <div class="flex justify-between text-muted" *ngIf="shouldShowServiceFee()">
                   <span>Service fee ({{property.serviceFeePercent || 10}}%)</span>
                   <span class="font-medium">₹{{calculateServiceFee(property.price) | number:'1.0-0'}}</span>
                 </div>
-                <div class="flex justify-between text-gray-600" *ngIf="shouldShowTax()">
+                <div class="flex justify-between text-muted" *ngIf="shouldShowTax()">
                   <span>Taxes (GST {{property.taxPercent || 18}}%)</span>
                   <span class="font-medium">₹{{calculateTax(property.price) | number:'1.0-0'}}</span>
                 </div>
-                <div class="flex justify-between font-semibold text-gray-900 text-sm sm:text-base pt-2 sm:pt-3 border-t">
+                <div class="flex justify-between font-semibold text-black text-sm sm:text-base pt-2 sm:pt-3 border-t">
                   <span>Total</span>
-                  <span class="text-primary-600">₹{{calculateTotal(property.price) | number:'1.0-0'}}</span>
+                  <span class="text-accent">₹{{calculateTotal(property.price) | number:'1.0-0'}}</span>
                 </div>
               </div>
-              <p class="mt-2 sm:mt-3 text-[10px] sm:text-xs text-gray-500">
+              <p class="mt-2 sm:mt-3 text-[10px] sm:text-xs text-muted">
                 * Prices shown are estimates. Final amount may vary based on booking duration.
               </p>
             </div>

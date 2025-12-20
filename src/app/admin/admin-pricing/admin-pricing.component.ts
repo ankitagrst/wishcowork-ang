@@ -6,11 +6,10 @@ import { PricingService, Plan, AdditionalService, FAQ } from '../../services/pri
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-admin-pricing',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './admin-pricing.component.html',
-  styleUrls: ['./admin-pricing.component.css']
+    selector: 'app-admin-pricing',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './admin-pricing.component.html',
+    styleUrls: ['./admin-pricing.component.css']
 })
 export class AdminPricingComponent implements OnInit {
   activeTab: 'plans' | 'services' | 'faqs' = 'plans';

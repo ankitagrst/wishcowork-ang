@@ -19,12 +19,25 @@
 
 
 <div class="min-h-screen flex flex-col">
-  <!-- Show header and footer only for non-admin routes -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-white focus:px-3 focus:py-2 focus:rounded-md">Skip to content</a>
+  <!-- Show header only for non-admin routes (moved outside scroll container so it's fixed reliably) -->
   <app-header *ngIf="!isAdminRoute"></app-header>
-  
-  <main [class.flex-1]="!isAdminRoute">
-    <router-outlet />
-  </main>
-  
-  <app-footer *ngIf="!isAdminRoute"></app-footer>
+
+  <!-- Scrollable content -->
+  <div data-scroll-container class="flex-1 min-h-0">
+    <main id="main-content" class="pt-20 flex-1 min-h-0">
+      <router-outlet />
+    </main>
+    
+    <!-- Footer (moved inside scroll container to scroll with content) -->
+    <app-footer *ngIf="!isAdminRoute"></app-footer>
+  </div>
+
+  <!-- Floating CTA for quick booking -->
+  <button routerLink="/contact" class="fixed bottom-6 right-6 z-50 bg-accent text-black py-3 px-4 rounded-full shadow-lg hover:scale-105 transition-transform duration-200 hidden md:flex items-center space-x-2" aria-label="Quick book">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
+    </svg>
+    <span class="font-semibold">Quick Book</span>
+  </button>
 </div>

@@ -5,16 +5,20 @@ import { BehaviorSubject } from 'rxjs';
 export interface AppSettings {
   apiUrl: string;
   useMockAPI: boolean;
+  appName?: string;
+  supportEmail?: string;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsService {
-  private settingsKey = 'wishcowork_settings';
+  private settingsKey = 'app_settings';
   private defaultSettings: AppSettings = {
-    apiUrl: 'https://wishcoworker.com/api',
-    useMockAPI: false  // Use real API by default
+    apiUrl: 'https://wishcoworker.com/api/',
+    useMockAPI: false, // Use real API by default
+    appName: 'WishCowork',
+    supportEmail: 'info@wishcowork.com'
   };
 
   private settingsSubject = new BehaviorSubject<AppSettings>(this.defaultSettings);
@@ -42,6 +46,14 @@ export class SettingsService {
 
   getSettings(): AppSettings {
     return this.settingsSubject.value;
+  }
+
+  getAppName(): string {
+    return this.settingsSubject.value.appName || this.defaultSettings.appName!;
+  }
+
+  getSupportEmail(): string {
+    return this.settingsSubject.value.supportEmail || this.defaultSettings.supportEmail!;
   }
 
   updateSettings(settings: Partial<AppSettings>): void {

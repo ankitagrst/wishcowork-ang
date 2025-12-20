@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { BlogsService, Blog } from '../../services/blogs.service';
+import { SeoService } from '../../services/seo.service';
+import { SettingsService } from '../../services/settings.service';
 
 @Component({
-  selector: 'app-blogs',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './blogs.component.html'
+    selector: 'app-blogs',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './blogs.component.html'
 })
 export class BlogsComponent implements OnInit {
   featuredPosts: Blog[] = [];
@@ -18,9 +19,19 @@ export class BlogsComponent implements OnInit {
   categories = ['All', 'Productivity', 'Industry Trends', 'Networking', 'Home Office', 'Business', 'General'];
   selectedCategory = 'All';
 
-  constructor(private blogsService: BlogsService) {}
+  constructor(
+    private blogsService: BlogsService,
+    private seoService: SeoService,
+    private settingsService: SettingsService
+  ) {}
 
   ngOnInit() {
+    const appName = this.settingsService.getAppName();
+    this.seoService.updateMetaTags({
+      title: `Blog - Insights & Trends in Coworking | ${appName}`,
+      description: `Discover insights about coworking, productivity, and workspace trends. Stay updated with the latest from the WishCowork community.`,
+      keywords: 'coworking blog, workspace trends, productivity tips, business insights'
+    });
     this.loadBlogs();
   }
 

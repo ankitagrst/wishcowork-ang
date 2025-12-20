@@ -6,11 +6,9 @@ import { NewsService, News } from '../../services/news.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-admin-news',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './admin-news.component.html',
-  styleUrls: ['./admin-news.component.css']
+    selector: 'app-admin-news',
+    imports: [CommonModule, FormsModule],
+    templateUrl: './admin-news.component.html'
 })
 export class AdminNewsComponent implements OnInit {
   newsList: News[] = [];

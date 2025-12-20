@@ -6,11 +6,10 @@ import { Property } from '../../models/property.model';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-admin-properties',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './admin-properties.component.html',
-  styleUrls: ['./admin-properties.component.scss']
+    selector: 'app-admin-properties',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './admin-properties.component.html',
+    styleUrls: ['./admin-properties.component.scss']
 })
 export class AdminPropertiesComponent implements OnInit {
   properties: Property[] = [];

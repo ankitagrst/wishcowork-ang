@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-contact-form',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  template: `
+    selector: 'app-contact-form',
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    template: `
     <!-- Contact Form Section -->
     <section [class]="sectionClass">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="text-center mb-12 sm:mb-16" *ngIf="showHeader">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">{{ title }}</h2>
-          <p class="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto">
+          <h2 class="text-3xl sm:text-4xl font-bold text-deep mb-4">{{ title }}</h2>
+          <p class="text-lg sm:text-xl text-muted max-w-2xl mx-auto">
             {{ subtitle }}
           </p>
         </div>
@@ -21,54 +20,54 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
           <!-- Contact Information -->
           <div class="mb-8 lg:mb-0">
-            <h3 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6" *ngIf="!showHeader">{{ title }}</h3>
+            <h3 class="text-xl sm:text-2xl font-bold text-deep mb-4 sm:mb-6" *ngIf="!showHeader">{{ title }}</h3>
             
             <!-- Contact Details -->
             <div class="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
               <div class="flex items-start space-x-3 sm:space-x-4">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                   </svg>
                 </div>
                 <div>
-                  <h4 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Our Locations</h4>
-                  <p class="text-gray-600 text-sm sm:text-base">Multiple premium locations across Delhi, Mumbai, Bangalore, and Gurgaon</p>
+                  <h4 class="font-semibold text-deep mb-1 text-sm sm:text-base">Our Locations</h4>
+                  <p class="text-muted text-sm sm:text-base">Multiple premium locations across Delhi, Mumbai, Bangalore, and Gurgaon</p>
                 </div>
               </div>
 
               <div class="flex items-start space-x-3 sm:space-x-4">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
                   </svg>
                 </div>
                 <div>
-                  <h4 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Call Us</h4>
-                  <p class="text-gray-600 text-sm sm:text-base">+91 98765 43210</p>
-                  <p class="text-gray-600 text-xs sm:text-sm">Available 24/7 for support</p>
+                  <h4 class="font-semibold text-deep mb-1 text-sm sm:text-base">Call Us</h4>
+                  <p class="text-muted text-sm sm:text-base">+91 98765 43210</p>
+                  <p class="text-muted text-xs sm:text-sm">Available 24/7 for support</p>
                 </div>
               </div>
 
               <div class="flex items-start space-x-3 sm:space-x-4">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-accent/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5 sm:w-6 sm:h-6 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                   </svg>
                 </div>
                 <div>
-                  <h4 class="font-semibold text-gray-900 mb-1 text-sm sm:text-base">Email Us</h4>
-                  <p class="text-gray-600 text-sm sm:text-base">info&#64;wishcowork.com</p>
-                  <p class="text-gray-600 text-xs sm:text-sm">We'll respond within 24 hours</p>
+                  <h4 class="font-semibold text-deep mb-1 text-sm sm:text-base">Email Us</h4>
+                  <p class="text-muted text-sm sm:text-base">info&#64;wishcowork.com</p>
+                  <p class="text-muted text-xs sm:text-sm">We'll respond within 24 hours</p>
                 </div>
               </div>
             </div>
 
             <!-- Business Hours -->
-            <div class="bg-gray-50 rounded-xl p-4 sm:p-6">
-              <h4 class="font-semibold text-gray-900 mb-3 sm:mb-4 text-sm sm:text-base">Business Hours</h4>
-              <div class="space-y-2 text-xs sm:text-sm text-gray-600">
+            <div class="brand-surface rounded-xl p-4 sm:p-6">
+              <h4 class="font-semibold text-deep mb-3 sm:mb-4 text-sm sm:text-base">Business Hours</h4>
+              <div class="space-y-2 text-xs sm:text-sm text-muted">
                 <div class="flex justify-between">
                   <span>Monday - Friday</span>
                   <span>9:00 AM - 8:00 PM</span>
@@ -90,11 +89,11 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
             <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                 <div>
-                  <label class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">First Name</label>
+                  <label class="block text-xs sm:text-sm font-semibold text-deep mb-2">First Name</label>
                   <input 
                     type="text" 
                     formControlName="firstName"
-                    class="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors text-sm sm:text-base"
+                    class="w-full px-3 py-2.5 sm:px-4 sm:py-3 border border-deep/20 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-colors text-sm sm:text-base"
                     placeholder="Enter your first name"
                   >
                   <div *ngIf="contactForm.get('firstName')?.touched && contactForm.get('firstName')?.errors" class="text-red-500 text-sm mt-1">
@@ -103,11 +102,11 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
                 </div>
                 
                 <div>
-                  <label class="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
+                  <label class="block text-sm font-semibold text-deep mb-2">Last Name</label>
                   <input 
                     type="text" 
                     formControlName="lastName"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors"
+                    class="w-full px-4 py-3 border border-deep/20 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-colors"
                     placeholder="Enter your last name"
                   >
                   <div *ngIf="contactForm.get('lastName')?.touched && contactForm.get('lastName')?.errors" class="text-red-500 text-sm mt-1">
@@ -118,11 +117,11 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                  <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                  <label class="block text-sm font-semibold text-deep mb-2">Email</label>
                   <input 
                     type="email" 
                     formControlName="email"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors"
+                    class="w-full px-4 py-3 border border-deep/20 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-colors"
                     placeholder="Enter your email"
                   >
                   <div *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.errors" class="text-red-500 text-sm mt-1">
@@ -132,11 +131,11 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
                 </div>
                 
                 <div>
-                  <label class="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+                  <label class="block text-sm font-semibold text-deep mb-2">Phone</label>
                   <input 
                     type="tel" 
                     formControlName="phone"
-                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors"
+                    class="w-full px-4 py-3 border border-deep/20 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-colors"
                     placeholder="Enter your phone number"
                   >
                   <div *ngIf="contactForm.get('phone')?.touched && contactForm.get('phone')?.errors" class="text-red-500 text-sm mt-1">
@@ -146,10 +145,10 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
               </div>
 
               <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
+                <label class="block text-sm font-semibold text-deep mb-2">Subject</label>
                 <select 
                   formControlName="subject"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors"
+                  class="w-full px-4 py-3 border border-deep/20 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-colors"
                 >
                   <option value="">Select a subject</option>
                   <option value="general">General Inquiry</option>
@@ -164,11 +163,11 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
               </div>
 
               <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Message</label>
+                <label class="block text-sm font-semibold text-deep mb-2">Message</label>
                 <textarea 
                   formControlName="message"
                   rows="5"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors resize-none"
+                  class="w-full px-4 py-3 border border-deep/20 rounded-xl focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-colors resize-none"
                   placeholder="Tell us about your workspace requirements..."
                 ></textarea>
                 <div *ngIf="contactForm.get('message')?.touched && contactForm.get('message')?.errors" class="text-red-500 text-sm mt-1">
@@ -180,7 +179,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
               <button 
                 type="submit" 
                 [disabled]="!contactForm.valid || isSubmitting"
-                class="w-full bg-gradient-to-r from-primary-600 to-blue-600 hover:from-primary-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105"
+                class="btn-primary w-full py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105"
               >
                 <span *ngIf="!isSubmitting">Send Message</span>
                 <span *ngIf="isSubmitting" class="flex items-center justify-center">
