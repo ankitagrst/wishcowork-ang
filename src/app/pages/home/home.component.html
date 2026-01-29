@@ -250,7 +250,7 @@
 
     <!-- CTA Button -->
     <div class="text-center">
-      <button class="btn-primary font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+      <button routerLink="/properties" class="btn-primary font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
         EXPLORE ALL LOCATIONS
       </button>
     </div>
@@ -492,7 +492,7 @@
 
     <!-- View All Articles Button -->
     <div class="text-center mt-12">
-      <button class="btn-primary px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
+      <button routerLink="/blogs" class="btn-primary px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
         View All Articles
       </button>
     </div>
@@ -1101,48 +1101,15 @@
 </section>
 
 <!-- Enterprises Using WishCowork Section -->
-<section class="py-16 sm:py-24 bg-white">
+<section class="py-16 sm:py-24 bg-white" *ngIf="enterpriseLogos.length > 0">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-12 sm:mb-16 text-center">Enterprises using WishCowork</h2>
     
     <!-- Logos Grid -->
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-      <div class="flex items-center justify-center p-4">
-        <div class="text-3xl font-bold text-muted/40">OYO</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">BharatPe</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">CARS24</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">JioSaavn</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">Flipkart</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">Rebel Foods</div>
-      </div>
-      
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">Trulymadly</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">MagicBricks</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">Toppr</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">SanDisk</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">Swiggy</div>
-      </div>
-      <div class="flex items-center justify-center p-4">
-        <div class="text-2xl font-bold text-muted/40">Zoomcar</div>
+      <div *ngFor="let logo of enterpriseLogos" class="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
+        <img *ngIf="logo.logoUrl" [src]="logo.logoUrl" [alt]="logo.name" class="max-h-12 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" title="{{logo.name}}">
+        <div *ngIf="!logo.logoUrl" class="text-xl font-bold text-muted/40 uppercase">{{logo.name}}</div>
       </div>
     </div>
   </div>

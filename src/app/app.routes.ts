@@ -8,14 +8,15 @@ import { GalleryComponent } from './pages/gallery/gallery.component';
 import { EventsComponent } from './pages/events/events.component';
 import { NewsComponent } from './pages/news/news.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { CourierServicesComponent } from './pages/courier-services/courier-services.component';
 import { BusinessServicesComponent } from './pages/business-services/business-services.component';
 import { BlogsComponent } from './pages/blogs/blogs.component';
+import { BlogDetailComponent } from './pages/blog-detail/blog-detail.component';
 import { FaqComponent } from './pages/faq/faq.component';
 import { CareersComponent } from './pages/careers/careers.component';
 import { PrivacyPolicyComponent } from './pages/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './pages/terms-of-service/terms-of-service.component';
 import { CookiePolicyComponent } from './pages/cookie-policy/cookie-policy.component';
-import { PricingComponent } from './pages/pricing/pricing.component';
 import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 import { AdminDashboardComponent } from './admin/admin-dashboard/admin-dashboard.component';
 import { AdminPropertiesComponent } from './admin/admin-properties/admin-properties.component';
@@ -24,6 +25,8 @@ import { AdminPricingComponent } from './admin/admin-pricing/admin-pricing.compo
 import { AdminEventsComponent } from './admin/admin-events/admin-events.component';
 import { AdminBlogsComponent } from './admin/admin-blogs/admin-blogs.component';
 import { AdminNewsComponent } from './admin/admin-news/admin-news.component';
+import { AdminBookingsComponent } from './admin/admin-bookings/admin-bookings.component';
+import { AdminLogosComponent } from './admin/admin-logos/admin-logos.component';
 import { PropertyFormComponent } from './admin/property-form/property-form.component';
 import { authGuard, adminGuard } from './guards/auth.guard';
 
@@ -62,6 +65,10 @@ export const routes: Routes = [
     component: ContactComponent
   },
   {
+    path: 'courier-services',
+    component: CourierServicesComponent
+  },
+  {
     path: 'business-services',
     component: BusinessServicesComponent
   },
@@ -70,16 +77,16 @@ export const routes: Routes = [
     component: BlogsComponent
   },
   {
+    path: 'blog/:slug',
+    component: BlogDetailComponent
+  },
+  {
     path: 'faq',
     component: FaqComponent
   },
   {
     path: 'careers',
     component: CareersComponent
-  },
-  {
-    path: 'pricing',
-    component: PricingComponent
   },
   {
     path: 'privacy-policy',
@@ -131,6 +138,16 @@ export const routes: Routes = [
   {
     path: 'admin/news',
     component: AdminNewsComponent,
+    canActivate: [adminGuard]
+  },
+  {
+    path: 'admin/bookings',
+    component: AdminBookingsComponent,
+    canActivate: [adminGuard]
+  },
+  {
+    path: 'admin/logos',
+    component: AdminLogosComponent,
     canActivate: [adminGuard]
   },
   {

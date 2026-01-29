@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { SettingsService } from '../../services/settings.service';
 import { SeoService } from '../../services/seo.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface Plan {
   id?: number;
@@ -207,13 +209,14 @@ interface FAQ {
     </section>
   `
 })
-export class PlansComponent implements OnInit {
+export class PlansComponent implements OnInit, OnDestroy {
   selectedCategory: string = 'all';
   plans: Plan[] = [];
   additionalServices: AdditionalService[] = [];
   faqs: FAQ[] = [];
   loading: boolean = true;
   error: string | null = null;
+  private destroy$ = new Subject<void>();
 
   private get apiUrl(): string {
     return this.settingsService.getApiUrl();
@@ -245,8 +248,14 @@ export class PlansComponent implements OnInit {
     this.loadFaqs();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadPlans() {
     this.http.get<Plan[]>(`${this.apiUrl}/pricing/plans`)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
           this.plans = data;
@@ -262,6 +271,7 @@ export class PlansComponent implements OnInit {
 
   loadServices() {
     this.http.get<AdditionalService[]>(`${this.apiUrl}/pricing/services`)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
           this.additionalServices = data;
@@ -274,6 +284,7 @@ export class PlansComponent implements OnInit {
 
   loadFaqs() {
     this.http.get<FAQ[]>(`${this.apiUrl}/pricing/faqs`)
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (data) => {
           this.faqs = data;

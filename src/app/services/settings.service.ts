@@ -1,12 +1,14 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '@env';
 
 export interface AppSettings {
   apiUrl: string;
   useMockAPI: boolean;
   appName?: string;
   supportEmail?: string;
+  supportPhone?: string;
 }
 
 @Injectable({
@@ -15,10 +17,11 @@ export interface AppSettings {
 export class SettingsService {
   private settingsKey = 'app_settings';
   private defaultSettings: AppSettings = {
-    apiUrl: 'https://wishcoworker.com/api/',
+    apiUrl: environment.apiUrl,
     useMockAPI: false, // Use real API by default
     appName: 'WishCowork',
-    supportEmail: 'info@wishcowork.com'
+    supportEmail: 'info@wishcowork.com',
+    supportPhone: '+91-9555730319'
   };
 
   private settingsSubject = new BehaviorSubject<AppSettings>(this.defaultSettings);
@@ -68,7 +71,9 @@ export class SettingsService {
   }
 
   getApiUrl(): string {
-    return this.settingsSubject.value.apiUrl;
+    const url = this.settingsSubject.value.apiUrl;
+    // Ensure no trailing slash for consistent URL construction
+    return url.endsWith('/') ? url.slice(0, -1) : url;
   }
 
   setApiUrl(url: string): void {

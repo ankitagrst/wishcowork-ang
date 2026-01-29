@@ -25,10 +25,12 @@ export class FooterComponent implements OnInit, OnDestroy {
   ) {
     this.appName = this.settings.getAppName();
     this.supportEmail = this.settings.getSupportEmail();
+    this.supportPhone = this.settings.getSettings().supportPhone || '+91-9555730319';
   }
 
   appName = '';
   supportEmail = '';
+  supportPhone = '';
 
   ngOnInit(): void {
     this.loadCities();

@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { EventsService, Event as ApiEvent } from '../../services/events.service';
 import { SeoService } from '../../services/seo.service';
 import { SettingsService } from '../../services/settings.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface Event {
   id: string;
@@ -258,13 +260,14 @@ interface Event {
     </section>
   `
 })
-export class EventsComponent implements OnInit {
+export class EventsComponent implements OnInit, OnDestroy {
   selectedCategory: string = 'all';
   selectedStatus: string = 'all';
   displayedEventsCount: number = 9;
   hasMoreEvents: boolean = true;
   loading: boolean = true;
   events: Event[] = [];
+  private destroy$ = new Subject<void>();
 
   categories = [
     { label: 'All Events', value: 'all' },
@@ -298,21 +301,28 @@ export class EventsComponent implements OnInit {
     this.loadEvents();
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadEvents(): void {
     this.loading = true;
-    this.eventsService.getEvents(false).subscribe({
-      next: (apiEvents) => {
-        // Convert API events to component format
-        this.events = apiEvents.map(event => this.convertApiEventToEvent(event));
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error loading events:', err);
-        this.loading = false;
-        // Keep empty array on error
-        this.events = [];
-      }
-    });
+    this.eventsService.getEvents(false)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (apiEvents) => {
+          // Convert API events to component format
+          this.events = apiEvents.map(event => this.convertApiEventToEvent(event));
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error loading events:', err);
+          this.loading = false;
+          // Keep empty array on error
+          this.events = [];
+        }
+      });
   }
 
   private convertApiEventToEvent(apiEvent: ApiEvent): Event {

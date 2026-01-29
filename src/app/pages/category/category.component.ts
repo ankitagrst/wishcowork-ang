@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { combineLatest } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { PropertyService } from '../../services/property.service';
 import { SeoService } from '../../services/seo.service';
 import { Property, Category, City } from '../../models/property.model';
@@ -12,14 +15,16 @@ import { PropertyCardComponent } from '../../components/property-card/property-c
     templateUrl: './category.component.html',
     styleUrl: './category.component.scss'
 })
-export class CategoryComponent implements OnInit {
+export class CategoryComponent implements OnInit, OnDestroy {
   properties: Property[] = [];
   allProperties: Property[] = [];
   currentCategory: string = '';
   currentCity: string = '';
+  searchQuery: string = '';
   categories: Category[] = [];
   cities: City[] = [];
   loading = true;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -31,29 +36,58 @@ export class CategoryComponent implements OnInit {
     // Load all properties first
     this.loadAllProperties();
     
-    this.route.params.subscribe(params => {
-      // Normalize category and city names to lowercase with hyphens
-      this.currentCategory = params['categoryName'];
-      this.currentCity = params['cityName'];
-      console.log('Route params:', { categoryName: params['categoryName'], cityName: params['cityName'] });
-      this.applyFilters();
-      this.updateSEO();
-    });
+    combineLatest([
+      this.route.params,
+      this.route.queryParams
+    ])
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(([params, queryParams]) => {
+        // Normalize category and city names to lowercase with hyphens
+        // Priority: Route params > Query params
+        const rawCategory = params['categoryName'] || queryParams['type'] || queryParams['category'];
+        const rawCity = params['cityName'] || queryParams['city'];
+        
+        this.currentCategory = this.normalizeValue(rawCategory);
+        this.currentCity = this.normalizeValue(rawCity);
+        this.searchQuery = queryParams['q'] || queryParams['search'] || '';
+        
+        console.log('Route and Query params:', { 
+          category: this.currentCategory, 
+          city: this.currentCity,
+          search: this.searchQuery
+        });
+        
+        this.applyFilters();
+        this.updateSEO();
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private loadAllProperties() {
     this.loading = true;
-    this.propertyService.getAllProperties().subscribe(allProperties => {
-      console.log('All properties loaded:', allProperties.length);
-      this.allProperties = allProperties;
-      
-      // Build dynamic filter lists from actual data
-      this.buildFilterLists();
-      
-      // Apply filters
-      this.applyFilters();
-      this.loading = false;
-    });
+    this.propertyService.getAllProperties()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (allProperties) => {
+          console.log('All properties loaded:', allProperties.length);
+          this.allProperties = allProperties;
+          
+          // Build dynamic filter lists from actual data
+          this.buildFilterLists();
+          
+          // Apply filters
+          this.applyFilters();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error loading properties:', err);
+          this.loading = false;
+        }
+      });
   }
 
   private buildFilterLists() {
@@ -123,7 +157,12 @@ export class CategoryComponent implements OnInit {
       const matchesCity = !this.currentCity || 
                          propCity === this.normalizeValue(this.currentCity);
       
-      return matchesCategory && matchesCity;
+      const matchesSearch = !this.searchQuery || 
+                           property.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                           property.address.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                           property.description.toLowerCase().includes(this.searchQuery.toLowerCase());
+      
+      return matchesCategory && matchesCity && matchesSearch;
     });
     
     console.log('Filtered properties:', this.properties.length, 'properties');

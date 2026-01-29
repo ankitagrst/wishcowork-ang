@@ -223,10 +223,10 @@
             </div>
             
             <div class="p-8 space-y-4" formArrayName="photos">
-              <div *ngFor="let photo of photos.controls; let i = index" class="flex gap-3">
-                <input type="url" [formControlName]="i" placeholder="https://example.com/image.jpg" class="flex-1 px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl focus:ring-0 focus:border-accent transition-all text-deep font-medium placeholder:text-deep/20"/>
-                <button type="button" (click)="removePhoto(i)" *ngIf="photos.length > 1" class="p-4 bg-red-50 text-red-600 rounded-2xl hover:bg-red-100 transition-all">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div *ngFor="let photo of photos.controls; let i = index" class="flex flex-col gap-3 relative bg-sand/5 p-4 rounded-2xl border border-deep/5">
+                <app-image-upload [formControlName]="i" label="Photo {{i + 1}}" [preview]="true"></app-image-upload>
+                <button type="button" (click)="removePhoto(i)" *ngIf="photos.length > 1" class="absolute top-4 right-4 p-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all z-10">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                   </svg>
                 </button>
@@ -235,7 +235,7 @@
                 <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                 </svg>
-                Add Photo URL
+                Add Another Photo
               </button>
             </div>
           </div>

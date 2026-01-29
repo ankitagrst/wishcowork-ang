@@ -21,9 +21,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private scrollSubscription?: Subscription;
 
   appName = '';
+  supportPhone = '';
 
   constructor(private propertyService: PropertyService, private locoService: LocomotiveScrollService, private settings: SettingsService) {
     this.appName = this.settings.getAppName();
+    this.supportPhone = this.settings.getSettings().supportPhone || '+91 999 999 9999';
   }
 
   ngOnInit() {
@@ -83,20 +85,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
   }
 
+  private mobileMenuScrollY = 0;
+
   toggleMobileMenu() {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
     
-    // Prevent body scroll when mobile menu is open
     if (this.isMobileMenuOpen) {
+      this.mobileMenuScrollY = window.scrollY || window.pageYOffset;
       document.body.style.overflow = 'hidden';
+      this.locoService.stop();
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.style.overflow = '';
+      window.scrollTo(0, this.mobileMenuScrollY);
+      this.locoService.start();
     }
   }
   
   closeMobileMenu() {
     this.isMobileMenuOpen = false;
-    document.body.style.overflow = 'auto';
+    document.body.style.overflow = '';
+    window.scrollTo(0, this.mobileMenuScrollY);
+    this.locoService.start();
   }
 
   /**

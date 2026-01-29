@@ -1,0 +1,178 @@
+<section class="py-8 bg-brand-surface border-b border-deep/10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <button 
+      (click)="goBack()"
+      class="flex items-center gap-2 text-accent font-bold text-sm uppercase tracking-wider hover:text-deep transition-colors mb-6"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to Blog
+    </button>
+  </div>
+</section>
+
+<section *ngIf="loading" class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="inline-block w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin"></div>
+    <p class="mt-4 text-deep/60 text-lg">Loading article...</p>
+  </div>
+</section>
+
+<section *ngIf="notFound && !loading" class="py-16 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl font-bold text-deep mb-4">Article Not Found</h2>
+    <p class="text-deep/60 mb-8">The blog article you're looking for doesn't exist.</p>
+    <button 
+      (click)="goBack()"
+      class="bg-accent text-black px-6 py-3 rounded-lg font-bold hover:bg-accent/90 transition-colors"
+    >
+      Back to Blogs
+    </button>
+  </div>
+</section>
+
+<article *ngIf="blog && !loading" class="bg-white py-16">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Article Header -->
+    <div class="mb-12">
+      <div class="flex items-center gap-3 mb-6">
+        <span class="bg-accent text-black px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+          {{ blog.category }}
+        </span>
+        <span *ngIf="blog.isFeatured" class="bg-sand text-deep px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider">
+          ⭐ Featured
+        </span>
+      </div>
+
+      <h1 class="text-5xl font-bold text-deep mb-6 leading-tight">
+        {{ blog.title }}
+      </h1>
+
+      <div class="flex flex-wrap items-center gap-6 text-deep/60 font-medium">
+        <div class="flex items-center gap-3">
+          <img 
+            *ngIf="blog.authorImage" 
+            [src]="blog.authorImage" 
+            [alt]="blog.author"
+            class="w-10 h-10 rounded-full object-cover"
+          />
+          <div *ngIf="!blog.authorImage" class="w-10 h-10 bg-sand rounded-full flex items-center justify-center">
+            <span class="text-sm font-semibold text-deep">{{ blog.author.charAt(0).toUpperCase() }}</span>
+          </div>
+          <div>
+            <p class="font-semibold text-deep">{{ blog.author }}</p>
+            <p class="text-sm text-deep/50">Author</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+          </svg>
+          {{ blog.publishedAt ? (blog.publishedAt | date: 'MMMM d, yyyy') : 'Draft' }}
+        </div>
+
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
+            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path>
+          </svg>
+          {{ blog.views || 0 }} views
+        </div>
+
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4.555 5.659A3 3 0 018.5 5h3.992a1 1 0 01.894 1.553l-2.263 4.525A1 1 0 0110.5 11h-.745a1 1 0 00-.82.4l-1.353 1.76a2 2 0 01-1.55.84H6.189a2 2 0 01-2-2V7.236a2 2 0 01.555-1.577z"></path>
+          </svg>
+          {{ blog.readTime || 5 }} min read
+        </div>
+      </div>
+    </div>
+
+    <!-- Featured Image -->
+    <div *ngIf="blog.featuredImage" class="mb-12 rounded-2xl overflow-hidden shadow-xl">
+      <img 
+        [src]="blog.featuredImage" 
+        [alt]="blog.title"
+        class="w-full h-96 object-cover"
+      />
+    </div>
+
+    <!-- Article Content -->
+    <div class="prose prose-lg max-w-none mb-12">
+      <div class="text-lg leading-relaxed text-deep/80" [innerHTML]="blog.content"></div>
+    </div>
+
+    <!-- Tags -->
+    <div *ngIf="blog.tags && blog.tags.length > 0" class="mb-12 pb-12 border-b border-deep/10">
+      <p class="text-sm font-bold uppercase tracking-wider text-deep/60 mb-4">Tags</p>
+      <div class="flex flex-wrap gap-3">
+        <span 
+          *ngFor="let tag of blog.tags"
+          class="bg-sand/50 text-deep px-4 py-2 rounded-lg text-sm font-medium hover:bg-sand transition-colors"
+        >
+          #{{ tag }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Author Bio Section -->
+    <div class="bg-sand/20 rounded-2xl p-8 border border-deep/10 mb-12">
+      <div class="flex gap-6">
+        <img 
+          *ngIf="blog.authorImage" 
+          [src]="blog.authorImage" 
+          [alt]="blog.author"
+          class="w-16 h-16 rounded-full object-cover flex-shrink-0"
+        />
+        <div *ngIf="!blog.authorImage" class="w-16 h-16 bg-sand rounded-full flex items-center justify-center flex-shrink-0">
+          <span class="text-2xl font-bold text-deep">{{ blog.author.charAt(0).toUpperCase() }}</span>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-deep mb-2">About {{ blog.author }}</h3>
+          <p class="text-deep/70">
+            {{ blog.author }} is a contributor to WishCowork blog, sharing insights and expertise about coworking, productivity, and business growth.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Articles -->
+    <div *ngIf="relatedBlogs.length > 0" class="mt-16 pt-12 border-t border-deep/10">
+      <h2 class="text-3xl font-bold text-deep mb-8">Related Articles</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <article 
+          *ngFor="let relatedBlog of relatedBlogs"
+          (click)="router.navigate(['/blog', relatedBlog.slug])"
+          class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer group border border-deep/10"
+        >
+          <div class="relative overflow-hidden">
+            <img 
+              [src]="relatedBlog.featuredImage || 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop'"
+              [alt]="relatedBlog.title"
+              class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            <div class="absolute top-4 left-4">
+              <span class="bg-accent text-black px-3 py-1 rounded-full text-xs font-bold uppercase">
+                {{ relatedBlog.category }}
+              </span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-lg font-bold text-deep mb-2 group-hover:text-accent transition-colors">
+              {{ relatedBlog.title }}
+            </h3>
+            <p class="text-deep/70 text-sm mb-4">
+              {{ relatedBlog.excerpt }}
+            </p>
+            <div class="flex items-center justify-between text-xs text-deep/60">
+              <span>{{ relatedBlog.publishedAt ? (relatedBlog.publishedAt | date: 'MMM d, yyyy') : 'Draft' }}</span>
+              <span>{{ relatedBlog.readTime || 5 }} min read</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</article>

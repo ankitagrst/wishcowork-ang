@@ -102,8 +102,8 @@
   </div>
 
   <!-- Blog Modal -->
-  <div *ngIf="showBlogModal" class="fixed inset-0 bg-deep/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeBlogModal()">
-    <div class="bg-white rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden border border-white/20" (click)="$event.stopPropagation()">
+  <div *ngIf="showBlogModal" class="absolute left-0 w-full h-screen bg-deep/80 backdrop-blur-sm flex items-start justify-center p-4 z-[100] overflow-y-auto overscroll-contain" [style.top.px]="currentScrollY" (click)="closeBlogModal()">
+    <div class="bg-white rounded-3xl w-full max-w-4xl my-8 shadow-2xl overflow-hidden border border-white/20 transform transition-all" (click)="$event.stopPropagation()">
       <div class="flex items-center justify-between px-8 py-6 border-b border-deep/5 bg-brand-surface">
         <div>
           <h2 class="text-2xl font-bold text-deep">{{ selectedBlog?.id ? 'Edit Blog Post' : 'Create New Blog Post' }}</h2>
@@ -115,7 +115,7 @@
           </svg>
         </button>
       </div>
-      <div class="p-8 max-h-[75vh] overflow-y-auto custom-scrollbar">
+      <div class="p-8">
         <form *ngIf="selectedBlog" class="space-y-8">
           <div class="space-y-2">
             <label class="text-[10px] font-bold text-deep uppercase tracking-widest ml-1">Blog Title *</label>
@@ -150,13 +150,11 @@
               <input class="w-full bg-brand-surface border border-deep/10 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all text-deep" type="text" [(ngModel)]="selectedBlog.author" name="author" placeholder="Author name">
             </div>
             <div class="space-y-2">
-              <label class="text-sm font-bold text-deep uppercase tracking-wider">Author Image URL</label>
-              <input class="w-full bg-brand-surface border border-deep/10 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all text-deep" type="text" [(ngModel)]="selectedBlog.authorImage" name="authorImage" placeholder="https://...">
+              <app-image-upload [(ngModel)]="selectedBlog.authorImage" name="authorImage" label="Author Image"></app-image-upload>
             </div>
           </div>
           <div class="space-y-2">
-            <label class="text-sm font-bold text-deep uppercase tracking-wider">Featured Image URL</label>
-            <input class="w-full bg-brand-surface border border-deep/10 rounded-xl px-5 py-3 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-all text-deep" type="text" [(ngModel)]="selectedBlog.featuredImage" name="featuredImage" placeholder="https://...">
+            <app-image-upload [(ngModel)]="selectedBlog.featuredImage" name="featuredImage" label="Featured Image"></app-image-upload>
           </div>
           <div class="grid gap-6 md:grid-cols-2">
             <div class="space-y-2">

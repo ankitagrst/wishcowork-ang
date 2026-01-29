@@ -1,0 +1,89 @@
+<div class="pt-24 pb-12 brand-surface min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-black mb-4">Courier Services</h1>
+      <p class="text-muted text-lg max-w-2xl mx-auto">We've tied up with multiple leading courier partners to provide you with seamless shipping solutions directly from your workspace.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Partners List -->
+      <div class="lg:col-span-1 space-y-6">
+        <h2 class="text-xl font-bold text-black mb-4">Our Courier Partners</h2>
+        <div *ngFor="let courier of couriers" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center space-x-4">
+          <div class="w-16 h-16 bg-gray-50 rounded-xl flex items-center justify-center overflow-hidden">
+             <!-- Placeholder for logos -->
+             <span class="font-bold text-accent">{{courier.name.charAt(0)}}</span>
+          </div>
+          <div>
+            <h3 class="font-bold text-black">{{courier.name}}</h3>
+            <p class="text-xs text-muted">{{courier.description}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Form -->
+      <div class="lg:col-span-2">
+        <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-xl border border-gray-100">
+          <h2 class="text-2xl font-bold text-black mb-6">Book a Shipment</h2>
+          
+          <form [formGroup]="courierForm" (ngSubmit)="onSubmit()" class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-black mb-1">Your Name</label>
+                <input type="text" formControlName="name" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" placeholder="Enter your name">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-black mb-1">Phone Number</label>
+                <input type="tel" formControlName="phone" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" placeholder="10-digit mobile number">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-black mb-1">Pickup Address</label>
+                <textarea formControlName="pickupAddress" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" placeholder="Where should we pick up?"></textarea>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-black mb-1">Destination Address</label>
+                <textarea formControlName="destinationAddress" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" placeholder="Where is it going?"></textarea>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-black mb-1">Courier Partner</label>
+                <select formControlName="courierPartner" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all">
+                  <option *ngFor="let courier of couriers" [value]="courier.name">{{courier.name}}</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-black mb-1">Estimated Weight (kg)</label>
+                <input type="number" formControlName="weight" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" placeholder="e.g. 0.5, 2">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-black mb-1">Package Details (Optional)</label>
+              <input type="text" formControlName="packageDetails" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent outline-none transition-all" placeholder="What's inside?">
+            </div>
+
+            <div *ngIf="submitSuccess" class="p-4 bg-green-50 text-green-700 rounded-xl border border-green-200">
+              <p class="font-bold flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                Shipment request submitted! OUR TEAM WILL GET BACK SOON
+              </p>
+            </div>
+
+            <button type="submit" [disabled]="submitting" class="w-full btn-primary py-4 text-lg font-bold">
+              <span *ngIf="!submitting">Book Courier Now</span>
+              <span *ngIf="submitting" class="flex items-center justify-center">
+                <svg class="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                Processing Booking...
+              </span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

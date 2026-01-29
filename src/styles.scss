@@ -24,6 +24,15 @@ body {
   line-height: 1.6;
   color: #022124; /* Deep color */
   background-color: #fdf8f1; /* Sand color */
+  position: relative;
+}
+
+html.modal-open {
+  overflow: hidden !important;
+}
+
+body.modal-open {
+  overflow: hidden !important;
 }
 
 /* Brand Colors & Utilities */
@@ -98,6 +107,38 @@ body {
 
 .text-responsive-xl {
   @apply text-xl sm:text-2xl;
+}
+
+/* Modal Scroll Lock - Enhanced */
+.modal-open [data-scroll-container] {
+  overflow: hidden !important;
+  /* Don't fix height or position to avoid layout shifts */
+}
+
+/* Ensure modal overlays are above everything and scrollable */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  align-items: flex-start; /* Allow content to flow naturally */
+  justify-content: center;
+  padding: 1rem;
+  background-color: rgba(2, 33, 36, 0.8); /* deep/80 */
+  backdrop-filter: blur(4px);
+}
+
+/* Modal Content Container */
+.modal-content-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  /* Ensure content doesn't get cut off */
+  max-height: none !important; 
+  height: auto !important;
 }
 
 .text-responsive-2xl {

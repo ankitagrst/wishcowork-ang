@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { PropertyService } from '../../services/property.service';
 import { ViewTrackingService } from '../../services/view-tracking.service';
@@ -23,7 +24,7 @@ interface RecentActivity {
 
 @Component({
     selector: 'app-admin-dashboard',
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, FormsModule],
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss']
 })
@@ -36,40 +37,10 @@ export class AdminDashboardComponent implements OnInit {
     pendingRequests: 0
   };
 
-  recentActivities: RecentActivity[] = [
-    {
-      id: 1,
-      type: 'property',
-      title: 'New Property Listed',
-      description: 'Virtual Office in Sector 62, Noida added',
-      time: '2 hours ago',
-      icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
-    },
-    {
-      id: 2,
-      type: 'booking',
-      title: 'New Booking',
-      description: 'Meeting Room booked for tomorrow',
-      time: '5 hours ago',
-      icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'
-    },
-    {
-      id: 3,
-      type: 'inquiry',
-      title: 'New Inquiry',
-      description: 'Inquiry for Coworking Space in Delhi',
-      time: '1 day ago',
-      icon: 'M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-    },
-    {
-      id: 4,
-      type: 'user',
-      title: 'New User Registration',
-      description: 'New user registered on the platform',
-      time: '2 days ago',
-      icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'
-    }
-  ];
+  enquiries: any[] = [];
+  loadingEnquiries = false;
+
+  recentActivities: RecentActivity[] = [];
 
   quickActions = [
     {
@@ -127,6 +98,13 @@ export class AdminDashboardComponent implements OnInit {
       icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
       route: '/admin/settings',
       color: 'from-orange-500 to-orange-600'
+    },
+    {
+      title: 'Enterprise Logos',
+      description: 'Manage brand logos',
+      icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z',
+      route: '/admin/logos',
+      color: 'from-pink-500 to-pink-600'
     }
   ];
 
@@ -140,6 +118,7 @@ export class AdminDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     this.loadStats();
+    this.loadEnquiries();
   }
 
   loadStats(): void {
@@ -147,7 +126,6 @@ export class AdminDashboardComponent implements OnInit {
     this.propertyService.getAllProperties().subscribe(properties => {
       this.stats.totalProperties = properties.length;
       this.stats.activeProperties = properties.length; // All are active for now
-      this.stats.pendingRequests = Math.floor(Math.random() * 50) + 10;
     });
     
     // Load real view data
@@ -159,6 +137,54 @@ export class AdminDashboardComponent implements OnInit {
         this.stats.totalViews = Math.floor(Math.random() * 10000) + 5000;
       }
     });
+  }
+
+  loadEnquiries(): void {
+    this.loadingEnquiries = true;
+    this.propertyService.getEnquiries().subscribe(enquiries => {
+      this.enquiries = enquiries;
+      this.stats.pendingRequests = enquiries.filter(e => e.status === 'pending').length;
+      this.loadingEnquiries = false;
+      
+      // Update recent activities with real enquiries
+      this.recentActivities = enquiries.slice(0, 10).map(e => ({
+        id: e.id,
+        type: 'inquiry' as const,
+        title: `New ${e.type === 'booking' ? 'Booking' : 'Tour'} Request`,
+        description: `${e.name} for ${e.property_title || 'Unknown Property'}`,
+        time: this.formatTime(e.created_at),
+        icon: e.type === 'booking' ? 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' : 'M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+      }));
+    });
+  }
+
+  private formatTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} mins ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  }
+
+  updateEnquiryStatus(id: number, status: string): void {
+    this.propertyService.updateEnquiryStatus(id, status).subscribe(success => {
+      if (success) {
+        this.loadEnquiries();
+      }
+    });
+  }
+
+  deleteEnquiry(id: number): void {
+    if (confirm('Are you sure you want to delete this enquiry?')) {
+      this.propertyService.deleteEnquiry(id).subscribe(success => {
+        if (success) {
+          this.loadEnquiries();
+        }
+      });
+    }
   }
 
   logout(): void {

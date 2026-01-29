@@ -26,9 +26,9 @@
       <ol class="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-muted overflow-x-auto">
         <li class="whitespace-nowrap"><a routerLink="/" class="hover:text-accent">Home</a></li>
         <li><span class="mx-1 sm:mx-2">/</span></li>
-        <li class="whitespace-nowrap"><a [routerLink]="['/category', property.category]" class="hover:text-accent">{{categoryDisplay}}</a></li>
+        <li class="whitespace-nowrap"><a [routerLink]="['/category', slugify(property.category)]" class="hover:text-accent">{{categoryDisplay}}</a></li>
         <li><span class="mx-1 sm:mx-2">/</span></li>
-        <li class="whitespace-nowrap"><a [routerLink]="['/category', property.category, property.city]" class="hover:text-accent">{{cityDisplay}}</a></li>
+        <li class="whitespace-nowrap"><a [routerLink]="['/category', slugify(property.category), slugify(property.city)]" class="hover:text-accent">{{cityDisplay}}</a></li>
         <li><span class="mx-1 sm:mx-2">/</span></li>
         <li class="text-black font-medium truncate">{{property.title}}</li>
       </ol>
@@ -146,37 +146,81 @@
             </div>
 
             <!-- Booking Form -->
-            <div class="space-y-3 sm:space-y-4">
-              <div>
-                <label class="block text-xs sm:text-sm font-medium text-black mb-1.5 sm:mb-2">Check-in Date</label>
-                <input type="date" class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm sm:text-base touch-manipulation">
-              </div>
-              
-              <div>
-                <label class="block text-xs sm:text-sm font-medium text-black mb-1.5 sm:mb-2">Check-out Date</label>
-                <input type="date" class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm sm:text-base touch-manipulation">
+            <form [formGroup]="enquiryForm" class="space-y-3 sm:space-y-4">
+              <div class="grid grid-cols-1 gap-3">
+                <div>
+                  <label class="block text-xs sm:text-sm font-medium text-black mb-1">Booking Type</label>
+                  <select formControlName="bookingType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm">
+                    <option value="day-pass">Day Pass</option>
+                    <option value="meeting-room">Meeting Room</option>
+                    <option value="coworking">Coworking Space</option>
+                    <option value="private-office">Private Office</option>
+                    <option value="virtual-office">Virtual Office</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs sm:text-sm font-medium text-black mb-1">Full Name</label>
+                  <input type="text" formControlName="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm" placeholder="Your Name">
+                  <div *ngIf="enquiryForm.get('name')?.touched && enquiryForm.get('name')?.errors" class="text-red-500 text-[10px] mt-0.5">Name is required</div>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-xs sm:text-sm font-medium text-black mb-1">Email</label>
+                    <input type="email" formControlName="email" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm" placeholder="Email">
+                    <div *ngIf="enquiryForm.get('email')?.touched && enquiryForm.get('email')?.errors" class="text-red-500 text-[10px] mt-0.5">Valid email required</div>
+                  </div>
+                  <div>
+                    <label class="block text-xs sm:text-sm font-medium text-black mb-1">Phone</label>
+                    <input type="tel" formControlName="phone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm" placeholder="10-digit phone">
+                    <div *ngIf="enquiryForm.get('phone')?.touched && enquiryForm.get('phone')?.errors" class="text-red-500 text-[10px] mt-0.5">10-digit phone required</div>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label class="block text-xs sm:text-sm font-medium text-black mb-1.5 sm:mb-2">Guests</label>
-                <select class="w-full px-3 py-2.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm sm:text-base touch-manipulation">
-                  <option>1 person</option>
-                  <option>2-5 people</option>
-                  <option>6-10 people</option>
-                  <option>10+ people</option>
-                </select>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-xs sm:text-sm font-medium text-black mb-1">Check-in</label>
+                  <input type="date" formControlName="check_in" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm">
+                </div>
+                <div>
+                  <label class="block text-xs sm:text-sm font-medium text-black mb-1">Guests</label>
+                  <select formControlName="guests" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm">
+                    <option>1 person</option>
+                    <option>2-5 people</option>
+                    <option>6-10 people</option>
+                    <option>10+ people</option>
+                  </select>
+                </div>
+              </div>
+
+              <div *ngIf="submitError" class="p-2 bg-red-50 text-red-600 text-xs rounded-lg">{{submitError}}</div>
+              <div *ngIf="submitSuccess" class="p-3 bg-green-50 text-green-700 text-sm font-medium rounded-lg border border-green-200">
+                <div class="flex items-center">
+                  <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  OUR TEAM WILL GET BACK SOON
+                </div>
               </div>
 
               <button (click)="onBookNow()" 
-                      [disabled]="property.availability !== 'available'"
+                      [disabled]="property.availability !== 'available' || submitting"
                       class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-sm sm:text-base touch-manipulation active:scale-95">
-                {{property.availability === 'available' ? 'Book Now' : 'Not Available'}}
+                <span *ngIf="!submitting">
+                  {{ (enquiryForm.get('bookingType')?.value === 'day-pass' || enquiryForm.get('bookingType')?.value === 'meeting-room') ? 'Pay & Book' : 'Submit Enquiry' }}
+                </span>
+                <span *ngIf="submitting" class="flex items-center justify-center">
+                  <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  Processing...
+                </span>
               </button>
 
-              <button class="w-full btn-secondary min-h-[44px] text-sm sm:text-base touch-manipulation active:scale-95">
+              <button (click)="onContactTour()"
+                      [disabled]="submitting"
+                      class="w-full btn-secondary min-h-[44px] text-sm sm:text-base touch-manipulation active:scale-95">
                 Contact for Tour
               </button>
-            </div>
+            </form>
 
             <!-- Price Breakdown -->
             <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t" *ngIf="shouldShowServiceFee() || shouldShowTax()">

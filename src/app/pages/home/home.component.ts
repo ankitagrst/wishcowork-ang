@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -6,8 +6,10 @@ import { PropertyService } from '../../services/property.service';
 import { PricingService, FAQ } from '../../services/pricing.service';
 import { SeoService } from '../../services/seo.service';
 import { SettingsService } from '../../services/settings.service';
-import { Category, City } from '../../models/property.model';
+import { Category, City, EnterpriseLogo } from '../../models/property.model';
 import { ContactFormComponent } from '../../components/contact-form/contact-form.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-home',
@@ -15,10 +17,11 @@ import { ContactFormComponent } from '../../components/contact-form/contact-form
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   categories: Category[] = [];
   cities: City[] = [];
   faqs: FAQ[] = [];
+  enterpriseLogos: EnterpriseLogo[] = [];
   searchQuery = '';
   suggestions: string[] = ['Mumbai', 'Bengaluru', 'Delhi', 'Gurgaon', 'Pune', 'Hyderabad', 'Chennai'];
   filteredSuggestions: string[] = [];
@@ -27,6 +30,7 @@ export class HomeComponent implements OnInit {
   loadingFAQs = false;
   showAllFAQs = false;
   maxFAQsToShow = 6;
+  private destroy$ = new Subject<void>();
 
   // Hero search state
   heroTabs = [
@@ -64,15 +68,40 @@ export class HomeComponent implements OnInit {
     this.loadData();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private loadData() {
     // Categories and Cities (featured only)
-    this.propertyService.getCategories().subscribe(categories => {
-      this.categories = categories.filter(c => c.featured);
-    });
+    this.propertyService.getCategories()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (categories) => {
+          this.categories = categories.filter(c => c.featured);
+        },
+        error: (err) => console.error('Error loading categories:', err)
+      });
 
-    this.propertyService.getCities().subscribe(cities => {
-      this.cities = cities.filter(c => c.featured);
-    });
+    this.propertyService.getCities()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (cities) => {
+          this.cities = cities.filter(c => c.featured);
+        },
+        error: (err) => console.error('Error loading cities:', err)
+      });
+
+    // Load enterprise logos
+    this.propertyService.getEnterpriseLogos()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (logos) => {
+          this.enterpriseLogos = logos;
+        },
+        error: (err) => console.error('Error loading logos:', err)
+      });
 
     // Load FAQs from admin
     this.loadFAQs();
@@ -83,18 +112,20 @@ export class HomeComponent implements OnInit {
    */
   private loadFAQs(): void {
     this.loadingFAQs = true;
-    this.pricingService.getFaqs(false).subscribe({
-      next: (faqs) => {
-        // Sort by display order
-        this.faqs = (faqs || []).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
-        this.loadingFAQs = false;
-      },
-      error: (error) => {
-        console.error('Error loading FAQs:', error);
-        this.faqs = [];
-        this.loadingFAQs = false;
-      }
-    });
+    this.pricingService.getFaqs(false)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (faqs) => {
+          // Sort by display order
+          this.faqs = (faqs || []).sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
+          this.loadingFAQs = false;
+        },
+        error: (error) => {
+          console.error('Error loading FAQs:', error);
+          this.faqs = [];
+          this.loadingFAQs = false;
+        }
+      });
   }
 
   onSearch() {
@@ -154,24 +185,21 @@ export class HomeComponent implements OnInit {
    * Navigate to booking page
    */
   bookWorkspace(type: string): void {
-    console.log('Book workspace:', type);
-    // Routes to booking page with pre-selected type
+    this.router.navigate(['/contact'], { queryParams: { interest: type } });
   }
 
   /**
    * Explore office spaces
    */
   exploreOfficeSpaces(): void {
-    console.log('Exploring office spaces');
-    // Navigate to properties listing page
+    this.router.navigate(['/properties']);
   }
 
   /**
    * Contact support
    */
   contactSupport(): void {
-    console.log('Contact support');
-    // Scroll to contact form or open contact modal
+    this.router.navigate(['/contact']);
   }
 
   onImageError(event: any): void {

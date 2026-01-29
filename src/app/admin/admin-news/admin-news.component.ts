@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NewsService, News } from '../../services/news.service';
 import { AuthService } from '../../services/auth.service';
+import { LocomotiveScrollService } from '../../services/locomotive-scroll.service';
+import { ImageUploadComponent } from '../../components/image-upload/image-upload.component';
 
 @Component({
     selector: 'app-admin-news',
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, ImageUploadComponent],
     templateUrl: './admin-news.component.html'
 })
 export class AdminNewsComponent implements OnInit {
@@ -24,11 +26,34 @@ export class AdminNewsComponent implements OnInit {
   constructor(
     private newsService: NewsService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private locomotiveScrollService: LocomotiveScrollService
   ) {}
 
   ngOnInit() {
     this.loadNews();
+  }
+
+  public currentScrollY = 0;
+  private scrollY = 0;
+
+  private toggleBodyScroll(lock: boolean): void {
+    if (typeof document === 'undefined') return;
+    
+    if (lock) {
+      this.currentScrollY = this.locomotiveScrollService.getScrollY();
+      this.scrollY = window.scrollY || window.pageYOffset;
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden';
+      this.locomotiveScrollService.stop();
+    } else {
+      document.documentElement.classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      window.scrollTo(0, this.scrollY);
+      this.locomotiveScrollService.start();
+    }
   }
 
   loadNews() {
@@ -72,6 +97,7 @@ export class AdminNewsComponent implements OnInit {
       this.tagsString = '';
     }
     this.showNewsModal = true;
+    this.toggleBodyScroll(true);
     this.error = '';
     this.success = '';
   }
@@ -80,6 +106,7 @@ export class AdminNewsComponent implements OnInit {
     this.showNewsModal = false;
     this.selectedNews = null;
     this.tagsString = '';
+    this.toggleBodyScroll(false);
   }
 
   saveNews() {

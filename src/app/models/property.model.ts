@@ -74,3 +74,10 @@ export interface User {
   role: 'user' | 'admin';
   createdAt: Date;
 }
+
+export interface EnterpriseLogo {
+  id: string;
+  name: string;
+  logoUrl: string;
+  displayOrder?: number;
+}

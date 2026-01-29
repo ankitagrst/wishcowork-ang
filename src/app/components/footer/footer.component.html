@@ -54,11 +54,11 @@
           
           <!-- Contact Details -->
           <div class="flex flex-col space-y-2">
-            <a href="tel:+919555730319" class="flex items-center space-x-2 hover:text-black transition-colors">
+            <a [href]="'tel:' + supportPhone.replace(' ', '')" class="flex items-center space-x-2 hover:text-black transition-colors">
               <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
               </svg>
-              <span>+91-9555730319</span>
+              <span>{{ supportPhone }}</span>
             </a>
             <a [href]="'mailto:' + supportEmail" class="flex items-center space-x-2 hover:text-black transition-colors">
               <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -74,14 +74,15 @@
       <div>
         <h3 class="font-semibold text-lg mb-4">Workspace</h3>
         <ul class="space-y-2 text-muted">
+          <li><a [routerLink]="['/category', 'day-pass']" class="text-accent font-bold hover:text-black transition-colors">Day Pass</a></li>
           <li><a routerLink="/category/private-office" class="hover:text-accent transition-colors">Private Office</a></li>
           <li><a routerLink="/category/coworking" class="hover:text-accent transition-colors">Coworking</a></li>
           <li><a routerLink="/category/dedicated-desk" class="hover:text-accent transition-colors">Dedicated Desk</a></li>
           <li><a routerLink="/category/meeting-room" class="hover:text-accent transition-colors">Meeting Room</a></li>
           <li><a routerLink="/category/virtual-office" class="hover:text-accent transition-colors">Virtual Office</a></li>
+          <li><a routerLink="/courier-services" class="hover:text-accent transition-colors">Courier Services</a></li>
           <li><a routerLink="/plans" class="hover:text-accent transition-colors">On-the-Go</a></li>
           <li><a routerLink="/business-services" class="hover:text-accent transition-colors">Enterprise Solutions</a></li>
-          <li><a routerLink="/plans" class="hover:text-accent transition-colors">Daily Office</a></li>
         </ul>
       </div>
 
@@ -102,64 +103,61 @@
     </div>
 
     <!-- Cities Section -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8 pt-8 border-t border-deep/40">
+    <div class="mt-12 pt-8 border-t border-gray-200">
       <!-- Coworking Spaces by City -->
-      <div>
-        <h3 class="font-semibold text-lg mb-4">Coworking Spaces by City</h3>
-        <div class="flex flex-wrap gap-2">
+      <div class="mb-8">
+        <h3 class="font-bold text-gray-800 text-lg mb-4">Coworking Spaces by top cities</h3>
+        <div class="flex flex-wrap items-center">
           <ng-container *ngIf="cities && cities.length > 0; else noCities">
-            <span *ngFor="let city of cities.slice(0, 12); let last = last" class="muted text-sm">
+            <span *ngFor="let city of cities; let last = last" class="text-sm text-gray-600 flex items-center">
               <a 
                 (click)="navigateToCityWorkspace(city, 'coworking')"
                 class="hover:text-accent transition-colors cursor-pointer"
                 title="Coworking spaces in {{ city.name }}">
-                {{ city.name }}
-              </a><span *ngIf="!last">,</span>
+                Coworking Space in {{ city.name }}
+              </a>
+              <span *ngIf="!last" class="mx-2 text-gray-400">•</span>
             </span>
           </ng-container>
           <ng-template #noCities>
-            <p class="text-muted text-sm">Loading cities...</p>
+            <p class="text-muted text-sm italic">Our coworking network is growing soon...</p>
           </ng-template>
         </div>
       </div>
 
       <!-- Day Pass by City -->
-      <div>
-        <h3 class="font-semibold text-lg mb-4 text-black">Day Pass by City</h3>
-        <div class="flex flex-wrap gap-2">
+      <div class="mb-8">
+        <h3 class="font-bold text-gray-800 text-lg mb-4">Coworking Day Pass by top cities</h3>
+        <div class="flex flex-wrap items-center">
           <ng-container *ngIf="cities && cities.length > 0; else noCities">
-            <span *ngFor="let city of cities.slice(0, 12); let last = last" class="muted text-sm">
+            <span *ngFor="let city of cities; let last = last" class="text-sm text-gray-600 flex items-center">
               <a 
                 (click)="navigateToCityWorkspace(city, 'day-pass')"
                 class="hover:text-accent transition-colors cursor-pointer"
                 title="Day pass in {{ city.name }}">
-                {{ city.name }}
-              </a><span *ngIf="!last">,</span>
+                Coworking Day Pass in {{ city.name }}
+              </a>
+              <span *ngIf="!last" class="mx-2 text-gray-400">•</span>
             </span>
           </ng-container>
-          <ng-template #noCities>
-            <p class="text-muted text-sm">Loading cities...</p>
-          </ng-template>
         </div>
       </div>
 
       <!-- Virtual Offices by City -->
       <div>
-        <h3 class="font-semibold text-lg mb-4 text-black">Virtual Offices by City</h3>
-        <div class="flex flex-wrap gap-2">
+        <h3 class="font-bold text-gray-800 text-lg mb-4">Virtual Offices by top cities</h3>
+        <div class="flex flex-wrap items-center">
           <ng-container *ngIf="cities && cities.length > 0; else noCities">
-            <span *ngFor="let city of cities.slice(0, 12); let last = last" class="muted text-sm">
+            <span *ngFor="let city of cities; let last = last" class="text-sm text-gray-600 flex items-center">
               <a 
                 (click)="navigateToCityWorkspace(city, 'virtual-office')"
                 class="hover:text-accent transition-colors cursor-pointer"
                 title="Virtual offices in {{ city.name }}">
-                {{ city.name }}
-              </a><span *ngIf="!last">,</span>
+                Virtual Office in {{ city.name }}
+              </a>
+              <span *ngIf="!last" class="mx-2 text-gray-400">•</span>
             </span>
           </ng-container>
-          <ng-template #noCities>
-            <p class="text-muted text-sm">Loading cities...</p>
-          </ng-template>
         </div>
       </div>
     </div>

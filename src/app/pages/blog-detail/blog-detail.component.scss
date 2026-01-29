@@ -1,0 +1,57 @@
+/* Blog article styles */
+article {
+  .prose {
+    p {
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    h2 {
+      font-size: 1.875rem;
+      font-weight: bold;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      color: var(--color-deep, #1a1a1a);
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+      color: var(--color-deep, #1a1a1a);
+    }
+
+    ul, ol {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    blockquote {
+      border-left: 4px solid var(--color-accent, #ffd700);
+      padding-left: 1.5rem;
+      margin: 2rem 0;
+      font-style: italic;
+      color: var(--color-deep, #1a1a1a);
+    }
+
+    code {
+      background-color: var(--color-sand, #f5e6d3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      font-family: 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: var(--color-sand, #f5e6d3);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+  }
+}

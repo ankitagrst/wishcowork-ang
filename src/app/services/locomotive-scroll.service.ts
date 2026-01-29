@@ -159,6 +159,24 @@ export class LocomotiveScrollService {
     }
   }
 
+  stop(): void {
+    if (!this.isBrowser || !this.locomotiveScroll) return;
+    try {
+      this.locomotiveScroll.stop && this.locomotiveScroll.stop();
+    } catch (e) {
+      console.warn('Locomotive stop failed', e);
+    }
+  }
+
+  start(): void {
+    if (!this.isBrowser || !this.locomotiveScroll) return;
+    try {
+      this.locomotiveScroll.start && this.locomotiveScroll.start();
+    } catch (e) {
+      console.warn('Locomotive start failed', e);
+    }
+  }
+
   destroy(): void {
     if (!this.isBrowser || !this.locomotiveScroll) return;
     try {
@@ -193,5 +211,24 @@ export class LocomotiveScrollService {
 
   getScrollProgress(): number {
     return this.scrollProgressSubject.value;
+  }
+
+  getScrollY(): number {
+    if (this.locomotiveScroll) {
+      // Try to get scroll from locomotive instance
+      // Structure might vary based on version, checking common paths
+      if (this.locomotiveScroll.scroll && this.locomotiveScroll.scroll.instance && this.locomotiveScroll.scroll.instance.scroll) {
+        return this.locomotiveScroll.scroll.instance.scroll.y;
+      }
+      if (this.locomotiveScroll.scroll && this.locomotiveScroll.scroll.y) {
+        return this.locomotiveScroll.scroll.y;
+      }
+    }
+    
+    // Fallback to window scroll
+    if (typeof window !== 'undefined') {
+      return window.scrollY || window.pageYOffset;
+    }
+    return 0;
   }
 }

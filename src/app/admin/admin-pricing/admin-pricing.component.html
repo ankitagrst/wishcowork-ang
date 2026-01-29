@@ -221,196 +221,221 @@
 </div>
 
 <!-- Plan Modal -->
-<div *ngIf="showPlanModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" (click)="showPlanModal = false">
-  <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto" (click)="$event.stopPropagation()">
-    <div class="p-6 border-b border-gray-200">
-      <h2 class="text-2xl font-bold">{{ selectedPlan?.id ? 'Edit Plan' : 'Add New Plan' }}</h2>
+<div *ngIf="showPlanModal" class="absolute left-0 w-full h-screen bg-deep/80 backdrop-blur-sm flex items-start justify-center p-4 z-[100] overflow-y-auto overscroll-contain" [style.top.px]="currentScrollY" (click)="closeModal()">
+  <div class="bg-white rounded-2xl max-w-2xl w-full my-8 shadow-2xl transform transition-all" (click)="$event.stopPropagation()">
+    <div class="p-8 border-b border-deep/5 bg-brand-surface rounded-t-2xl">
+      <h2 class="text-2xl font-bold text-deep tracking-tight">{{ selectedPlan?.id ? 'Edit Plan' : 'Add New Plan' }}</h2>
+      <p class="text-sm font-medium text-deep/40 mt-1">Update your pricing plan details and features.</p>
     </div>
     
-    <div class="p-6 space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Plan Name *</label>
-        <input [(ngModel)]="selectedPlan!.name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
-      </div>
+    <div class="p-8 space-y-6">
+      <form #planForm="ngForm">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Plan Name *</label>
+            <input [(ngModel)]="selectedPlan!.name" name="planName" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., Hot Desk">
+          </div>
 
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Description *</label>
-        <textarea [(ngModel)]="selectedPlan!.description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required></textarea>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Category *</label>
-          <select [(ngModel)]="selectedPlan!.category" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
-            <option value="coworking">Coworking</option>
-            <option value="private">Private Office</option>
-            <option value="virtual">Virtual Office</option>
-            <option value="meeting">Meeting Room</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Price *</label>
-          <input [(ngModel)]="selectedPlan!.price" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" required>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Unit *</label>
-          <select [(ngModel)]="selectedPlan!.unit" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
-            <option value="hour">Hour</option>
-            <option value="day">Day</option>
-            <option value="month">Month</option>
-            <option value="year">Year</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">Display Order</label>
-          <input [(ngModel)]="selectedPlan!.displayOrder" type="number" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Features</label>
-        <div class="space-y-2">
-          <div *ngFor="let feature of selectedPlan?.features; let i = index; trackBy: trackFeature" class="flex gap-2">
-            <input [(ngModel)]="selectedPlan!.features[i]" type="text" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500" placeholder="Feature description">
-            <button (click)="removeFeature(i)" class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg">Remove</button>
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Category *</label>
+            <select [(ngModel)]="selectedPlan!.category" name="planCategory" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all appearance-none">
+              <option value="coworking">Coworking</option>
+              <option value="private">Private Office</option>
+              <option value="virtual">Virtual Office</option>
+              <option value="meeting">Meeting Room</option>
+            </select>
           </div>
         </div>
-        <button (click)="addFeature()" class="mt-2 text-primary-600 hover:text-primary-700 text-sm font-medium">+ Add Feature</button>
-      </div>
 
-      <div class="flex items-center gap-4">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input [(ngModel)]="selectedPlan!.isPopular" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-          <span class="text-sm font-medium text-gray-700">Mark as Popular</span>
-        </label>
+        <div class="space-y-2 mt-6">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Description *</label>
+          <textarea [(ngModel)]="selectedPlan!.description" name="planDescription" rows="3" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Describe what's included in this plan..."></textarea>
+        </div>
 
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input [(ngModel)]="selectedPlan!.isActive" type="checkbox" class="rounded border-gray-300 text-primary-600 focus:ring-primary-500">
-          <span class="text-sm font-medium text-gray-700">Active</span>
-        </label>
-      </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Price *</label>
+            <div class="relative">
+              <span class="absolute left-5 top-1/2 -translate-y-1/2 text-deep/40 font-bold">₹</span>
+              <input [(ngModel)]="selectedPlan!.price" name="planPrice" type="number" class="w-full pl-10 pr-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Unit *</label>
+            <select [(ngModel)]="selectedPlan!.unit" name="planUnit" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all appearance-none">
+              <option value="hour">Hour</option>
+              <option value="day">Day</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+            </select>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
+            <input [(ngModel)]="selectedPlan!.displayOrder" name="planDisplayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
+          </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="mt-8">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1 mb-4">Plan Features</label>
+          <div class="space-y-3">
+            <div *ngFor="let feature of selectedPlan!.features; let i = index; trackBy: trackFeature" class="flex gap-2">
+              <input [(ngModel)]="selectedPlan!.features[i]" [name]="'feature' + i" type="text" class="flex-1 px-5 py-3 bg-sand/10 border border-deep/10 rounded-xl text-sm text-deep focus:outline-none focus:border-accent transition-all" placeholder="Feature description">
+              <button type="button" (click)="removeFeature(i)" class="p-3 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+              </button>
+            </div>
+            <button type="button" (click)="addFeature()" class="w-full py-3 border-2 border-dashed border-deep/10 rounded-xl text-xs font-bold text-deep/40 hover:border-accent hover:text-accent transition-all uppercase tracking-widest">
+              + Add Feature
+            </button>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6 mt-8 p-4 bg-sand/20 rounded-2xl border border-deep/5">
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <div class="relative">
+              <input type="checkbox" [(ngModel)]="selectedPlan!.isPopular" name="planIsPopular" class="sr-only peer">
+              <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors peer-checked:bg-accent"></div>
+              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm peer-checked:translate-x-4"></div>
+            </div>
+            <span class="text-xs font-bold text-deep/60 uppercase tracking-wider">Mark as Popular</span>
+          </label>
+
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <div class="relative">
+              <input type="checkbox" [(ngModel)]="selectedPlan!.isActive" name="planIsActive" class="sr-only peer">
+              <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors peer-checked:bg-accent"></div>
+              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm peer-checked:translate-x-4"></div>
+            </div>
+            <span class="text-xs font-bold text-deep/60 uppercase tracking-wider">Active</span>
+          </label>
+        </div>
+      </form>
     </div>
 
-    <div class="p-6 border-t border-gray-200 flex justify-end gap-3">
-      <button (click)="showPlanModal = false" class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Cancel</button>
-      <button (click)="savePlan()" class="px-4 py-2 bg-accent-500 hover:bg-accent-600 text-black rounded-lg">Save Plan</button>
+    <div class="p-8 border-t border-deep/5 bg-brand-surface rounded-b-2xl flex justify-end gap-4">
+      <button (click)="closeModal()" class="px-8 py-4 text-sm font-bold text-deep/40 hover:text-deep transition-all uppercase tracking-widest">Cancel</button>
+      <button (click)="savePlan()" [disabled]="loading" class="px-10 py-4 bg-accent text-deep rounded-2xl font-bold text-sm shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest">
+        {{ loading ? 'Saving...' : (selectedPlan?.id ? 'Update Plan' : 'Create Plan') }}
+      </button>
     </div>
   </div>
 </div>
 
 <!-- Service Modal -->
-<div *ngIf="showServiceModal" class="fixed inset-0 bg-deep/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="showServiceModal = false">
-  <div class="bg-white rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-white/20" (click)="$event.stopPropagation()">
-    <div class="p-8 border-b border-deep/5 bg-brand-surface">
+<div *ngIf="showServiceModal" class="absolute left-0 w-full h-screen bg-deep/80 backdrop-blur-sm flex items-start justify-center p-4 z-[100] overflow-y-auto overscroll-contain" [style.top.px]="currentScrollY" (click)="closeModal()">
+  <div class="bg-white rounded-[2.5rem] max-w-2xl w-full my-8 shadow-2xl flex flex-col border border-white/20 transform transition-all" (click)="$event.stopPropagation()">
+    <div class="p-8 border-b border-deep/5 bg-brand-surface rounded-t-[2.5rem]">
       <h2 class="text-2xl font-bold text-deep tracking-tight">{{ selectedService?.id ? 'Edit Service' : 'Add New Service' }}</h2>
       <p class="text-sm font-medium text-deep/40 mt-1">Configure your service offering details.</p>
     </div>
     
-    <div class="p-8 space-y-8 overflow-y-auto">
-      <div class="space-y-2">
-        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Service Name *</label>
-        <input [(ngModel)]="selectedService!.name" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., Dedicated Desk">
-      </div>
-
-      <div class="space-y-2">
-        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Description *</label>
-        <textarea [(ngModel)]="selectedService!.description" rows="3" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Describe what's included..."></textarea>
-      </div>
-
-      <div class="grid grid-cols-2 gap-6">
+    <div class="p-8 space-y-8">
+      <form #serviceForm="ngForm">
         <div class="space-y-2">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Price *</label>
-          <div class="relative">
-            <span class="absolute left-5 top-1/2 -translate-y-1/2 text-deep/40 font-bold">₹</span>
-            <input [(ngModel)]="selectedService!.price" type="number" class="w-full pl-10 pr-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required>
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Service Name *</label>
+          <input [(ngModel)]="selectedService!.name" name="serviceName" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., Dedicated Desk">
+        </div>
+
+        <div class="space-y-2 mt-6">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Description *</label>
+          <textarea [(ngModel)]="selectedService!.description" name="serviceDescription" rows="3" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Describe what's included..."></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6 mt-6">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Price *</label>
+            <div class="relative">
+              <span class="absolute left-5 top-1/2 -translate-y-1/2 text-deep/40 font-bold">₹</span>
+              <input [(ngModel)]="selectedService!.price" name="servicePrice" type="number" class="w-full pl-10 pr-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Unit *</label>
+            <select [(ngModel)]="selectedService!.unit" name="serviceUnit" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all appearance-none">
+              <option value="hour">Hour</option>
+              <option value="day">Day</option>
+              <option value="month">Month</option>
+              <option value="pass">Pass</option>
+            </select>
           </div>
         </div>
 
-        <div class="space-y-2">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Unit *</label>
-          <select [(ngModel)]="selectedService!.unit" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all appearance-none">
-            <option value="hour">Hour</option>
-            <option value="day">Day</option>
-            <option value="month">Month</option>
-            <option value="pass">Pass</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-2 gap-6">
-        <div class="space-y-2">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Icon (Lucide Name)</label>
-          <input [(ngModel)]="selectedService!.icon" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" placeholder="e.g., video, calendar">
-        </div>
-
-        <div class="space-y-2">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
-          <input [(ngModel)]="selectedService!.displayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
-        </div>
-      </div>
-
-      <div class="flex items-center gap-4 py-2">
-        <label class="flex items-center space-x-3 cursor-pointer group">
-          <div class="relative">
-            <input type="checkbox" class="sr-only" [(ngModel)]="selectedService!.isActive">
-            <div class="w-12 h-6 bg-deep/10 rounded-full shadow-inner transition-colors group-hover:bg-deep/20" [ngClass]="{'bg-green-500': selectedService!.isActive}"></div>
-            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform" [ngClass]="{'translate-x-6': selectedService!.isActive}"></div>
+        <div class="grid grid-cols-2 gap-6 mt-6">
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Icon (Lucide Name)</label>
+            <input [(ngModel)]="selectedService!.icon" name="serviceIcon" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" placeholder="e.g., video, calendar">
           </div>
-          <span class="text-sm font-bold text-deep uppercase tracking-wider">Active Status</span>
-        </label>
-      </div>
+
+          <div class="space-y-2">
+            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
+            <input [(ngModel)]="selectedService!.displayOrder" name="serviceDisplayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4 py-2 mt-6">
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <div class="relative">
+              <input type="checkbox" class="sr-only" [(ngModel)]="selectedService!.isActive" name="serviceIsActive">
+              <div class="w-12 h-6 bg-deep/10 rounded-full shadow-inner transition-colors group-hover:bg-deep/20" [ngClass]="{'bg-green-500': selectedService!.isActive}"></div>
+              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform" [ngClass]="{'translate-x-6': selectedService!.isActive}"></div>
+            </div>
+            <span class="text-sm font-bold text-deep uppercase tracking-wider">Active Status</span>
+          </label>
+        </div>
+      </form>
     </div>
 
-    <div class="p-8 border-t border-deep/5 bg-brand-surface flex justify-end gap-4">
-      <button (click)="showServiceModal = false" class="px-8 py-3 rounded-xl border border-deep/10 text-deep font-bold text-sm hover:bg-sand transition-all uppercase tracking-widest">Cancel</button>
+    <div class="p-8 border-t border-deep/5 bg-brand-surface flex justify-end gap-4 rounded-b-[2.5rem]">
+      <button (click)="closeModal()" class="px-8 py-3 rounded-xl border border-deep/10 text-deep font-bold text-sm hover:bg-sand transition-all uppercase tracking-widest">Cancel</button>
       <button (click)="saveService()" class="px-8 py-3 rounded-xl bg-deep text-white font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 uppercase tracking-widest">Save Service</button>
     </div>
   </div>
 </div>
 
 <!-- FAQ Modal -->
-<div *ngIf="showFaqModal" class="fixed inset-0 bg-deep/60 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="showFaqModal = false">
-  <div class="bg-white rounded-[2.5rem] max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-white/20" (click)="$event.stopPropagation()">
-    <div class="p-8 border-b border-deep/5 bg-brand-surface">
+<div *ngIf="showFaqModal" class="absolute left-0 w-full h-screen bg-deep/80 backdrop-blur-sm flex items-start justify-center p-4 z-[100] overflow-y-auto overscroll-contain" [style.top.px]="currentScrollY" (click)="closeModal()">
+  <div class="bg-white rounded-[2.5rem] max-w-2xl w-full my-8 shadow-2xl flex flex-col border border-white/20 transform transition-all" (click)="$event.stopPropagation()">
+    <div class="p-8 border-b border-deep/5 bg-brand-surface rounded-t-[2.5rem]">
       <h2 class="text-2xl font-bold text-deep tracking-tight">{{ selectedFaq?.id ? 'Edit FAQ' : 'Add New FAQ' }}</h2>
       <p class="text-sm font-medium text-deep/40 mt-1">Manage frequently asked questions.</p>
     </div>
     
-    <div class="p-8 space-y-8 overflow-y-auto">
-      <div class="space-y-2">
-        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Question *</label>
-        <input [(ngModel)]="selectedFaq!.question" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., What are the operating hours?">
-      </div>
+    <div class="p-8 space-y-8">
+      <form #faqForm="ngForm">
+        <div class="space-y-2">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Question *</label>
+          <input [(ngModel)]="selectedFaq!.question" name="faqQuestion" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., What are the operating hours?">
+        </div>
 
-      <div class="space-y-2">
-        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Answer *</label>
-        <textarea [(ngModel)]="selectedFaq!.answer" rows="4" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Provide a detailed answer..."></textarea>
-      </div>
+        <div class="space-y-2 mt-6">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Answer *</label>
+          <textarea [(ngModel)]="selectedFaq!.answer" name="faqAnswer" rows="4" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Provide a detailed answer..."></textarea>
+        </div>
 
-      <div class="space-y-2">
-        <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
-        <input [(ngModel)]="selectedFaq!.displayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
-      </div>
+        <div class="space-y-2 mt-6">
+          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
+          <input [(ngModel)]="selectedFaq!.displayOrder" name="faqDisplayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
+        </div>
 
-      <div class="flex items-center gap-4 py-2">
-        <label class="flex items-center space-x-3 cursor-pointer group">
-          <div class="relative">
-            <input type="checkbox" class="sr-only" [(ngModel)]="selectedFaq!.isActive">
-            <div class="w-12 h-6 bg-deep/10 rounded-full shadow-inner transition-colors group-hover:bg-deep/20" [ngClass]="{'bg-green-500': selectedFaq!.isActive}"></div>
-            <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform" [ngClass]="{'translate-x-6': selectedFaq!.isActive}"></div>
-          </div>
-          <span class="text-sm font-bold text-deep uppercase tracking-wider">Active Status</span>
-        </label>
-      </div>
+        <div class="flex items-center gap-4 py-2 mt-6">
+          <label class="flex items-center space-x-3 cursor-pointer group">
+            <div class="relative">
+              <input type="checkbox" class="sr-only" [(ngModel)]="selectedFaq!.isActive" name="faqIsActive">
+              <div class="w-12 h-6 bg-deep/10 rounded-full shadow-inner transition-colors group-hover:bg-deep/20" [ngClass]="{'bg-green-500': selectedFaq!.isActive}"></div>
+              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow transition-transform" [ngClass]="{'translate-x-6': selectedFaq!.isActive}"></div>
+            </div>
+            <span class="text-sm font-bold text-deep uppercase tracking-wider">Active Status</span>
+          </label>
+        </div>
+      </form>
     </div>
 
     <div class="p-8 border-t border-deep/5 bg-brand-surface flex justify-end gap-4">
-      <button (click)="showFaqModal = false" class="px-8 py-3 rounded-xl border border-deep/10 text-deep font-bold text-sm hover:bg-sand transition-all uppercase tracking-widest">Cancel</button>
+      <button (click)="closeModal()" class="px-8 py-3 rounded-xl border border-deep/10 text-deep font-bold text-sm hover:bg-sand transition-all uppercase tracking-widest">Cancel</button>
       <button (click)="saveFaq()" class="px-8 py-3 rounded-xl bg-deep text-white font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 uppercase tracking-widest">Save FAQ</button>
     </div>
   </div>

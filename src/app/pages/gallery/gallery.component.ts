@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { SeoService } from '../../services/seo.service';
 import { SettingsService } from '../../services/settings.service';
+import { LocomotiveScrollService } from '../../services/locomotive-scroll.service';
 
 interface GalleryImage {
   id: string;
@@ -174,51 +175,54 @@ interface Location {
     <!-- Modal -->
     <div 
       *ngIf="selectedImage" 
-      class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 p-4"
+      class="absolute inset-x-0 min-h-screen bg-black/90 backdrop-blur-sm flex items-start justify-center z-[100] p-4 overflow-y-auto overscroll-contain"
+      [style.top.px]="currentScrollY"
       (click)="closeModal()"
     >
-      <div class="relative max-w-4xl max-h-full" (click)="$event.stopPropagation()">
-        <img 
-          [src]="selectedImage.src" 
-          [alt]="selectedImage.alt"
-          class="max-w-full max-h-full object-contain rounded-lg"
-        />
+      <div class="relative max-w-5xl w-full my-8 transform transition-all" (click)="$event.stopPropagation()">
+        <div class="bg-white rounded-2xl overflow-hidden shadow-2xl relative">
+          <img 
+            [src]="selectedImage.src" 
+            [alt]="selectedImage.alt"
+            class="w-full h-auto object-contain"
+          />
+          
+          <!-- Image Info -->
+          <div class="p-6 bg-white">
+            <h3 class="text-xl font-bold text-black mb-2">{{ selectedImage.title }}</h3>
+            <p class="text-muted mb-1">{{ selectedImage.location }}</p>
+            <p class="text-sm text-muted">{{ selectedImage.description }}</p>
+          </div>
+
+          <!-- Navigation Arrows -->
+          <button 
+            *ngIf="canNavigatePrevious()"
+            (click)="navigateImage(-1)"
+            class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white p-3 rounded-full transition-all duration-200 backdrop-blur-sm"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+
+          <button 
+            *ngIf="canNavigateNext()"
+            (click)="navigateImage(1)"
+            class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/20 hover:bg-black/40 text-white p-3 rounded-full transition-all duration-200 backdrop-blur-sm"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </button>
+        </div>
         
         <!-- Close Button -->
         <button 
           (click)="closeModal()"
-          class="absolute top-4 right-4 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-2 rounded-full transition-all duration-200"
+          class="absolute -top-12 right-0 text-white hover:text-accent transition-colors p-2"
         >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-
-        <!-- Image Info -->
-        <div class="absolute bottom-0 left-0 right-0 bg-black/60 text-white p-6 rounded-b-lg">
-          <h3 class="text-xl font-bold mb-2">{{ selectedImage.title }}</h3>
-          <p class="text-white/80 mb-1">{{ selectedImage.location }}</p>
-          <p class="text-white/60 text-sm">{{ selectedImage.description }}</p>
-        </div>
-
-        <!-- Navigation Arrows -->
-        <button 
-          *ngIf="canNavigatePrevious()"
-          (click)="navigateImage(-1)"
-          class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all duration-200"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-          </svg>
-        </button>
-
-        <button 
-          *ngIf="canNavigateNext()"
-          (click)="navigateImage(1)"
-          class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white p-3 rounded-full transition-all duration-200"
-        >
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
           </svg>
         </button>
       </div>
@@ -235,7 +239,8 @@ export class GalleryComponent implements OnInit {
 
   constructor(
     private seoService: SeoService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private locomotiveScrollService: LocomotiveScrollService
   ) {}
 
   ngOnInit() {
@@ -529,10 +534,34 @@ export class GalleryComponent implements OnInit {
     this.selectedImage = image;
     const filtered = this.getFilteredImages();
     this.currentImageIndex = filtered.findIndex(img => img.id === image.id);
+    this.toggleBodyScroll(true);
   }
 
   closeModal(): void {
     this.selectedImage = null;
+    this.toggleBodyScroll(false);
+  }
+
+  public currentScrollY = 0;
+  private scrollY = 0;
+
+  private toggleBodyScroll(lock: boolean): void {
+    if (typeof document === 'undefined') return;
+    
+    if (lock) {
+      this.currentScrollY = this.locomotiveScrollService.getScrollY();
+      this.scrollY = window.scrollY || window.pageYOffset;
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden';
+      this.locomotiveScrollService.stop();
+    } else {
+      document.documentElement.classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      window.scrollTo(0, this.scrollY);
+      this.locomotiveScrollService.start();
+    }
   }
 
   canNavigatePrevious(): boolean {

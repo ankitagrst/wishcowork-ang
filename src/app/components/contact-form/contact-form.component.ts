@@ -1,6 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PropertyService } from '../../services/property.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-contact-form',
@@ -207,7 +210,7 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
     </section>
   `
 })
-export class ContactFormComponent {
+export class ContactFormComponent implements OnDestroy {
   @Input() title: string = 'Request a Consultation';
   @Input() subtitle: string = 'Get in touch with our workspace experts to find the perfect solution for your business needs.';
   @Input() sectionClass: string = 'py-20 bg-gray-50';
@@ -216,8 +219,12 @@ export class ContactFormComponent {
   contactForm: FormGroup;
   isSubmitting = false;
   isSubmitted = false;
+  private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private propertyService: PropertyService
+  ) {
     this.contactForm = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -232,22 +239,40 @@ export class ContactFormComponent {
     if (this.contactForm.valid) {
       this.isSubmitting = true;
       
-      // Simulate API call
-      setTimeout(() => {
-        this.isSubmitting = false;
-        this.isSubmitted = true;
-        this.contactForm.reset();
-        
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          this.isSubmitted = false;
-        }, 5000);
-      }, 2000);
+      const formData = this.contactForm.value;
+      const enquiryData = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        type: formData.subject === 'booking' ? 'booking' : 'tour',
+        message: `Subject: ${formData.subject}\n\n${formData.message}`,
+        property_id: null
+      };
+
+      this.propertyService.submitEnquiry(enquiryData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.isSubmitting = false;
+            this.isSubmitted = true;
+            this.contactForm.reset();
+            setTimeout(() => this.isSubmitted = false, 5000);
+          },
+          error: (error) => {
+            console.error('Error submitting form:', error);
+            this.isSubmitting = false;
+            alert('Failed to send message. Please try again later.');
+          }
+        });
     } else {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.contactForm.controls).forEach(key => {
         this.contactForm.get(key)?.markAsTouched();
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

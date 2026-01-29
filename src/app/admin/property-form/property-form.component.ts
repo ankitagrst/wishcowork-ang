@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
+import { ImageUploadComponent } from '../../components/image-upload/image-upload.component';
 
 @Component({
     selector: 'app-property-form',
-    imports: [CommonModule, ReactiveFormsModule],
+    imports: [CommonModule, ReactiveFormsModule, ImageUploadComponent],
     templateUrl: './property-form.component.html',
     styleUrl: './property-form.component.scss'
 })
@@ -106,7 +107,7 @@ export class PropertyFormComponent implements OnInit {
   }
 
   addPhoto(): void {
-    this.photos.push(this.fb.control('', [Validators.required, Validators.pattern(/^https?:\/\/.+/)]));
+    this.photos.push(this.fb.control('', [Validators.required]));
   }
 
   removePhoto(index: number): void {
@@ -157,7 +158,7 @@ export class PropertyFormComponent implements OnInit {
 
           // Add photos
           property.photos?.forEach(photo => {
-            this.photos.push(this.fb.control(photo, [Validators.required, Validators.pattern(/^https?:\/\/.+/)]));
+            this.photos.push(this.fb.control(photo, [Validators.required]));
           });
         }
         this.loading = false;

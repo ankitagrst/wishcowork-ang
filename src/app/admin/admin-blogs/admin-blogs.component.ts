@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BlogsService, Blog } from '../../services/blogs.service';
 import { AuthService } from '../../services/auth.service';
+import { LocomotiveScrollService } from '../../services/locomotive-scroll.service';
+import { ImageUploadComponent } from '../../components/image-upload/image-upload.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-admin-blogs',
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, ImageUploadComponent],
     templateUrl: './admin-blogs.component.html',
 })
-export class AdminBlogsComponent implements OnInit {
+export class AdminBlogsComponent implements OnInit, OnDestroy {
   blogs: Blog[] = [];
   selectedBlog: Blog | null = null;
   tagsString = ''; // For handling comma-separated tags in form
@@ -18,32 +22,63 @@ export class AdminBlogsComponent implements OnInit {
   loading = false;
   error = '';
   success = '';
+  private destroy$ = new Subject<void>();
 
   categories = ['Productivity', 'Industry Trends', 'Networking', 'Home Office', 'Business', 'General'];
 
   constructor(
     private blogsService: BlogsService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private locomotiveScrollService: LocomotiveScrollService
   ) {}
 
   ngOnInit() {
     this.loadBlogs();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  public currentScrollY = 0;
+  private scrollY = 0;
+
+  private toggleBodyScroll(lock: boolean): void {
+    if (typeof document === 'undefined') return;
+    
+    if (lock) {
+      this.currentScrollY = this.locomotiveScrollService.getScrollY();
+      this.scrollY = window.scrollY || window.pageYOffset;
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden';
+      this.locomotiveScrollService.stop();
+    } else {
+      document.documentElement.classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      window.scrollTo(0, this.scrollY);
+      this.locomotiveScrollService.start();
+    }
+  }
+
   loadBlogs() {
     this.loading = true;
-    this.blogsService.getBlogs(true).subscribe({
-      next: (blogs) => {
-        this.blogs = blogs;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to load blogs';
-        this.loading = false;
-        console.error('Error loading blogs:', err);
-      }
-    });
+    this.blogsService.getBlogs(true)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (blogs) => {
+          this.blogs = blogs;
+          this.loading = false;
+        },
+        error: (err) => {
+          this.error = 'Failed to load blogs';
+          this.loading = false;
+          console.error('Error loading blogs:', err);
+        }
+      });
   }
 
   openBlogModal(blog?: Blog) {
@@ -76,6 +111,7 @@ export class AdminBlogsComponent implements OnInit {
       this.tagsString = '';
     }
     this.showBlogModal = true;
+    this.toggleBodyScroll(true);
     this.error = '';
     this.success = '';
   }
@@ -84,6 +120,7 @@ export class AdminBlogsComponent implements OnInit {
     this.showBlogModal = false;
     this.selectedBlog = null;
     this.tagsString = '';
+    this.toggleBodyScroll(false);
   }
 
   saveBlog() {
@@ -116,36 +153,40 @@ export class AdminBlogsComponent implements OnInit {
 
     if (this.selectedBlog.id) {
       // Update existing blog
-      this.blogsService.updateBlog(this.selectedBlog.id, blogData).subscribe({
-        next: () => {
-          this.success = 'Blog updated successfully!';
-          this.loading = false;
-          this.closeBlogModal();
-          this.loadBlogs();
-          setTimeout(() => this.success = '', 3000);
-        },
-        error: (err) => {
-          this.error = 'Failed to update blog';
-          this.loading = false;
-          console.error('Error updating blog:', err);
-        }
-      });
+      this.blogsService.updateBlog(this.selectedBlog.id, blogData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.success = 'Blog updated successfully!';
+            this.loading = false;
+            this.closeBlogModal();
+            this.loadBlogs();
+            setTimeout(() => this.success = '', 3000);
+          },
+          error: (err) => {
+            this.error = 'Failed to update blog';
+            this.loading = false;
+            console.error('Error updating blog:', err);
+          }
+        });
     } else {
       // Create new blog
-      this.blogsService.createBlog(blogData).subscribe({
-        next: () => {
-          this.success = 'Blog created successfully!';
-          this.loading = false;
-          this.closeBlogModal();
-          this.loadBlogs();
-          setTimeout(() => this.success = '', 3000);
-        },
-        error: (err) => {
-          this.error = 'Failed to create blog';
-          this.loading = false;
-          console.error('Error creating blog:', err);
-        }
-      });
+      this.blogsService.createBlog(blogData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: () => {
+            this.success = 'Blog created successfully!';
+            this.loading = false;
+            this.closeBlogModal();
+            this.loadBlogs();
+            setTimeout(() => this.success = '', 3000);
+          },
+          error: (err) => {
+            this.error = 'Failed to create blog';
+            this.loading = false;
+            console.error('Error creating blog:', err);
+          }
+        });
     }
   }
 
@@ -155,19 +196,21 @@ export class AdminBlogsComponent implements OnInit {
     }
 
     this.loading = true;
-    this.blogsService.deleteBlog(id).subscribe({
-      next: () => {
-        this.success = 'Blog deleted successfully!';
-        this.loading = false;
-        this.loadBlogs();
-        setTimeout(() => this.success = '', 3000);
-      },
-      error: (err) => {
-        this.error = 'Failed to delete blog';
-        this.loading = false;
-        console.error('Error deleting blog:', err);
-      }
-    });
+    this.blogsService.deleteBlog(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.success = 'Blog deleted successfully!';
+          this.loading = false;
+          this.loadBlogs();
+          setTimeout(() => this.success = '', 3000);
+        },
+        error: (err) => {
+          this.error = 'Failed to delete blog';
+          this.loading = false;
+          console.error('Error deleting blog:', err);
+        }
+      });
   }
 
   formatDate(dateString: string | undefined): string {

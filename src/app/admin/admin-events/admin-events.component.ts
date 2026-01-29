@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EventsService, Event } from '../../services/events.service';
 import { AuthService } from '../../services/auth.service';
+import { LocomotiveScrollService } from '../../services/locomotive-scroll.service';
+import { ImageUploadComponent } from '../../components/image-upload/image-upload.component';
 
 @Component({
     selector: 'app-admin-events',
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, ImageUploadComponent],
     templateUrl: './admin-events.component.html',
     styleUrls: ['./admin-events.component.css']
 })
@@ -25,11 +27,39 @@ export class AdminEventsComponent implements OnInit {
   constructor(
     private eventsService: EventsService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private locomotiveScrollService: LocomotiveScrollService
   ) {}
 
   ngOnInit(): void {
     this.loadEvents();
+  }
+
+  public currentScrollY = 0;
+  private scrollY = 0;
+
+  private toggleBodyScroll(lock: boolean): void {
+    if (typeof document === 'undefined') return;
+    
+    if (lock) {
+      this.currentScrollY = this.locomotiveScrollService.getScrollY();
+      this.scrollY = window.scrollY || window.pageYOffset;
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden';
+      this.locomotiveScrollService.stop();
+    } else {
+      document.documentElement.classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      window.scrollTo(0, this.scrollY);
+      this.locomotiveScrollService.start();
+    }
+  }
+
+  closeModal() {
+    this.showEventModal = false;
+    this.toggleBodyScroll(false);
   }
 
   loadEvents(): void {
@@ -69,6 +99,7 @@ export class AdminEventsComponent implements OnInit {
       };
     }
     this.showEventModal = true;
+    this.toggleBodyScroll(true);
   }
 
   saveEvent(): void {
@@ -92,7 +123,7 @@ export class AdminEventsComponent implements OnInit {
         this.success = this.selectedEvent!.id
           ? 'Event updated successfully'
           : 'Event created successfully';
-        this.showEventModal = false;
+        this.closeModal();
         this.selectedEvent = null;
         this.loadEvents();
         setTimeout(() => this.success = null, 3000);

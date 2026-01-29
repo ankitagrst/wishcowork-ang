@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';  
+import { Component, OnInit, OnDestroy } from '@angular/core';  
 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NewsService, News } from '../../services/news.service';
 import { SeoService } from '../../services/seo.service';
 import { SettingsService } from '../../services/settings.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-news',
     imports: [CommonModule, RouterModule],
     templateUrl: './news.component.html'
 })
-export class NewsComponent implements OnInit {
+export class NewsComponent implements OnInit, OnDestroy {
   newsList: News[] = [];
   filteredNews: News[] = [];
   featuredNews: News | null = null;
   loading = false;
+  private destroy$ = new Subject<void>();
 
   categories = [
     { value: 'all', label: 'All News' },
@@ -42,22 +45,29 @@ export class NewsComponent implements OnInit {
     this.loadNews();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadNews() {
     this.loading = true;
-    this.newsService.getNews(false).subscribe({
-      next: (news) => {
-        if (news && news.length > 0) {
-          this.newsList = news;
-          this.featuredNews = news.find(n => n.isFeatured) || null;
-        } else {
-          // Fallback to mock data if API returns empty
-          this.loadMockNews();
-        }
-        this.filterNews();
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error loading news:', err);
+    this.newsService.getNews(false)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (news) => {
+          if (news && news.length > 0) {
+            this.newsList = news;
+            this.featuredNews = news.find(n => n.isFeatured) || null;
+          } else {
+            // Fallback to mock data if API returns empty
+            this.loadMockNews();
+          }
+          this.filterNews();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error loading news:', err);
         // Load mock data as fallback
         this.loadMockNews();
         this.filterNews();

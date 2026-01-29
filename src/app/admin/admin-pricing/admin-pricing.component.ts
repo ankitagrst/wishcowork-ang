@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PricingService, Plan, AdditionalService, FAQ } from '../../services/pricing.service';
 import { AuthService } from '../../services/auth.service';
+import { LocomotiveScrollService } from '../../services/locomotive-scroll.service';
 
 @Component({
     selector: 'app-admin-pricing',
@@ -36,13 +37,45 @@ export class AdminPricingComponent implements OnInit {
   constructor(
     private pricingService: PricingService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private locomotiveScrollService: LocomotiveScrollService
   ) {}
 
   ngOnInit() {
     this.loadPlans();
     this.loadServices();
     this.loadFaqs();
+  }
+
+  public currentScrollY = 0;
+  private scrollY = 0;
+
+  private toggleBodyScroll(lock: boolean): void {
+    if (typeof document === 'undefined') return;
+    
+    if (lock) {
+      // Get scroll position from Locomotive Service for positioning the modal
+      this.currentScrollY = this.locomotiveScrollService.getScrollY();
+      
+      this.scrollY = window.scrollY || window.pageYOffset;
+      document.documentElement.classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      document.body.style.overflow = 'hidden';
+      this.locomotiveScrollService.stop();
+    } else {
+      document.documentElement.classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+      document.body.style.overflow = '';
+      window.scrollTo(0, this.scrollY);
+      this.locomotiveScrollService.start();
+    }
+  }
+
+  closeModal() {
+    this.showPlanModal = false;
+    this.showServiceModal = false;
+    this.showFaqModal = false;
+    this.toggleBodyScroll(false);
   }
 
   // Plans Methods
@@ -77,6 +110,7 @@ export class AdminPricingComponent implements OnInit {
       };
     }
     this.showPlanModal = true;
+    this.toggleBodyScroll(true);
   }
 
   savePlan() {
@@ -90,7 +124,7 @@ export class AdminPricingComponent implements OnInit {
     operation.subscribe({
       next: () => {
         this.success = `Plan ${this.selectedPlan!.id ? 'updated' : 'created'} successfully`;
-        this.showPlanModal = false;
+        this.closeModal();
         this.loadPlans();
         setTimeout(() => this.success = null, 3000);
       },
@@ -166,6 +200,7 @@ export class AdminPricingComponent implements OnInit {
       };
     }
     this.showServiceModal = true;
+    this.toggleBodyScroll(true);
   }
 
   saveService() {
@@ -179,7 +214,7 @@ export class AdminPricingComponent implements OnInit {
     operation.subscribe({
       next: () => {
         this.success = `Service ${this.selectedService!.id ? 'updated' : 'created'} successfully`;
-        this.showServiceModal = false;
+        this.closeModal();
         this.loadServices();
         setTimeout(() => this.success = null, 3000);
       },
@@ -234,6 +269,7 @@ export class AdminPricingComponent implements OnInit {
       };
     }
     this.showFaqModal = true;
+    this.toggleBodyScroll(true);
   }
 
   saveFaq() {
@@ -247,7 +283,7 @@ export class AdminPricingComponent implements OnInit {
     operation.subscribe({
       next: () => {
         this.success = `FAQ ${this.selectedFaq!.id ? 'updated' : 'created'} successfully`;
-        this.showFaqModal = false;
+        this.closeModal();
         this.loadFaqs();
         setTimeout(() => this.success = null, 3000);
       },

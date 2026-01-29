@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, catchError, map, retry } from 'rxjs/operators';
-import { Property, Category, City, Booking } from '../models/property.model';
+import { Property, Category, City, Booking, EnterpriseLogo } from '../models/property.model';
 import { environment } from '@env';
 import { SettingsService } from './settings.service';
 
@@ -525,6 +525,104 @@ export class PropertyService {
   
   toggleAvailability(id: string, availability: 'available' | 'unavailable'): Observable<boolean> {
     return this.updateProperty(id, { availability });
+  }
+
+  // Enquiry Methods
+  submitEnquiry(enquiry: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/enquiries`, enquiry).pipe(
+      catchError(error => {
+        console.error('Failed to submit enquiry:', error);
+        throw error;
+      })
+    );
+  }
+
+  getEnquiries(): Observable<any[]> {
+    return this.http.get<any>(`${this.apiUrl}/enquiries`).pipe(
+      map(response => response.enquiries || []),
+      catchError(error => {
+        console.error('Failed to fetch enquiries:', error);
+        return of([]);
+      })
+    );
+  }
+
+  updateEnquiryStatus(id: number, status: string): Observable<boolean> {
+    const params = new HttpParams().set('id', id.toString());
+    return this.http.put<any>(`${this.apiUrl}/enquiries`, { status }, { params }).pipe(
+      map(response => response.success),
+      catchError(error => {
+        console.error('Failed to update enquiry status:', error);
+        return of(false);
+      })
+    );
+  }
+
+  deleteEnquiry(id: number): Observable<boolean> {
+    const params = new HttpParams().set('id', id.toString());
+    return this.http.delete<any>(`${this.apiUrl}/enquiries`, { params }).pipe(
+      map(response => response.success),
+      catchError(error => {
+        console.error('Failed to delete enquiry:', error);
+        return of(false);
+      })
+    );
+  }
+
+  // Enterprise Logo Methods
+  getEnterpriseLogos(activeOnly: boolean = true): Observable<EnterpriseLogo[]> {
+    if (this.useMockAPI) {
+      return of([
+        { id: '1', name: 'OYO', logoUrl: 'https://companieslogo.com/img/orig/OYO_BIG.D-8d655f4a.png?t=1633439405', displayOrder: 1 },
+        { id: '2', name: 'Swiggy', logoUrl: 'https://companieslogo.com/img/orig/SWIGGY.BO-f6f3629e.png?t=1633513360', displayOrder: 2 },
+        { id: '3', name: 'Zomato', logoUrl: 'https://companieslogo.com/img/orig/ZOMATO.BO-8a5871f7.png?t=1633513360', displayOrder: 3 },
+        { id: '4', name: 'Flipkart', logoUrl: 'https://companieslogo.com/img/orig/FLIPKART.BO-f6f3629e.png?t=1633513360', displayOrder: 4 }
+      ]);
+    }
+
+    let params = new HttpParams();
+    if (activeOnly) {
+      params = params.set('active', '1');
+    }
+
+    return this.http.get<any>(`${this.apiUrl}/enterprise-logos`, { params }).pipe(
+      map(response => response.logos || []),
+      catchError(error => {
+        console.error('Failed to fetch enterprise logos:', error);
+        return of([]);
+      })
+    );
+  }
+
+  addEnterpriseLogo(logo: Partial<EnterpriseLogo>): Observable<boolean> {
+    return this.http.post<any>(`${this.apiUrl}/enterprise-logos`, logo).pipe(
+      map(response => response.success),
+      catchError(error => {
+        console.error('Failed to add enterprise logo:', error);
+        return of(false);
+      })
+    );
+  }
+
+  updateEnterpriseLogo(logo: EnterpriseLogo): Observable<boolean> {
+    return this.http.put<any>(`${this.apiUrl}/enterprise-logos`, logo).pipe(
+      map(response => response.success),
+      catchError(error => {
+        console.error('Failed to update enterprise logo:', error);
+        return of(false);
+      })
+    );
+  }
+
+  deleteEnterpriseLogo(id: string): Observable<boolean> {
+    const params = new HttpParams().set('id', id);
+    return this.http.delete<any>(`${this.apiUrl}/enterprise-logos`, { params }).pipe(
+      map(response => response.success),
+      catchError(error => {
+        console.error('Failed to delete enterprise logo:', error);
+        return of(false);
+      })
+    );
   }
   
   private refreshProperties() {

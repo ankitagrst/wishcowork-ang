@@ -127,15 +127,15 @@
 </div>
 
 <!-- Event Modal -->
-<div *ngIf="showEventModal" class="fixed inset-0 bg-deep/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="showEventModal = false">
-  <div class="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col" (click)="$event.stopPropagation()">
+<div *ngIf="showEventModal" class="absolute left-0 w-full h-screen bg-deep/80 backdrop-blur-sm flex items-start justify-center p-4 z-[100] overflow-y-auto overscroll-contain" [style.top.px]="currentScrollY" (click)="closeModal()">
+  <div class="bg-white rounded-3xl max-w-3xl w-full my-8 shadow-2xl flex flex-col transform transition-all" (click)="$event.stopPropagation()">
     <!-- Modal Header -->
-    <div class="p-8 border-b border-deep/5 flex justify-between items-center bg-sand/30">
+    <div class="p-8 border-b border-deep/5 flex justify-between items-center bg-sand/30 rounded-t-3xl">
       <div>
         <h2 class="text-2xl font-bold text-deep">{{ selectedEvent?.id ? 'Edit Event' : 'Add New Event' }}</h2>
         <p class="text-deep/40 text-sm mt-1">Fill in the details to publish your event.</p>
       </div>
-      <button (click)="showEventModal = false" class="p-2 hover:bg-deep/5 rounded-full transition-colors">
+      <button (click)="closeModal()" class="p-2 hover:bg-deep/5 rounded-full transition-colors">
         <svg class="w-6 h-6 text-deep/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
         </svg>
@@ -143,51 +143,48 @@
     </div>
     
     <!-- Modal Body -->
-    <div class="p-8 space-y-6 overflow-y-auto">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="p-8 space-y-6">
+      <form #eventForm="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="md:col-span-2">
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Event Title *</label>
-          <input [(ngModel)]="selectedEvent!.title" type="text" 
+          <input [(ngModel)]="selectedEvent!.title" name="eventTitle" type="text" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
                  placeholder="Enter a catchy title" required>
         </div>
 
         <div class="md:col-span-2">
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Description *</label>
-          <textarea [(ngModel)]="selectedEvent!.description" rows="4" 
+          <textarea [(ngModel)]="selectedEvent!.description" name="eventDescription" rows="4" 
                     class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium resize-none" 
                     placeholder="What is this event about?" required></textarea>
         </div>
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Event Date *</label>
-          <input [(ngModel)]="selectedEvent!.eventDate" type="date" 
+          <input [(ngModel)]="selectedEvent!.eventDate" name="eventDate" type="date" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" required>
         </div>
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Event Time *</label>
-          <input [(ngModel)]="selectedEvent!.eventTime" type="time" 
+          <input [(ngModel)]="selectedEvent!.eventTime" name="eventTime" type="time" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" required>
         </div>
 
         <div class="md:col-span-2">
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Location *</label>
-          <input [(ngModel)]="selectedEvent!.location" type="text" 
+          <input [(ngModel)]="selectedEvent!.location" name="eventLocation" type="text" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
                  placeholder="e.g., WishCoWork Hub, Sector 62, Noida" required>
         </div>
 
         <div class="md:col-span-2">
-          <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Image URL</label>
-          <input [(ngModel)]="selectedEvent!.image" type="url" 
-                 class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
-                 placeholder="https://images.unsplash.com/photo-...">
+          <app-image-upload [(ngModel)]="selectedEvent!.image" name="eventImage" label="Event Image" [preview]="true"></app-image-upload>
         </div>
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Category *</label>
-          <select [(ngModel)]="selectedEvent!.category" 
+          <select [(ngModel)]="selectedEvent!.category" name="eventCategory"
                   class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium appearance-none">
             <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
           </select>
@@ -195,34 +192,34 @@
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Display Order</label>
-          <input [(ngModel)]="selectedEvent!.displayOrder" type="number" 
+          <input [(ngModel)]="selectedEvent!.displayOrder" name="eventDisplayOrder" type="number" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium">
         </div>
 
         <div class="md:col-span-2">
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Registration Link</label>
-          <input [(ngModel)]="selectedEvent!.registrationLink" type="url" 
+          <input [(ngModel)]="selectedEvent!.registrationLink" name="eventRegistrationLink" type="url" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
                  placeholder="https://forms.gle/example">
         </div>
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Max Attendees</label>
-          <input [(ngModel)]="selectedEvent!.maxAttendees" type="number" 
+          <input [(ngModel)]="selectedEvent!.maxAttendees" name="eventMaxAttendees" type="number" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium" 
                  placeholder="0 = unlimited">
         </div>
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-widest text-deep/40 mb-2">Current Attendees</label>
-          <input [(ngModel)]="selectedEvent!.currentAttendees" type="number" 
+          <input [(ngModel)]="selectedEvent!.currentAttendees" name="eventCurrentAttendees" type="number" 
                  class="w-full px-4 py-3 bg-sand/50 border border-deep/5 rounded-xl focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all text-deep font-medium">
         </div>
 
       <div class="flex flex-wrap items-center gap-6 pt-4">
         <label class="flex items-center gap-3 cursor-pointer group">
           <div class="relative">
-            <input [(ngModel)]="selectedEvent!.isFeatured" type="checkbox" class="peer sr-only">
+            <input [(ngModel)]="selectedEvent!.isFeatured" name="eventIsFeatured" type="checkbox" class="peer sr-only">
             <div class="w-10 h-6 bg-deep/10 rounded-full peer-checked:bg-accent transition-colors"></div>
             <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-4"></div>
           </div>
@@ -231,18 +228,19 @@
 
         <label class="flex items-center gap-3 cursor-pointer group">
           <div class="relative">
-            <input [(ngModel)]="selectedEvent!.isActive" type="checkbox" class="peer sr-only">
+            <input [(ngModel)]="selectedEvent!.isActive" name="eventIsActive" type="checkbox" class="peer sr-only">
             <div class="w-10 h-6 bg-deep/10 rounded-full peer-checked:bg-green-500 transition-colors"></div>
             <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-4"></div>
           </div>
           <span class="text-sm font-bold text-deep/60 group-hover:text-deep transition-colors">Active Status</span>
         </label>
       </div>
+      </form>
     </div>
 
     <!-- Modal Footer -->
-    <div class="p-8 border-t border-deep/5 bg-sand/30 flex justify-end gap-4">
-      <button (click)="showEventModal = false" 
+    <div class="p-8 border-t border-deep/5 bg-sand/30 flex justify-end gap-4 rounded-b-3xl">
+      <button (click)="closeModal()" 
               class="px-6 py-3 text-deep/60 font-bold hover:text-deep transition-colors">
         Cancel
       </button>

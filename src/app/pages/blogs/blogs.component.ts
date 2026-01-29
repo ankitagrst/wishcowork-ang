@@ -1,20 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { BlogsService, Blog } from '../../services/blogs.service';
 import { SeoService } from '../../services/seo.service';
 import { SettingsService } from '../../services/settings.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'app-blogs',
     imports: [CommonModule, RouterModule],
     templateUrl: './blogs.component.html'
 })
-export class BlogsComponent implements OnInit {
+export class BlogsComponent implements OnInit, OnDestroy {
   featuredPosts: Blog[] = [];
   allPosts: Blog[] = [];
   filteredPosts: Blog[] = [];
   loading = false;
+  private destroy$ = new Subject<void>();
 
   categories = ['All', 'Productivity', 'Industry Trends', 'Networking', 'Home Office', 'Business', 'General'];
   selectedCategory = 'All';
@@ -22,7 +25,8 @@ export class BlogsComponent implements OnInit {
   constructor(
     private blogsService: BlogsService,
     private seoService: SeoService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    public router: Router
   ) {}
 
   ngOnInit() {
@@ -35,28 +39,35 @@ export class BlogsComponent implements OnInit {
     this.loadBlogs();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   loadBlogs() {
     this.loading = true;
-    this.blogsService.getBlogs(false).subscribe({
-      next: (blogs) => {
-        if (blogs && blogs.length > 0) {
-          this.allPosts = blogs;
-          this.featuredPosts = blogs.filter(blog => blog.isFeatured).slice(0, 3);
-        } else {
-          // Fallback to mock data if API returns empty
+    this.blogsService.getBlogs(false)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (blogs) => {
+          if (blogs && blogs.length > 0) {
+            this.allPosts = blogs;
+            this.featuredPosts = blogs.filter(blog => blog.isFeatured).slice(0, 3);
+          } else {
+            // Fallback to mock data if API returns empty
+            this.loadMockBlogs();
+          }
+          this.filterPosts();
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error('Error loading blogs:', err);
+          // Load mock data as fallback
           this.loadMockBlogs();
+          this.filterPosts();
+          this.loading = false;
         }
-        this.filterPosts();
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error('Error loading blogs:', err);
-        // Load mock data as fallback
-        this.loadMockBlogs();
-        this.filterPosts();
-        this.loading = false;
-      }
-    });
+      });
   }
 
   private loadMockBlogs() {

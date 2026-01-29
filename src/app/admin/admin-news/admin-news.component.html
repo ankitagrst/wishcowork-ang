@@ -96,8 +96,8 @@
   </div>
 
   <!-- News Modal -->
-  <div *ngIf="showNewsModal" class="fixed inset-0 bg-deep/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" (click)="closeNewsModal()">
-    <div class="bg-white rounded-[2rem] w-full max-w-4xl shadow-2xl overflow-hidden border border-deep/5" (click)="$event.stopPropagation()">
+  <div *ngIf="showNewsModal" class="absolute left-0 w-full h-screen bg-deep/80 backdrop-blur-sm flex items-start justify-center p-4 z-[100] overflow-y-auto overscroll-contain" [style.top.px]="currentScrollY" (click)="closeNewsModal()">
+    <div class="bg-white rounded-[2rem] w-full max-w-4xl my-8 shadow-2xl overflow-hidden border border-deep/5 transform transition-all" (click)="$event.stopPropagation()">
       <div class="flex items-center justify-between px-8 py-6 border-b border-deep/5 bg-sand/30">
         <div>
           <h2 class="text-xl font-bold text-deep">{{ selectedNews?.id ? 'Edit Article' : 'Create New Article' }}</h2>
@@ -108,7 +108,7 @@
         </button>
       </div>
       
-      <div class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+      <div class="p-8">
         <form *ngIf="selectedNews" class="space-y-8">
           <!-- Basic Info -->
           <div class="grid gap-6">
@@ -145,8 +145,7 @@
           <!-- Media & Source -->
           <div class="grid gap-6">
             <div class="space-y-2">
-              <label class="text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Featured Image URL</label>
-              <input class="w-full bg-sand/10 border border-deep/10 rounded-xl px-4 py-3 text-deep placeholder:text-deep/20 focus:outline-none focus:border-accent transition-colors" type="text" [(ngModel)]="selectedNews.image" name="image" placeholder="https://images.unsplash.com/...">
+              <app-image-upload [(ngModel)]="selectedNews.image" name="image" label="Featured Image"></app-image-upload>
             </div>
             
             <div class="grid gap-6 md:grid-cols-2">

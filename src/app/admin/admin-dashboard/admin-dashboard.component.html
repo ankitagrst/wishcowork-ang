@@ -128,4 +128,79 @@
       </div>
     </div>
   </div>
+
+  <!-- Recent Enquiries Table -->
+  <div class="mt-12">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-xl font-bold text-deep uppercase tracking-widest">Recent Enquiries</h2>
+      <div class="flex gap-2">
+        <span class="px-3 py-1 bg-orange-50 text-orange-600 text-[10px] font-bold rounded-full uppercase tracking-wider">{{stats.pendingRequests}} Pending</span>
+      </div>
+    </div>
+    
+    <div class="bg-white rounded-[2rem] shadow-xl shadow-deep/5 border border-deep/5 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-sand/30 border-b border-deep/5">
+              <th class="px-6 py-4 text-[10px] font-bold text-deep/40 uppercase tracking-widest">Type</th>
+              <th class="px-6 py-4 text-[10px] font-bold text-deep/40 uppercase tracking-widest">Property</th>
+              <th class="px-6 py-4 text-[10px] font-bold text-deep/40 uppercase tracking-widest">Customer</th>
+              <th class="px-6 py-4 text-[10px] font-bold text-deep/40 uppercase tracking-widest">Details</th>
+              <th class="px-6 py-4 text-[10px] font-bold text-deep/40 uppercase tracking-widest">Status</th>
+              <th class="px-6 py-4 text-[10px] font-bold text-deep/40 uppercase tracking-widest text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-deep/5">
+            <tr *ngFor="let enquiry of enquiries" class="hover:bg-sand/10 transition-colors group">
+              <td class="px-6 py-4">
+                <span [class]="enquiry.type === 'booking' ? 'bg-accent/10 text-accent' : 'bg-blue-50 text-blue-600'" 
+                      class="px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">
+                  {{enquiry.type}}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm font-bold text-deep">{{enquiry.property_title || 'General Enquiry'}}</p>
+                <p class="text-[10px] text-deep/40 font-medium">{{enquiry.created_at | date:'mediumDate'}}</p>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm font-bold text-deep">{{enquiry.name}}</p>
+                <p class="text-[10px] text-deep/40 font-medium">{{enquiry.email}} | {{enquiry.phone}}</p>
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-xs text-deep/60">
+                  <span *ngIf="enquiry.check_in">In: {{enquiry.check_in | date:'shortDate'}} | </span>
+                  <span *ngIf="enquiry.guests">Guests: {{enquiry.guests}}</span>
+                  <p *ngIf="enquiry.message" class="mt-1 italic truncate max-w-[200px]">"{{enquiry.message}}"</p>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <select [ngModel]="enquiry.status" 
+                        (ngModelChange)="updateEnquiryStatus(enquiry.id, $event)"
+                        [class]="enquiry.status === 'pending' ? 'text-orange-600 bg-orange-50' : enquiry.status === 'contacted' ? 'text-blue-600 bg-blue-50' : 'text-green-600 bg-green-50'"
+                        class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded border-none focus:ring-0 cursor-pointer">
+                  <option value="pending">Pending</option>
+                  <option value="contacted">Contacted</option>
+                  <option value="closed">Closed</option>
+                </select>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <button (click)="deleteEnquiry(enquiry.id)" class="text-red-400 hover:text-red-600 transition-colors">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="enquiries.length === 0 && !loadingEnquiries">
+              <td colspan="6" class="px-6 py-12 text-center text-deep/40 font-medium">No enquiries found</td>
+            </tr>
+            <tr *ngIf="loadingEnquiries">
+              <td colspan="6" class="px-6 py-12 text-center">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-accent"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
