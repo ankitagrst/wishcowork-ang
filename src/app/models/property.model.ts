@@ -18,6 +18,9 @@ export interface Property {
     lat: number;
     lng: number;
   };
+  // Separate pricing for day-pass and meeting-room bookings
+  dayPassPrice?: number; // Price for day-pass (hourly/daily rate, not the monthly price)
+  meetingRoomPrice?: number; // Price for meeting-room bookings (per hour/day)
   // Optional pricing fields
   includeServiceFee?: boolean; // Whether to show service fee in breakdown
   includeTax?: boolean; // Whether to show tax in breakdown

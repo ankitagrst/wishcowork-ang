@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { CategoryComponent } from './pages/category/category.component';
 import { PropertyDetailComponent } from './pages/property-detail/property-detail.component';
-import { PlansComponent } from './pages/plans/plans.component';
 import { AboutComponent } from './pages/about/about.component';
 import { GalleryComponent } from './pages/gallery/gallery.component';
 import { EventsComponent } from './pages/events/events.component';
@@ -36,12 +35,8 @@ export const routes: Routes = [
     component: HomeComponent
   },
   {
-    path: 'plans',
-    component: PlansComponent
-  },
-  {
     path: 'pricing',
-    redirectTo: 'plans',
+    redirectTo: 'category/day-pass',
     pathMatch: 'full'
   },
   {

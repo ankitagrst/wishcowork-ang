@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { PropertyService } from '../../services/property.service';
 import { ViewTrackingService } from '../../services/view-tracking.service';
+import { AdminHeaderComponent } from '../admin-header/admin-header.component';
 
 interface DashboardStats {
   totalProperties: number;
@@ -24,7 +25,8 @@ interface RecentActivity {
 
 @Component({
     selector: 'app-admin-dashboard',
-    imports: [CommonModule, RouterModule, FormsModule],
+    imports: [CommonModule, RouterModule, FormsModule, AdminHeaderComponent],
+    // to be replaced with the real header import at top
     templateUrl: './admin-dashboard.component.html',
     styleUrls: ['./admin-dashboard.component.scss']
 })
@@ -40,7 +42,19 @@ export class AdminDashboardComponent implements OnInit {
   enquiries: any[] = [];
   loadingEnquiries = false;
 
+  // Selected enquiry for detail modal
+  selectedEnquiry: any | null = null;
+
   recentActivities: RecentActivity[] = [];
+
+  // Status options for enquiries (used in modal)
+  enquiryStatusOptions = [
+    { value: 'pending', label: 'Pending' },
+    { value: 'contacted', label: 'Contacted' },
+    { value: 'responded', label: 'Responded' },
+    { value: 'converted', label: 'Converted' },
+    { value: 'rejected', label: 'Rejected' }
+  ];
 
   quickActions = [
     {
@@ -184,6 +198,23 @@ export class AdminDashboardComponent implements OnInit {
           this.loadEnquiries();
         }
       });
+    }
+  }
+
+  // Open enquiry modal with full details
+  openEnquiry(enquiry: any): void {
+    this.selectedEnquiry = enquiry;
+  }
+
+  closeEnquiry(): void {
+    this.selectedEnquiry = null;
+  }
+
+  onEnquiryStatusChange(enquiry: any, newStatus: string): void {
+    this.updateEnquiryStatus(enquiry.id, newStatus);
+    enquiry.status = newStatus;
+    if (this.selectedEnquiry && this.selectedEnquiry.id === enquiry.id) {
+      this.selectedEnquiry.status = newStatus;
     }
   }
 

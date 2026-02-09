@@ -1,24 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PricingService, Plan, AdditionalService, FAQ } from '../../services/pricing.service';
+import { PricingService, AdditionalService, FAQ } from '../../services/pricing.service';
+import { PropertyService } from '../../services/property.service';
+import { PropertyPricingService, BookingTypePrice } from '../../services/property-pricing.service';
 import { AuthService } from '../../services/auth.service';
 import { LocomotiveScrollService } from '../../services/locomotive-scroll.service';
+import { Property } from '../../models/property.model';
 
 @Component({
     selector: 'app-admin-pricing',
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule],
     templateUrl: './admin-pricing.component.html',
     styleUrls: ['./admin-pricing.component.css']
 })
 export class AdminPricingComponent implements OnInit {
-  activeTab: 'plans' | 'services' | 'faqs' = 'plans';
-  
-  // Plans
-  plans: Plan[] = [];
-  selectedPlan: Plan | null = null;
-  showPlanModal = false;
+  activeTab: 'services' | 'faqs' | 'property-pricing' = 'property-pricing';
   
   // Services
   services: AdditionalService[] = [];
@@ -30,21 +28,40 @@ export class AdminPricingComponent implements OnInit {
   selectedFaq: FAQ | null = null;
   showFaqModal = false;
   
+  // Property Pricing
+  properties: Property[] = [];
+  selectedProperty: Property | null = null;
+  propertyPricing: BookingTypePrice[] = [];
+  pricingForm: FormGroup;
+  bookingTypes = ['coworking', 'private-office', 'meeting-room', 'virtual-office', 'day-pass'];
+  
   loading = false;
   error: string | null = null;
   success: string | null = null;
 
   constructor(
     private pricingService: PricingService,
+    private propertyService: PropertyService,
+    private propertyPricingService: PropertyPricingService,
     private router: Router,
     private authService: AuthService,
-    private locomotiveScrollService: LocomotiveScrollService
-  ) {}
+    private locomotiveScrollService: LocomotiveScrollService,
+    private fb: FormBuilder
+  ) {
+    this.pricingForm = this.fb.group({
+      booking_type: ['coworking', Validators.required],
+      price: ['', [Validators.required, Validators.min(0)]],
+      description: [''],
+      valid_from: [''],
+      valid_to: [''],
+      currency: ['INR']
+    });
+  }
 
   ngOnInit() {
-    this.loadPlans();
     this.loadServices();
     this.loadFaqs();
+    this.loadProperties();
   }
 
   public currentScrollY = 0;
@@ -72,102 +89,9 @@ export class AdminPricingComponent implements OnInit {
   }
 
   closeModal() {
-    this.showPlanModal = false;
     this.showServiceModal = false;
     this.showFaqModal = false;
     this.toggleBodyScroll(false);
-  }
-
-  // Plans Methods
-  loadPlans() {
-    this.loading = true;
-    this.pricingService.getPlans(true).subscribe({
-      next: (data) => {
-        this.plans = data.sort((a, b) => a.displayOrder - b.displayOrder);
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = 'Failed to load plans';
-        this.loading = false;
-      }
-    });
-  }
-
-  openPlanModal(plan?: Plan) {
-    if (plan) {
-      this.selectedPlan = { ...plan };
-    } else {
-      this.selectedPlan = {
-        name: '',
-        description: '',
-        category: 'coworking',
-        price: 0,
-        unit: 'month',
-        features: [],
-        isPopular: false,
-        displayOrder: this.plans.length + 1,
-        isActive: true
-      };
-    }
-    this.showPlanModal = true;
-    this.toggleBodyScroll(true);
-  }
-
-  savePlan() {
-    if (!this.selectedPlan) return;
-    
-    this.loading = true;
-    const operation = this.selectedPlan.id 
-      ? this.pricingService.updatePlan(this.selectedPlan)
-      : this.pricingService.createPlan(this.selectedPlan);
-    
-    operation.subscribe({
-      next: () => {
-        this.success = `Plan ${this.selectedPlan!.id ? 'updated' : 'created'} successfully`;
-        this.closeModal();
-        this.loadPlans();
-        setTimeout(() => this.success = null, 3000);
-      },
-      error: (err) => {
-        this.error = 'Failed to save plan';
-        this.loading = false;
-      }
-    });
-  }
-
-  deletePlan(id: number) {
-    if (!confirm('Are you sure you want to delete this plan?')) return;
-    
-    this.loading = true;
-    this.pricingService.deletePlan(id).subscribe({
-      next: () => {
-        this.success = 'Plan deleted successfully';
-        this.loadPlans();
-        setTimeout(() => this.success = null, 3000);
-      },
-      error: (err) => {
-        this.error = 'Failed to delete plan';
-        this.loading = false;
-      }
-    });
-  }
-
-  addFeature() {
-    if (this.selectedPlan && !this.selectedPlan.features) {
-      this.selectedPlan.features = [];
-    }
-    this.selectedPlan?.features.push('');
-  }
-
-  removeFeature(index: number): void {
-    if (this.selectedPlan && this.selectedPlan.features) {
-      this.selectedPlan.features.splice(index, 1);
-    }
-  }
-
-  // Track function for ngFor
-  trackFeature(index: number, feature: string): number {
-    return index;
   }
 
   // Services Methods
@@ -311,6 +235,101 @@ export class AdminPricingComponent implements OnInit {
     });
   }
 
+  // Property Pricing Methods
+  loadProperties() {
+    this.propertyService.getAllProperties().subscribe({
+      next: (properties) => {
+        this.properties = properties;
+      },
+      error: (err) => {
+        console.error('Failed to load properties:', err);
+      }
+    });
+  }
+
+  selectProperty(property: Property) {
+    this.selectedProperty = property;
+    this.propertyPricing = [];
+    this.pricingForm.reset({ booking_type: 'coworking', currency: 'INR' });
+    this.error = null;
+    this.success = null;
+    this.loadPropertyPricing(property);
+  }
+
+  loadPropertyPricing(property: Property) {
+    this.loading = true;
+    this.propertyPricingService.getPropertyPricing(property.id).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.propertyPricing = response.data || [];
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error loading pricing:', err);
+        this.error = 'Failed to load pricing';
+        this.loading = false;
+      }
+    });
+  }
+
+  editPropertyPricing(pricing: BookingTypePrice) {
+    this.pricingForm.patchValue({
+      booking_type: pricing.booking_type,
+      price: pricing.price,
+      description: pricing.description || '',
+      valid_from: pricing.valid_from || '',
+      valid_to: pricing.valid_to || '',
+      currency: pricing.currency || 'INR'
+    });
+  }
+
+  submitPropertyPricing() {
+    if (!this.selectedProperty || this.pricingForm.invalid) {
+      this.error = 'Please select a property and fill all required fields';
+      return;
+    }
+
+    this.loading = true;
+    this.propertyPricingService.setPricing(
+      this.selectedProperty.id,
+      this.pricingForm.get('booking_type')?.value,
+      {
+        price: this.pricingForm.get('price')?.value,
+        description: this.pricingForm.get('description')?.value,
+        valid_from: this.pricingForm.get('valid_from')?.value,
+        valid_to: this.pricingForm.get('valid_to')?.value,
+        currency: this.pricingForm.get('currency')?.value
+      }
+    ).subscribe({
+      next: (response: any) => {
+        if (response.success) {
+          this.success = `${response.data?.booking_type} pricing updated successfully`;
+          this.pricingForm.reset({ booking_type: 'coworking', currency: 'INR' });
+          this.loadPropertyPricing(this.selectedProperty!);
+          setTimeout(() => this.success = null, 3000);
+        } else {
+          this.error = response.message || 'Failed to update pricing';
+        }
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Error updating pricing:', err);
+        this.error = 'Error updating pricing: ' + (err.error?.message || err.message);
+        this.loading = false;
+      }
+    });
+  }
+
+  resetPricingForm() {
+    this.pricingForm.reset({ booking_type: 'coworking', currency: 'INR' });
+    this.error = null;
+  }
+
+  getPricingForType(bookingType: string): BookingTypePrice | undefined {
+    return this.propertyPricing.find(p => p.booking_type === bookingType);
+  }
+
   // Navigation Methods
   goToDashboard(): void {
     this.router.navigate(['/admin/dashboard']);
@@ -321,3 +340,4 @@ export class AdminPricingComponent implements OnInit {
     this.router.navigate(['/admin/login']);
   }
 }
+

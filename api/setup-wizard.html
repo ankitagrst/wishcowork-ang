@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WishCoWork - Database Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #667eea;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .info-box h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+            color: #424242;
+            line-height: 1.8;
+        }
+        
+        .setup-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .setup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        .setup-btn:active {
+            transform: translateY(0);
+        }
+        
+        .setup-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .result.active {
+            display: block;
+        }
+        
+        .result.success {
+            background: #d4edda;
+            border: 2px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .result.error {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .result h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .step-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+        
+        .step-list li {
+            padding: 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .api-test-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #856404;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .api-test-link:hover {
+            background: #ffc107;
+            color: white;
+        }
+        
+        pre {
+            background: rgba(0,0,0,0.05);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 WishCoWork Setup</h1>
+        <p class="subtitle">Automated Database Initialization</p>
+        
+        <div class="info-box">
+            <h3>📋 What will be set up:</h3>
+            <ul>
+                <li><strong>Database Tables:</strong> Properties, Pricing Plans, Services, FAQs, Events, Users</li>
+                <li><strong>Sample Data:</strong> 6 pricing plans, 4 additional services, 5 FAQs, 5 events</li>
+                <li><strong>Admin Account:</strong> email: admin@wishcowork.com, password: admin123</li>
+                <li><strong>Automatic:</strong> Creates tables if they don't exist, skips existing data</li>
+            </ul>
+        </div>
+        
+        <button class="setup-btn" onclick="runSetup()">
+            🔧 Run Complete Setup
+        </button>
+        
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Setting up database... Please wait</p>
+        </div>
+        
+        <div class="result" id="result"></div>
+        
+        <a href="api-test-dashboard.html" class="api-test-link" style="display: none;" id="apiTestLink">
+            🧪 Open API Testing Dashboard
+        </a>
+    </div>
+    
+    <script>
+        async function runSetup() {
+            const button = document.querySelector('.setup-btn');
+            const loading = document.querySelector('.loading');
+            const resultDiv = document.getElementById('result');
+            const apiTestLink = document.getElementById('apiTestLink');
+            
+            // Reset UI
+            button.disabled = true;
+            loading.classList.add('active');
+            resultDiv.classList.remove('active');
+            apiTestLink.style.display = 'none';
+            
+            try {
+                const response = await fetch('http://wishapi/setup/auto-setup.php');
+                const data = await response.json();
+                
+                loading.classList.remove('active');
+                resultDiv.classList.add('active');
+                
+                if (data.success) {
+                    resultDiv.classList.add('success');
+                    resultDiv.classList.remove('error');
+                    
+                    let html = '<h3>✅ Setup Completed Successfully!</h3>';
+                    
+                    // Steps
+                    if (data.steps && data.steps.length > 0) {
+                        html += '<h4>Steps Performed:</h4>';
+                        html += '<ul class="step-list">';
+                        data.steps.forEach(step => {
+                            html += `<li>${step}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    
+                    // Statistics
+                    if (data.statistics) {
+                        html += '<h4>📊 Database Statistics:</h4>';
+                        html += '<div class="stats-grid">';
+                        for (const [table, count] of Object.entries(data.statistics)) {
+                            html += `
+                                <div class="stat-card">
+                                    <div class="stat-number">${count}</div>
+                                    <div class="stat-label">${table}</div>
+                                </div>
+                            `;
+                        }
+                        html += '</div>';
+                    }
+                    
+                    // Admin credentials reminder
+                    html += `
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                            <h4 style="color: #856404; margin-bottom: 10px;">🔐 Admin Credentials:</h4>
+                            <p style="color: #856404;"><strong>Email:</strong> admin@wishcowork.com</p>
+                            <p style="color: #856404;"><strong>Password:</strong> admin123</p>
+                        </div>
+                    `;
+                    
+                    resultDiv.innerHTML = html;
+                    apiTestLink.style.display = 'block';
+                    
+                } else {
+                    resultDiv.classList.add('error');
+                    resultDiv.classList.remove('success');
+                    
+                    let html = '<h3>❌ Setup Failed</h3>';
+                    html += `<p><strong>Error:</strong> ${data.message}</p>`;
+                    
+                    if (data.errors && data.errors.length > 0) {
+                        html += '<h4>Errors:</h4>';
+                        html += '<ul class="step-list">';
+                        data.errors.forEach(error => {
+                            html += `<li>${error}</li>`;
+                        });
+                        html += '</ul>';
+                    }
+                    
+                    resultDiv.innerHTML = html;
+                }
+                
+                // Show raw response for debugging
+                resultDiv.innerHTML += '<details style="margin-top: 20px;"><summary style="cursor: pointer; color: #667eea; font-weight: bold;">Show Full Response</summary><pre>' + JSON.stringify(data, null, 2) + '</pre></details>';
+                
+            } catch (error) {
+                loading.classList.remove('active');
+                resultDiv.classList.add('active', 'error');
+                resultDiv.classList.remove('success');
+                resultDiv.innerHTML = `
+                    <h3>❌ Connection Error</h3>
+                    <p>Failed to connect to the setup script. Please check:</p>
+                    <ul class="step-list">
+                        <li>Is Apache/PHP server running?</li>
+                        <li>Is the API accessible at http://wishapi?</li>
+                        <li>Check browser console for details</li>
+                    </ul>
+                    <pre>${error.message}</pre>
+                `;
+            }
+            
+            button.disabled = false;
+        }
+        
+        // Add option to run on page load with query parameter
+        if (window.location.search.includes('auto=true')) {
+            window.onload = runSetup;
+        }
+    </script>
+</body>
+</html>

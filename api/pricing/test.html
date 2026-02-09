@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pricing API Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        button { margin: 5px; padding: 10px 20px; cursor: pointer; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Pricing API Test</h1>
+    
+    <div>
+        <button onclick="testPlans()">Test GET Plans</button>
+        <button onclick="testServices()">Test GET Services</button>
+        <button onclick="testFaqs()">Test GET FAQs</button>
+    </div>
+    
+    <div id="result"></div>
+    
+    <script>
+        const API_URL = 'http://wishapi/pricing';
+        
+        async function testPlans() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Loading plans...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/plans`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 class="success">✓ Plans API Working!</h3>
+                        <p>Found ${data.length} plans</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 class="error">✗ Error</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 class="error">✗ Network Error</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+        
+        async function testServices() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Loading services...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/services`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 class="success">✓ Services API Working!</h3>
+                        <p>Found ${data.length} services</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 class="error">✗ Error</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 class="error">✗ Network Error</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+        
+        async function testFaqs() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Loading FAQs...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/faqs`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <h3 class="success">✓ FAQs API Working!</h3>
+                        <p>Found ${data.length} FAQs</p>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <h3 class="error">✗ Error</h3>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <h3 class="error">✗ Network Error</h3>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+        
+        // Auto-test on load
+        window.onload = () => {
+            testPlans();
+        };
+    </script>
+</body>
+</html>

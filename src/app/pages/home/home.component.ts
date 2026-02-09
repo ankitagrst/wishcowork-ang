@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,7 +17,7 @@ import { takeUntil } from 'rxjs/operators';
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   categories: Category[] = [];
   cities: City[] = [];
   faqs: FAQ[] = [];
@@ -48,6 +48,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   selectedHeroCategory = 'coworking';
   selectedCity = 'Jaipur';
 
+  // Carousel state
+  @ViewChild('carouselTrack') carouselTrack: ElementRef | undefined;
+  @ViewChild('blogCarousel') blogCarouselTrack: ElementRef | undefined;
+  @ViewChild('bookingCarousel') bookingCarouselTrack: ElementRef | undefined;
+  @ViewChild('rentCarousel') rentCarouselTrack: ElementRef | undefined;
+  currentSlide = 0;
+  currentBlogSlide = 0;
+  currentBookingSlide = 0;
+  currentRentSlide = 0;
+  cardsPerView = 3;
 
   constructor(
     private propertyService: PropertyService,
@@ -71,6 +81,51 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  ngAfterViewInit() {
+    if (this.carouselTrack) {
+      const element = this.carouselTrack.nativeElement;
+      element.addEventListener('scroll', () => {
+        const scrollLeft = element.scrollLeft;
+        const cardWidth = 400; // Approximate width
+        this.currentSlide = Math.round(scrollLeft / cardWidth);
+        if (this.currentSlide > 2) this.currentSlide = 2;
+      });
+    }
+
+    // Setup blog carousel scroll listener
+    if (this.blogCarouselTrack) {
+      const element = this.blogCarouselTrack.nativeElement;
+      element.addEventListener('scroll', () => {
+        const scrollLeft = element.scrollLeft;
+        const cardWidth = element.children[0]?.offsetWidth || 300;
+        this.currentBlogSlide = Math.round(scrollLeft / (cardWidth + 24)); // 24px gap
+        if (this.currentBlogSlide > 2) this.currentBlogSlide = 2;
+      });
+    }
+
+    // Setup booking carousel scroll listener
+    if (this.bookingCarouselTrack) {
+      const element = this.bookingCarouselTrack.nativeElement;
+      element.addEventListener('scroll', () => {
+        const scrollLeft = element.scrollLeft;
+        const cardWidth = element.children[0]?.offsetWidth || 300;
+        this.currentBookingSlide = Math.round(scrollLeft / (cardWidth + 24)); // 24px gap
+        if (this.currentBookingSlide > 3) this.currentBookingSlide = 3;
+      });
+    }
+
+    // Setup rent carousel scroll listener
+    if (this.rentCarouselTrack) {
+      const element = this.rentCarouselTrack.nativeElement;
+      element.addEventListener('scroll', () => {
+        const scrollLeft = element.scrollLeft;
+        const cardWidth = element.children[0]?.offsetWidth || 300;
+        this.currentRentSlide = Math.round(scrollLeft / (cardWidth + 24)); // 24px gap
+        if (this.currentRentSlide > 3) this.currentRentSlide = 3;
+      });
+    }
   }
 
   private loadData() {
@@ -258,6 +313,60 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   selectCity(city: string | undefined): void {
     if (city) this.selectedCity = city;
+  }
+
+  scrollCarousel(direction: 'left' | 'right'): void {
+    if (!this.carouselTrack) return;
+    
+    const element = this.carouselTrack.nativeElement;
+    const scrollAmount = 400; // Adjust based on card width + gap
+    
+    if (direction === 'left') {
+      element.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+      this.currentSlide = Math.max(0, this.currentSlide - 1);
+    } else {
+      element.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      this.currentSlide = Math.min(2, this.currentSlide + 1); // Max 3 slides for indicators
+    }
+  }
+
+  goToSlide(slideIndex: number): void {
+    if (!this.carouselTrack) return;
+    
+    const element = this.carouselTrack.nativeElement;
+    const scrollAmount = slideIndex * 400;
+    element.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+    this.currentSlide = slideIndex;
+  }
+
+  goToBlogSlide(slideIndex: number): void {
+    if (!this.blogCarouselTrack) return;
+    
+    const element = this.blogCarouselTrack.nativeElement;
+    const cardWidth = element.children[0]?.offsetWidth || 300;
+    const scrollAmount = slideIndex * (cardWidth + 24); // 24px gap
+    element.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+    this.currentBlogSlide = slideIndex;
+  }
+
+  goToBookingSlide(slideIndex: number): void {
+    if (!this.bookingCarouselTrack) return;
+    
+    const element = this.bookingCarouselTrack.nativeElement;
+    const cardWidth = element.children[0]?.offsetWidth || 300;
+    const scrollAmount = slideIndex * (cardWidth + 24); // 24px gap
+    element.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+    this.currentBookingSlide = slideIndex;
+  }
+
+  goToRentSlide(slideIndex: number): void {
+    if (!this.rentCarouselTrack) return;
+    
+    const element = this.rentCarouselTrack.nativeElement;
+    const cardWidth = element.children[0]?.offsetWidth || 300;
+    const scrollAmount = slideIndex * (cardWidth + 24); // 24px gap
+    element.scrollTo({ left: scrollAmount, behavior: 'smooth' });
+    this.currentRentSlide = slideIndex;
   }
 
   searchFromHero(): void {

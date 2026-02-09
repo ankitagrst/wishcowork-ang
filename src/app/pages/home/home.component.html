@@ -1,113 +1,76 @@
 <!-- Hero Section -->
-<section class="relative  text-black pt-12 sm:pt-16 pb-16 sm:pb-20 overflow-hidden">
-  <!-- Background Pattern (simplified) -->
-  <div class="absolute top-0 right-0 -mt-16 -mr-16 w-64 h-64 sm:w-96 sm:h-96 bg-accent/10 rounded-full opacity-12 z-0 pointer-events-none"></div>
-  <div class="absolute bottom-0 left-0 -mb-16 -ml-16 w-56 h-56 sm:w-80 sm:h-80 bg-accent/20 rounded-full opacity-20 z-0 pointer-events-none"></div>
-  
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
+<section class="relative text-white overflow-hidden">
+  <!-- Background Image with Overlay -->
+  <div class="absolute inset-0 z-0">
+    <img 
+      src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&h=600&fit=crop&q=80" 
+      alt="Modern office workspace" 
+      class="w-full h-full object-cover"
+    />
+    <!-- Dark overlay for text readability -->
+    <div class="absolute inset-0 bg-black/40"></div>
+  </div>
 
-      <!-- Hero Content (cleaned & brand-focused) -->
-      <div class="text-center lg:text-left">
-        <h1 class="h1 text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6">
-          Premium workspaces across India
+  <!-- Content -->
+  <div class="relative z-10 pt-16 sm:pt-20 md:pt-28 pb-20 sm:pb-32">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Main Heading -->
+      <div class="text-center mb-8 sm:mb-12">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 sm:mb-4 leading-tight">
+          The new way to offices
         </h1>
-        <p class="lead text-black/80 mb-6 sm:mb-8 px-2 sm:px-0">
-          Find desks, private offices and meeting rooms with flexible terms and premium amenities — book by the hour, day or month.
+        <p class="text-md sm:text-lg md:text-xl text-white/85 max-w-2xl mx-auto leading-relaxed">
+          Find desks, private offices and meeting rooms with flexible terms
         </p>
-
-        <div class="flex items-center justify-center lg:justify-start gap-3">
-          <button class="btn-primary font-semibold px-6 py-3" (click)="searchFromHero()" aria-label="Search Workspaces">Search Workspaces</button>
-          <a routerLink="/plans" class="btn-secondary inline-flex items-center px-6 py-3" aria-label="Explore Plans">Explore Plans</a>
-        </div>
-      </div>
-
-      <!-- Decorative Hero Right (no image, no overlay search) -->
-      <div class="relative mt-6 sm:mt-8 lg:mt-0 px-4 sm:px-0">
-        <div class="rounded-xl h-[60vh] sm:h-[70vh] md:h-[80vh] shadow-xl flex items-center justify-center bg-black/5">
-          <div class="max-w-md text-center px-6">
-            <svg class="mx-auto mb-6" width="160" height="160" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect width="24" height="24" rx="6" fill="#f7b355"/>
-              <path d="M7 15l3-5 3 5 3-5" stroke="#065f46" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <h3 class="text-xl font-semibold text-black">Premium workspaces curated for productivity</h3>
-            <p class="text-sm text-muted mt-3">No clutter. Just quality spaces across major Indian cities.</p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Central Search Section (separate from hero) -->
-<section class="-mt-24 md:-mt-28 mb-12 relative z-20">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Top hero tabs (Long-term / On-demand / Virtual Office) -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 hero-tabs" role="tablist" aria-label="Hero tabs">
-      <div *ngFor="let t of heroTabs; let i = index" (click)="selectHeroTab(t.key)" role="tab"
-           tabindex="0"
-           (keydown)="onHeroTabKeydown($event, i)"
-           [attr.aria-selected]="selectedHeroTab === t.key"
-           [class.active]="selectedHeroTab === t.key"
-           [class.inactive]="selectedHeroTab !== t.key"
-           class="cursor-pointer rounded-2xl p-6 flex items-center justify-center text-center transition-all duration-300">
-        <div>
-          <div class="text-sm font-semibold tracking-wide uppercase mb-2">{{ t.label }}</div>
-          <div *ngIf="selectedHeroTab === t.key" class="text-xs text-muted">Best for longer commitments</div>
-        </div>
-      </div>
-    </div>
-
+<!-- Central Search Section -->
+<section class="-mt-16 md:-mt-24 mb-12 relative z-20">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Floating Search Card -->
-    <div class="search-card max-w-5xl mx-auto">
-      <!-- Category Pills -->
-      <div class="flex items-center gap-3 mb-4 flex-wrap">
-        <button *ngFor="let c of heroCategories" (click)="selectHeroCategory(c.key)" class="relative px-6 py-3 rounded-full border text-sm font-medium transition-all duration-200 flex items-center gap-3"
-                [ngClass]="{
-                  'bg-white border-deep/10 shadow-md': selectedHeroCategory === c.key,
-                  'brand-surface border border-deep/10 text-black': selectedHeroCategory !== c.key
-                }">
-          <!-- Icons per category -->
-          <ng-container [ngSwitch]="c.key">
-            <svg *ngSwitchCase="'coworking'" class="w-5 h-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3 7h18M3 12h18M3 17h18"/></svg>
-            <svg *ngSwitchCase="'managed'" class="w-5 h-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3 21h18V7H3v14zM8 7V3h8v4"/></svg>
-            <svg *ngSwitchCase="'office'" class="w-5 h-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M4 7h16v13H4zM8 7V4h8v3"/></svg>
-            <svg *ngSwitchDefault class="w-5 h-5 text-muted" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" d="M3 7h18M3 12h18M3 17h18"/></svg>
-          </ng-container>
-          <svg *ngIf="selectedHeroCategory === c.key" class="w-4 h-4 text-accent ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-          <span>{{ c.label }}</span>
-
-          <span *ngIf="c.comingSoonIn" class="absolute -top-3 right-0 text-xs brand-surface text-muted rounded-full px-2 py-0.5">Coming Soon in {{ c.comingSoonIn }}</span>
-        </button>
-      </div>
-
-      <!-- Description -->
-      <div class="text-center text-sm text-muted mb-4">Rent dedicated seats and private cabins in fully-equipped coworking spaces</div>
-
+    <div class="search-card-clean">
       <!-- Inputs row -->
-      <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
+      <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
         <div class="md:col-span-1">
-          <label class="text-xs text-muted">City</label>
-          <select class="w-full mt-1 px-3 py-3 rounded-xl border border-deep/10 bg-white text-black" [(ngModel)]="selectedCity" (change)="selectCity(selectedCity)">
+          <label class="text-xs font-semibold text-gray-700 uppercase tracking-wide">City</label>
+          <select class="w-full mt-2 px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-900 font-medium focus:ring-2 focus:ring-accent/30 focus:border-transparent" [(ngModel)]="selectedCity" (change)="selectCity(selectedCity)">
             <option *ngFor="let city of cities" [value]="city.name">{{ city.name }}</option>
             <option *ngIf="cities.length === 0" value="Jaipur">Jaipur</option>
           </select>
         </div>
 
         <div class="md:col-span-4">
-          <label class="sr-only">Search</label>
+          <label class="sr-only">Search workspaces</label>
           <div class="relative">
-            <input [(ngModel)]="searchQuery" (keyup.enter)="searchFromHero()" (input)="onSearchKeyup()" (keydown)="onSearchKeydown($event)" type="search" aria-label="Search workspaces" [attr.aria-expanded]="filteredSuggestions.length>0" [attr.aria-controls]="'suggestions-list'" [attr.aria-activedescendant]="highlightedSuggestionIndex >= 0 ? 'suggestion-' + highlightedSuggestionIndex : null" class="w-full px-4 py-3 rounded-xl border border-deep/10 focus:ring-2 focus:ring-accent/20" placeholder="Search location or workspaces in {{ selectedCity }}" />
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+            <input 
+              [(ngModel)]="searchQuery" 
+              (keyup.enter)="searchFromHero()" 
+              (input)="onSearchKeyup()" 
+              (keydown)="onSearchKeydown($event)" 
+              type="search" 
+              aria-label="Search workspaces" 
+              [attr.aria-expanded]="filteredSuggestions.length>0" 
+              [attr.aria-controls]="'suggestions-list'" 
+              [attr.aria-activedescendant]="highlightedSuggestionIndex >= 0 ? 'suggestion-' + highlightedSuggestionIndex : null" 
+              class="w-full pl-11 pr-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-accent/30 focus:border-transparent font-medium text-gray-900" 
+              placeholder="Search location or workspaces" 
+            />
             <!-- Suggestions -->
-            <ul *ngIf="filteredSuggestions.length > 0" id="suggestions-list" role="listbox" class="suggestions-list">
+            <ul *ngIf="filteredSuggestions.length > 0" id="suggestions-list" role="listbox" class="suggestions-list-clean">
               <li *ngFor="let s of filteredSuggestions; let i = index" role="option" [attr.id]="'suggestion-' + i" (click)="selectSuggestion(s)"
                   [class.active]="i === highlightedSuggestionIndex" (mouseenter)="highlightedSuggestionIndex = i" (mouseleave)="highlightedSuggestionIndex = -1">{{ s }}</li>
             </ul>
           </div>
         </div>
 
-        <div class="md:col-span-1 flex justify-end">
-          <button (click)="searchFromHero()" class="btn-hero-cta w-full">View Workspaces</button>
+        <div class="md:col-span-1">
+          <button (click)="searchFromHero()" class="btn-search-cta w-full">Search</button>
         </div>
       </div>
     </div>
@@ -161,90 +124,195 @@
       </p>
     </div>
     
-    <!-- Service Categories Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
-      <!-- Private Office -->
-      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-deep/10">
-        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-accent/20 transition-colors">
-          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+    <!-- Service Categories Carousel -->
+    <div class="carousel-container">
+      <!-- Carousel Wrapper -->
+      <div class="relative">
+        <!-- Left Navigation Button -->
+        <button (click)="scrollCarousel('left')" class="carousel-nav carousel-nav-left" aria-label="Previous services">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
           </svg>
+        </button>
+
+        <!-- Carousel Track -->
+        <div #carouselTrack class="service-carousel">
+          <!-- Private Office -->
+          <div class="service-card group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/15 hover:border-accent/40 overflow-hidden flex-shrink-0">
+            <!-- Featured Image -->
+            <div class="relative overflow-hidden h-48 bg-gray-100">
+              <img src="/assets/private-office.png" alt="Private Office" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8">
+              <!-- Accent Bar -->
+              <div class="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-accent to-accent/0"></div>
+              
+              <!-- Card Number Badge -->
+              <div class="absolute top-48 right-6 -mt-4 w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center text-xs font-bold">01</div>
+              
+            <div class="relative">
+              <h3 class="text-lg sm:text-xl font-bold text-black mb-3 tracking-tight">PRIVATE OFFICE</h3>
+              <p class="text-muted mb-6 text-sm sm:text-base leading-relaxed">Fully furnished private offices for teams of all sizes with 24/7 access and premium amenities.</p>
+              <div class="flex items-baseline gap-2 text-accent font-semibold text-base sm:text-lg">
+                <span class="text-xs text-muted font-normal">Starting from</span>
+                <span>₹35,999</span>
+                <span class="text-xs text-muted font-normal">/month</span>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Coworking -->
+          <div class="service-card group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/15 hover:border-accent/40 overflow-hidden flex-shrink-0">
+            <!-- Featured Image -->
+            <div class="relative overflow-hidden h-48 bg-gray-100">
+              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=300&fit=crop&q=80" alt="Coworking Space" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8">
+              <!-- Accent Bar -->
+              <div class="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-accent to-accent/0"></div>
+              
+              <!-- Card Number Badge -->
+              <div class="absolute top-48 right-6 -mt-4 w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center text-xs font-bold">02</div>
+              
+            <div class="relative">
+              <h3 class="text-lg sm:text-xl font-bold text-black mb-3 tracking-tight">COWORKING</h3>
+              <p class="text-muted mb-6 text-sm sm:text-base leading-relaxed">Flexible shared workspaces with vibrant community, networking opportunities, and collaborative environment.</p>
+              <div class="flex items-baseline gap-2 text-accent font-semibold text-base sm:text-lg">
+                <span class="text-xs text-muted font-normal">Starting from</span>
+                <span>₹899</span>
+                <span class="text-xs text-muted font-normal">/day</span>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Meeting Room -->
+          <div class="service-card group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/15 hover:border-accent/40 overflow-hidden flex-shrink-0">
+            <!-- Featured Image -->
+            <div class="relative overflow-hidden h-48 bg-gray-100">
+              <img src="/assets/meeting-room.png" alt="Meeting Room" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8">
+              <!-- Accent Bar -->
+              <div class="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-accent to-accent/0"></div>
+              
+              <!-- Card Number Badge -->
+              <div class="absolute top-48 right-6 -mt-4 w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center text-xs font-bold">03</div>
+              
+            <div class="relative">
+              <h3 class="text-lg sm:text-xl font-bold text-black mb-3 tracking-tight">MEETING ROOM</h3>
+              <p class="text-muted mb-6 text-sm sm:text-base leading-relaxed">Professional meeting rooms equipped with latest technology for presentations, conferences, and client meetings.</p>
+              <div class="flex items-baseline gap-2 text-accent font-semibold text-base sm:text-lg">
+                <span class="text-xs text-muted font-normal">Starting from</span>
+                <span>₹199</span>
+                <span class="text-xs text-muted font-normal">/hour</span>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Virtual Office -->
+          <div class="service-card group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/15 hover:border-accent/40 overflow-hidden flex-shrink-0">
+            <!-- Featured Image -->
+            <div class="relative overflow-hidden h-48 bg-gray-100">
+              <img src="/assets/virtual-office.png" alt="Virtual Office" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8">
+              <!-- Accent Bar -->
+              <div class="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-accent to-accent/0"></div>
+              
+              <!-- Card Number Badge -->
+              <div class="absolute top-48 right-6 -mt-4 w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center text-xs font-bold">04</div>
+              
+            <div class="relative">
+              <h3 class="text-lg sm:text-xl font-bold text-black mb-3 tracking-tight">VIRTUAL OFFICE</h3>
+              <p class="text-muted mb-6 text-sm sm:text-base leading-relaxed">Professional business address with GST registration, mail handling, and meeting room access when needed.</p>
+              <div class="flex items-baseline gap-2 text-accent font-semibold text-base sm:text-lg">
+                <span class="text-xs text-muted font-normal">Starting from</span>
+                <span>₹2,999</span>
+                <span class="text-xs text-muted font-normal">/month</span>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- Dedicated Desk -->
+          <div class="service-card group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/15 hover:border-accent/40 overflow-hidden flex-shrink-0">
+            <!-- Featured Image -->
+            <div class="relative overflow-hidden h-48 bg-gray-100">
+              <img src="/assets/dedicated-desk.png" alt="Dedicated Desk" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8">
+              <!-- Accent Bar -->
+              <div class="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-accent to-accent/0"></div>
+              
+              <!-- Card Number Badge -->
+              <div class="absolute top-48 right-6 -mt-4 w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center text-xs font-bold">05</div>
+              
+            <div class="relative">
+              <h3 class="text-lg sm:text-xl font-bold text-black mb-3 tracking-tight">DEDICATED DESK</h3>
+              <p class="text-muted mb-6 text-sm sm:text-base leading-relaxed">Your own permanent workstation in a shared office environment with personal storage and 24/7 access.</p>
+              <div class="flex items-baseline gap-2 text-accent font-semibold text-base sm:text-lg">
+                <span class="text-xs text-muted font-normal">Starting from</span>
+                <span>₹12,999</span>
+                <span class="text-xs text-muted font-normal">/month</span>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- On The Go -->
+          <div class="service-card group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 border border-accent/15 hover:border-accent/40 overflow-hidden flex-shrink-0">
+            <!-- Featured Image -->
+            <div class="relative overflow-hidden h-48 bg-gray-100">
+              <img src="/assets/on-the-go.png" alt="On The Go" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-6 sm:p-8">
+              <!-- Accent Bar -->
+              <div class="absolute top-0 left-0 w-1 h-12 bg-gradient-to-b from-accent to-accent/0"></div>
+              
+              <!-- Card Number Badge -->
+              <div class="absolute top-48 right-6 -mt-4 w-8 h-8 bg-accent/10 text-accent rounded-lg flex items-center justify-center text-xs font-bold">06</div>
+              
+            <div class="relative">
+              <h3 class="text-lg sm:text-xl font-bold text-black mb-3 tracking-tight">ON THE GO</h3>
+              <p class="text-muted mb-6 text-sm sm:text-base leading-relaxed">Flexible daily passes for professionals who need workspace access without long-term commitments.</p>
+              <div class="flex items-baseline gap-2 text-accent font-semibold text-base sm:text-lg">
+                <span class="text-xs text-muted font-normal">Starting from</span>
+                <span>₹499</span>
+                <span class="text-xs text-muted font-normal">/day</span>
+              </div>
+            </div>
+            </div>
+          </div>
         </div>
-        <h3 class="text-lg sm:text-xl font-bold text-black mb-3">PRIVATE OFFICE</h3>
-        <p class="text-muted mb-4 text-sm sm:text-base">Fully furnished private offices for teams of all sizes with 24/7 access and premium amenities.</p>
-        <div class="flex items-center text-accent font-medium text-sm sm:text-base">
-          <span>Starting from ₹35,999/month</span>
-        </div>
+
+        <!-- Right Navigation Button -->
+        <button (click)="scrollCarousel('right')" class="carousel-nav carousel-nav-right" aria-label="Next services">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
       </div>
 
-      <!-- Coworking -->
-      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-deep/10">
-        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-accent/20 transition-colors">
-          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-          </svg>
-        </div>
-        <h3 class="text-lg sm:text-xl font-bold text-black mb-3">COWORKING</h3>
-        <p class="text-muted mb-4 text-sm sm:text-base">Flexible shared workspaces with vibrant community, networking opportunities, and collaborative environment.</p>
-        <div class="flex items-center text-accent font-medium text-sm sm:text-base">
-          <span>Starting from ₹899/day</span>
-        </div>
-      </div>
-
-      <!-- Meeting Room -->
-      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-deep/10">
-        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-accent/20 transition-colors">
-          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"></path>
-          </svg>
-        </div>
-        <h3 class="text-lg sm:text-xl font-bold text-black mb-3">MEETING ROOM</h3>
-        <p class="text-muted mb-4 text-sm sm:text-base">Professional meeting rooms equipped with latest technology for presentations, conferences, and client meetings.</p>
-        <div class="flex items-center text-accent font-medium text-sm sm:text-base">
-          <span>Starting from ₹199/hour</span>
-        </div>
-      </div>
-
-      <!-- Virtual Office -->
-      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-deep/10">
-        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-accent/20 transition-colors">
-          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-          </svg>
-        </div>
-        <h3 class="text-lg sm:text-xl font-bold text-black mb-3">VIRTUAL OFFICE</h3>
-        <p class="text-muted mb-4 text-sm sm:text-base">Professional business address with GST registration, mail handling, and meeting room access when needed.</p>
-        <div class="flex items-center text-accent font-medium text-sm sm:text-base">
-          <span>Starting from ₹2,999/month</span>
-        </div>
-      </div>
-
-      <!-- Dedicated Desk -->
-      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-deep/10">
-        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-accent/20 transition-colors">
-          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-          </svg>
-        </div>
-        <h3 class="text-lg sm:text-xl font-bold text-black mb-3">DEDICATED DESK</h3>
-        <p class="text-muted mb-4 text-sm sm:text-base">Your own permanent workstation in a shared office environment with personal storage and 24/7 access.</p>
-        <div class="flex items-center text-accent font-medium text-sm sm:text-base">
-          <span>Starting from ₹12,999/month</span>
-        </div>
-      </div>
-
-      <!-- On The Go -->
-      <div class="group bg-white rounded-xl p-6 sm:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-deep/10">
-        <div class="w-12 h-12 sm:w-16 sm:h-16 bg-accent/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-accent/20 transition-colors">
-          <svg class="w-6 h-6 sm:w-8 sm:h-8 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-          </svg>
-        </div>
-        <h3 class="text-lg sm:text-xl font-bold text-black mb-3">ON THE GO</h3>
-        <p class="text-muted mb-4 text-sm sm:text-base">Flexible daily passes for professionals who need workspace access without long-term commitments.</p>
-        <div class="flex items-center text-accent font-medium text-sm sm:text-base">
-          <span>Starting from ₹499/day</span>
-        </div>
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators" role="tablist">
+        <button (click)="goToSlide(0)" [class.active]="currentSlide === 0" role="tab" [attr.aria-selected]="currentSlide === 0" class="indicator" aria-label="Slide 1"></button>
+        <button (click)="goToSlide(1)" [class.active]="currentSlide === 1" role="tab" [attr.aria-selected]="currentSlide === 1" class="indicator" aria-label="Slide 2"></button>
+        <button (click)="goToSlide(2)" [class.active]="currentSlide === 2" role="tab" [attr.aria-selected]="currentSlide === 2" class="indicator" aria-label="Slide 3"></button>
       </div>
     </div>
 
@@ -350,274 +418,50 @@
 </section>
 
 <!-- Cities Section -->
-<section class="py-16">
-  <div class="max-w-7xl mx-auto section-padding">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-black mb-4">Work From Anywhere, Nationwide</h2>
-      <p class="text-muted max-w-2xl mx-auto">
+<section class="py-20 sm:py-28 bg-gradient-to-br from-slate-50 via-white to-amber-50/20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-16 sm:mb-20">
+      <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold text-black mb-4 sm:mb-6 leading-tight">
+        Work From Anywhere, Nationwide
+      </h2>
+      <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">
         We have premium workspace solutions across India's major business hubs.
       </p>
     </div>
     
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <a *ngFor="let city of cities" 
+    <!-- Modern City Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 auto-rows-max">
+      <!-- City Card 1 -->
+      <a *ngFor="let city of cities; let i = index" 
          [routerLink]="['/city', city.slug]"
-         class="group text-center">
-        <div class="w-20 h-20 mx-auto mb-3 bg-accent/10 rounded-full flex items-center justify-center group-hover:bg-accent/20 transition-colors">
-          <span class="text-2xl font-bold text-accent">{{city.name.charAt(0)}}</span>
+         [ngClass]="{'lg:col-span-2': i === 0, 'sm:col-span-2': i === 0}"
+         class="city-card-modern group">
+        <div class="relative w-full h-full flex flex-col justify-between p-6 sm:p-8">
+          <!-- Top Section -->
+          <div class="flex items-start justify-between mb-auto">
+            <div class="city-badge-modern">
+              <span>{{city.name.charAt(0)}}</span>
+            </div>
+            <svg class="w-5 h-5 text-accent opacity-0 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+          </div>
+          
+          <!-- Bottom Section -->
+          <div>
+            <h3 class="text-xl sm:text-2xl font-bold text-black mb-1 group-hover:text-accent transition-colors">{{city.name}}</h3>
+            <p class="text-sm text-gray-500 font-medium">{{city.state}}</p>
+          </div>
         </div>
-        <h3 class="font-semibold text-black group-hover:text-accent">{{city.name}}</h3>
-        <p class="text-sm text-muted">{{city.state}}</p>
+        
+        <!-- Background Gradient -->
+        <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity -z-10"></div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- Blog Section -->
-<section class="py-20 brand-surface">
-  <div class="max-w-7xl mx-auto section-padding">
-    <div class="text-center mb-16">
-      <h2 class="text-4xl font-bold text-black mb-4">Read Our Latest Articles</h2>
-      <p class="text-xl text-muted max-w-2xl mx-auto">
-        Stay updated with the latest insights on workspace trends, productivity tips, and business growth strategies.
-      </p>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Blog Post 1 -->
-      <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group">
-        <div class="relative overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=250&fit=crop&q=80" 
-            alt="Future of Workspace"
-            class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-          <div class="absolute top-4 left-4">
-            <span class="bg-accent text-white px-3 py-1 rounded-full text-xs font-medium">WORKSPACE</span>
-          </div>
-        </div>
-        <div class="p-6">
-          <div class="flex items-center text-sm text-muted mb-3">
-            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-            </svg>
-            September 25, 2025
-          </div>
-          <h3 class="text-xl font-bold text-black mb-3 group-hover:text-accent transition-colors">
-            The Future of Flexible Workspaces: Trends to Watch in 2025
-          </h3>
-          <p class="text-muted mb-4 line-clamp-3">
-            Discover how the workspace industry is evolving and what trends are shaping the future of flexible work environments across India.
-          </p>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <img src="https://i.pravatar.cc/32?img=10" alt="Author" class="w-8 h-8 rounded-full" (error)="onImageError($event)">
-              <span class="text-sm text-muted">Rajesh Kumar</span>
-            </div>
-            <a routerLink="/blogs" class="text-accent hover:text-accent/80 font-medium text-sm">Read More →</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Blog Post 2 -->
-      <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group">
-        <div class="relative overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&h=250&fit=crop&q=80" 
-            alt="Productivity Tips"
-            class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-          <div class="absolute top-4 left-4">
-            <span class="bg-accent text-black px-3 py-1 rounded-full text-xs font-medium">PRODUCTIVITY</span>
-          </div>
-        </div>
-        <div class="p-6">
-          <div class="flex items-center text-sm text-muted mb-3">
-            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-            </svg>
-            September 20, 2025
-          </div>
-          <h3 class="text-xl font-bold text-black mb-3 group-hover:text-accent transition-colors">
-            10 Productivity Hacks for Remote Workers and Freelancers
-          </h3>
-          <p class="text-muted mb-4 line-clamp-3">
-            Boost your productivity with these proven strategies that successful remote workers and freelancers use to stay focused and efficient.
-          </p>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <img src="https://i.pravatar.cc/32?img=15" alt="Author" class="w-8 h-8 rounded-full" (error)="onImageError($event)">
-              <span class="text-sm text-muted">Priya Sharma</span>
-            </div>
-            <a routerLink="/blogs" class="text-accent hover:text-accent/80 font-medium text-sm">Read More →</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Blog Post 3 -->
-      <article class="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 group">
-        <div class="relative overflow-hidden">
-          <img 
-            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop&q=80" 
-            alt="Business Growth"
-            class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-          <div class="absolute top-4 left-4">
-            <span class="bg-accent text-black px-3 py-1 rounded-full text-xs font-medium">BUSINESS</span>
-          </div>
-        </div>
-        <div class="p-6">
-          <div class="flex items-center text-sm text-muted mb-3">
-            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-            </svg>
-            September 15, 2025
-          </div>
-          <h3 class="text-xl font-bold text-black mb-3 group-hover:text-accent transition-colors">
-            How Coworking Spaces Accelerate Startup Growth in India
-          </h3>
-          <p class="text-muted mb-4 line-clamp-3">
-            Learn how startups are leveraging coworking spaces to reduce costs, build networks, and scale their operations faster than ever before.
-          </p>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-2">
-              <img src="https://i.pravatar.cc/32?img=20" alt="Author" class="w-8 h-8 rounded-full" (error)="onImageError($event)">
-              <span class="text-sm text-muted">Amit Patel</span>
-            </div>
-            <a routerLink="/blogs" class="text-accent hover:text-accent/80 font-medium text-sm">Read More →</a>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <!-- View All Articles Button -->
-    <div class="text-center mt-12">
-      <button routerLink="/blogs" class="btn-primary px-8 py-3 rounded-xl transition-all duration-300 transform hover:scale-105">
-        View All Articles
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ Section -->
-<section class="py-16 sm:py-24 bg-white">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section Header -->
-    <div class="text-center mb-16 sm:mb-20">
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4 sm:mb-6">
-        Frequently Asked Questions
-      </h2>
-      <p class="text-lg sm:text-xl text-muted max-w-3xl mx-auto leading-relaxed">
-        Got questions? We have answers. Find everything you need to know about WishCowork and our workspace solutions.
-      </p>
-    </div>
-
-    <!-- FAQ Items -->
-    <div class="space-y-3 sm:space-y-4">
-      <!-- Loading State -->
-      <div *ngIf="loadingFAQs" class="text-center py-12">
-        <div class="inline-flex items-center justify-center">
-          <div class="animate-spin rounded-full h-10 w-10 border-2 border-accent border-t-transparent"></div>
-        </div>
-        <p class="text-muted mt-4 text-lg">Loading FAQs...</p>
-      </div>
-
-      <!-- Empty State -->
-      <div *ngIf="!loadingFAQs && faqs.length === 0" class="brand-surface rounded-2xl p-8 sm:p-12 text-center border border-deep/10">
-        <p class="text-muted text-lg">FAQs will be available soon.</p>
-        <p class="text-muted text-base mt-2">Contact our support team for immediate assistance.</p>
-      </div>
-
-      <!-- FAQ Items Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
-        <div *ngFor="let faq of displayedFAQs; let i = index" class="group lg:col-span-1">
-          <button
-            class="w-full px-4 sm:px-8 py-5 sm:py-6 flex items-start sm:items-center justify-between bg-white hover:brand-surface rounded-xl sm:rounded-2xl transition-all duration-300 border border-deep/10 hover:border-accent hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-opacity-50"
-            (click)="toggleFAQ(i)"
-            [class.border-accent]="expandedFAQ === i"
-            [class.shadow-lg]="expandedFAQ === i"
-          >
-            <div class="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 text-left">
-              <!-- Number Badge -->
-              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-sm sm:text-base">
-                {{ i + 1 }}
-              </div>
-              <!-- Question Text -->
-              <span class="text-base sm:text-lg font-semibold text-black group-hover:text-accent transition-colors duration-200">
-                {{ faq.question }}
-              </span>
-            </div>
-            <!-- Chevron Icon -->
-            <svg
-              class="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 ml-3 transition-all duration-300 transform group-hover:scale-110"
-              [class.rotate-180]="expandedFAQ === i"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-
-          <!-- Answer Content -->
-          <div
-            class="overflow-hidden transition-all duration-300 ease-in-out lg:col-span-2"
-            [style.max-height.px]="expandedFAQ === i ? 1000 : 0"
-          >
-            <div class="px-4 sm:px-8 py-5 sm:py-6 text-base text-black brand-surface border-b border-l border-r border-deep/10 rounded-b-xl sm:rounded-b-2xl">
-              <div class="ml-0 sm:ml-14 leading-relaxed whitespace-pre-wrap">
-                {{ faq.answer }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Show More/Less Button -->
-      <div *ngIf="faqs.length > maxFAQsToShow" class="text-center mt-8 lg:col-span-2">
-        <button
-          (click)="toggleShowAllFAQs()"
-          class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-        >
-          <span>{{ showAllFAQs ? 'Show Less' : 'Show More FAQs' }}</span>
-          <svg
-            class="w-5 h-5 transition-transform duration-300"
-            [class.rotate-180]="showAllFAQs"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-
-    <!-- Still Have Questions? -->
-    <div class="mt-16 sm:mt-20">
-      <div class="brand-surface rounded-3xl p-8 sm:p-12 lg:p-16 text-center border border-deep/10">
-        <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-black">Still have questions?</h3>
-        <p class="text-muted mb-8 text-base sm:text-lg max-w-2xl mx-auto">
-          Our dedicated support team is available 24/7 to help you find the perfect workspace solution.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
-          <button 
-            routerLink="/contact"
-            class="btn-primary px-8 py-4"
-          >
-            Contact Support
-          </button>
-          <button 
-            (click)="contactSupport()"
-            class="btn-secondary px-8 py-4"
-          >
-            Email Us
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- Rent Longer-Term Section -->
 <section class="py-16 sm:py-24 brand-surface">
@@ -627,8 +471,109 @@
       <div class="w-12 h-1 bg-accent rounded"></div>
     </div>
     
-    <!-- Property Type Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+    <!-- Mobile Rent Carousel -->
+    <div class="md:hidden">
+      <div class="relative">
+        <div #rentCarousel class="rent-mobile-carousel">
+          <!-- Coworking Space -->
+          <div class="rent-carousel-card">
+      <!-- Coworking Space -->
+      <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+        <div class="relative h-48 sm:h-56 overflow-hidden brand-surface">
+          <img 
+            src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop&q=80" 
+            alt="Coworking Space"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          />
+        </div>
+        <div class="p-6">
+          <h3 class="text-lg sm:text-xl font-bold text-black mb-2">Coworking Space</h3>
+          <p class="text-sm text-muted mb-4">Full-time offices for teams of all sizes</p>
+          <ul class="space-y-2 text-sm text-black/70 mb-6">
+            <li class="flex items-start">
+              <span class="text-accent mr-2">•</span>
+              <span>Dedicated seats & private cabins</span>
+            </li>
+            <li class="flex items-start">
+              <span class="text-accent mr-2">•</span>
+              <span>Fully-equipped coworking spaces</span>
+            </li>
+          </ul>
+          <a 
+            (click)="navigateToCategory('coworking-space')"
+            class="text-accent hover:text-accent/80 font-bold text-sm inline-flex items-center gap-2 cursor-pointer group/link">
+            Explore
+            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+          </div>
+          <!-- Managed Office -->
+          <div class="rent-carousel-card">
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+              <div class="relative h-48 sm:h-56 overflow-hidden brand-surface">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&h=400&fit=crop&q=80" alt="Managed Office" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg sm:text-xl font-bold text-black mb-2">Managed Office</h3>
+                <p class="text-sm text-muted mb-4">Dedicated office space managed by a provider</p>
+                <ul class="space-y-2 text-sm text-black/70 mb-6">
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Fully furnished customized office</span></li>
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Fully managed operations</span></li>
+                </ul>
+                <a (click)="navigateToCategory('managed-office')" class="text-accent hover:text-accent/80 font-bold text-sm inline-flex items-center gap-2 cursor-pointer group/link">Explore<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+              </div>
+            </div>
+          </div>
+          <!-- Office/Commercial Spaces -->
+          <div class="rent-carousel-card">
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+              <div class="relative h-48 sm:h-56 overflow-hidden brand-surface">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=500&h=400&fit=crop&q=80" alt="Office/Commercial Spaces" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg sm:text-xl font-bold text-black mb-2">Commercial Spaces</h3>
+                <p class="text-sm text-muted mb-4">Rent/Lease office space for your company</p>
+                <ul class="space-y-2 text-sm text-black/70 mb-6">
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Long term contracts (3+ years)</span></li>
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Full customizations</span></li>
+                </ul>
+                <p class="text-muted text-xs font-bold uppercase tracking-widest">Coming Soon</p>
+              </div>
+            </div>
+          </div>
+          <!-- Virtual Office -->
+          <div class="rent-carousel-card">
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+              <div class="relative h-48 sm:h-56 overflow-hidden brand-surface">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop&q=80" alt="Virtual Office" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg sm:text-xl font-bold text-black mb-2">Virtual Office</h3>
+                <p class="text-sm text-muted mb-4">Professional business address</p>
+                <ul class="space-y-2 text-sm text-black/70 mb-6">
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>GST registered address</span></li>
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>No physical space required</span></li>
+                </ul>
+                <a (click)="navigateToCategory('virtual-office')" class="text-accent hover:text-accent/80 font-bold text-sm inline-flex items-center gap-2 cursor-pointer group/link">Explore<svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators mt-4" role="tablist">
+        <button (click)="goToRentSlide(0)" [class.active]="currentRentSlide === 0" role="tab" class="indicator" aria-label="Rent slide 1"></button>
+        <button (click)="goToRentSlide(1)" [class.active]="currentRentSlide === 1" role="tab" class="indicator" aria-label="Rent slide 2"></button>
+        <button (click)="goToRentSlide(2)" [class.active]="currentRentSlide === 2" role="tab" class="indicator" aria-label="Rent slide 3"></button>
+        <button (click)="goToRentSlide(3)" [class.active]="currentRentSlide === 3" role="tab" class="indicator" aria-label="Rent slide 4"></button>
+      </div>
+    </div>
+    
+    <!-- Property Type Cards - Desktop Grid -->
+    <div class="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
       <!-- Coworking Space -->
       <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
         <div class="relative h-48 sm:h-56 overflow-hidden brand-surface">
@@ -757,6 +702,7 @@
   </div>
 </section>
 
+
 <!-- Book On-Demand Section -->
 <section class="py-16 sm:py-24 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -765,8 +711,8 @@
       <div class="w-12 h-1 bg-accent rounded"></div>
     </div>
     
-    <!-- Flexible Booking Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+    <!-- Flexible Booking Cards - Desktop Grid -->
+    <div class="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
       <!-- Day Pass -->
       <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
         <div class="relative h-48 sm:h-56 overflow-hidden brand-surface">
@@ -887,8 +833,400 @@
         </div>
       </div>
     </div>
+
+    <!-- Mobile Booking Carousel -->
+    <div class="md:hidden">
+      <div class="relative">
+        <div #bookingCarousel class="booking-mobile-carousel">
+          <!-- Day Pass -->
+          <div class="booking-carousel-card">
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+              <div class="relative h-48 overflow-hidden brand-surface">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop&q=80" alt="Day Pass" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg font-bold text-black mb-2">Day Pass</h3>
+                <p class="text-sm text-muted mb-4">Flexible coworking for individuals</p>
+                <ul class="space-y-2 text-sm text-black/70 mb-6">
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Desks-by-the-day in coworking spaces</span></li>
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Starting at ₹900/day</span></li>
+                </ul>
+                <button (click)="bookWorkspace('day-pass')" class="btn-primary w-full py-2 rounded-lg font-bold transition-all text-sm">Book Now</button>
+              </div>
+            </div>
+          </div>
+          <!-- Meeting Room -->
+          <div class="booking-carousel-card">
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+              <div class="relative h-48 overflow-hidden brand-surface">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop&q=80" alt="Meeting Room" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg font-bold text-black mb-2">Meeting Room</h3>
+                <p class="text-sm text-muted mb-4">Book by-the-hour by the day</p>
+                <ul class="space-y-2 text-sm text-black/70 mb-6">
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Meeting, conference and training rooms</span></li>
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Fully equipped & professional setup</span></li>
+                </ul>
+                <button (click)="bookWorkspace('meeting-room')" class="btn-primary w-full py-2 rounded-lg font-bold transition-all text-sm">Book Now</button>
+              </div>
+            </div>
+          </div>
+          <!-- Team Plan -->
+          <div class="booking-carousel-card">
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+              <div class="relative h-48 overflow-hidden brand-surface">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop&q=80" alt="Team Plan" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg font-bold text-black mb-2">Team Plan</h3>
+                <p class="text-sm text-muted mb-4">Flexible day pass for remote & hybrid teams</p>
+                <ul class="space-y-2 text-sm text-black/70 mb-6">
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Centralized dashboard for entire team</span></li>
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Volume discounts on bulk bookings</span></li>
+                </ul>
+                <button (click)="bookWorkspace('team-plan')" class="btn-primary w-full py-2 rounded-lg font-bold transition-all text-sm">Book Now</button>
+              </div>
+            </div>
+          </div>
+          <!-- Events -->
+          <div class="booking-carousel-card">
+            <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-deep/10">
+              <div class="relative h-48 overflow-hidden brand-surface">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=500&h=400&fit=crop&q=80" alt="Events" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"/>
+              </div>
+              <div class="p-6">
+                <h3 class="text-lg font-bold text-black mb-2">Events</h3>
+                <p class="text-sm text-muted mb-4">Book spaces for events & workshops</p>
+                <ul class="space-y-2 text-sm text-black/70 mb-6">
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Professional event hosting spaces</span></li>
+                  <li class="flex items-start"><span class="text-accent mr-2">•</span><span>Premium amenities & support</span></li>
+                </ul>
+                <button (click)="bookWorkspace('events')" class="btn-primary w-full py-2 rounded-lg font-bold transition-all text-sm">Book Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators mt-4" role="tablist">
+        <button (click)="goToBookingSlide(0)" [class.active]="currentBookingSlide === 0" role="tab" class="indicator" aria-label="Booking slide 1"></button>
+        <button (click)="goToBookingSlide(1)" [class.active]="currentBookingSlide === 1" role="tab" class="indicator" aria-label="Booking slide 2"></button>
+        <button (click)="goToBookingSlide(2)" [class.active]="currentBookingSlide === 2" role="tab" class="indicator" aria-label="Booking slide 3"></button>
+        <button (click)="goToBookingSlide(3)" [class.active]="currentBookingSlide === 3" role="tab" class="indicator" aria-label="Booking slide 4"></button>
+      </div>
+    </div>
   </div>
 </section>
+<section class="py-20 sm:py-28 bg-gradient-to-br from-white via-slate-50/50 to-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-16 sm:mb-20">
+      <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold text-black mb-4 sm:mb-6 leading-tight">
+        Read Our Latest Articles
+      </h2>
+      <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-medium">
+        Stay updated with the latest insights on workspace trends, productivity tips, and business growth strategies.
+      </p>
+    </div>
+    
+    <!-- Mobile Blog Carousel -->
+    <div class="md:hidden">
+      <div class="relative">
+        <div #blogCarousel class="blog-mobile-carousel">
+          <article class="blog-carousel-card">
+            <div class="blog-card-modern group">
+              <div class="blog-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=250&fit=crop&q=80" alt="Future of Workspace" class="blog-image"/>
+                <div class="blog-category blog-category-workspace">WORKSPACE</div>
+              </div>
+              <div class="blog-content">
+                <div class="blog-meta"><span class="blog-date">September 25, 2025</span></div>
+                <h3 class="blog-title">The Future of Flexible Workspaces: Trends to Watch in 2025</h3>
+                <p class="blog-excerpt">Discover how the workspace industry is evolving and what trends are shaping the future of flexible work environments across India.</p>
+                <div class="blog-footer">
+                  <div class="blog-author">
+                    <img src="https://i.pravatar.cc/32?img=10" alt="Author" class="author-avatar" (error)="onImageError($event)">
+                    <span>Rajesh Kumar</span>
+                  </div>
+                  <a routerLink="/blogs" class="blog-read-more">Read More →</a>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="blog-carousel-card">
+            <div class="blog-card-modern group">
+              <div class="blog-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&h=250&fit=crop&q=80" alt="Productivity Tips" class="blog-image"/>
+                <div class="blog-category blog-category-productivity">PRODUCTIVITY</div>
+              </div>
+              <div class="blog-content">
+                <div class="blog-meta"><span class="blog-date">September 20, 2025</span></div>
+                <h3 class="blog-title">10 Productivity Hacks for Remote Workers and Freelancers</h3>
+                <p class="blog-excerpt">Boost your productivity with these proven strategies that successful remote workers and freelancers use to stay focused and efficient.</p>
+                <div class="blog-footer">
+                  <div class="blog-author">
+                    <img src="https://i.pravatar.cc/32?img=15" alt="Author" class="author-avatar" (error)="onImageError($event)">
+                    <span>Priya Sharma</span>
+                  </div>
+                  <a routerLink="/blogs" class="blog-read-more">Read More →</a>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="blog-carousel-card">
+            <div class="blog-card-modern group">
+              <div class="blog-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop&q=80" alt="Business Growth" class="blog-image"/>
+                <div class="blog-category blog-category-business">BUSINESS</div>
+              </div>
+              <div class="blog-content">
+                <div class="blog-meta"><span class="blog-date">September 15, 2025</span></div>
+                <h3 class="blog-title">How Coworking Spaces Accelerate Startup Growth in India</h3>
+                <p class="blog-excerpt">Learn how startups are leveraging coworking spaces to reduce costs, build networks, and scale their operations faster than ever before.</p>
+                <div class="blog-footer">
+                  <div class="blog-author">
+                    <img src="https://i.pravatar.cc/32?img=20" alt="Author" class="author-avatar" (error)="onImageError($event)">
+                    <span>Amit Patel</span>
+                  </div>
+                  <a routerLink="/blogs" class="blog-read-more">Read More →</a>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+      <!-- Carousel Indicators -->
+      <div class="carousel-indicators mt-4" role="tablist">
+        <button (click)="goToBlogSlide(0)" [class.active]="currentBlogSlide === 0" role="tab" class="indicator" aria-label="Blog slide 1"></button>
+        <button (click)="goToBlogSlide(1)" [class.active]="currentBlogSlide === 1" role="tab" class="indicator" aria-label="Blog slide 2"></button>
+        <button (click)="goToBlogSlide(2)" [class.active]="currentBlogSlide === 2" role="tab" class="indicator" aria-label="Blog slide 3"></button>
+      </div>
+    </div>
+    
+    <!-- Modern Blog Grid - Desktop -->
+    <div class="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      <!-- Blog Post 1 -->
+      <article class="blog-card-modern group">
+        <div class="blog-image-wrapper">
+          <img 
+            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=250&fit=crop&q=80" 
+            alt="Future of Workspace"
+            class="blog-image"
+          />
+          <div class="blog-category blog-category-workspace">WORKSPACE</div>
+        </div>
+        <div class="blog-content">
+          <div class="blog-meta">
+            <span class="blog-date">September 25, 2025</span>
+          </div>
+          <h3 class="blog-title">
+            The Future of Flexible Workspaces: Trends to Watch in 2025
+          </h3>
+          <p class="blog-excerpt">
+            Discover how the workspace industry is evolving and what trends are shaping the future of flexible work environments across India.
+          </p>
+          <div class="blog-footer">
+            <div class="blog-author">
+              <img src="https://i.pravatar.cc/32?img=10" alt="Author" class="author-avatar" (error)="onImageError($event)">
+              <span>Rajesh Kumar</span>
+            </div>
+            <a routerLink="/blogs" class="blog-read-more">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Blog Post 2 -->
+      <article class="blog-card-modern group">
+        <div class="blog-image-wrapper">
+          <img 
+            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=400&h=250&fit=crop&q=80" 
+            alt="Productivity Tips"
+            class="blog-image"
+          />
+          <div class="blog-category blog-category-productivity">PRODUCTIVITY</div>
+        </div>
+        <div class="blog-content">
+          <div class="blog-meta">
+            <span class="blog-date">September 20, 2025</span>
+          </div>
+          <h3 class="blog-title">
+            10 Productivity Hacks for Remote Workers and Freelancers
+          </h3>
+          <p class="blog-excerpt">
+            Boost your productivity with these proven strategies that successful remote workers and freelancers use to stay focused and efficient.
+          </p>
+          <div class="blog-footer">
+            <div class="blog-author">
+              <img src="https://i.pravatar.cc/32?img=15" alt="Author" class="author-avatar" (error)="onImageError($event)">
+              <span>Priya Sharma</span>
+            </div>
+            <a routerLink="/blogs" class="blog-read-more">Read More →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Blog Post 3 -->
+      <article class="blog-card-modern group">
+        <div class="blog-image-wrapper">
+          <img 
+            src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=250&fit=crop&q=80" 
+            alt="Business Growth"
+            class="blog-image"
+          />
+          <div class="blog-category blog-category-business">BUSINESS</div>
+        </div>
+        <div class="blog-content">
+          <div class="blog-meta">
+            <span class="blog-date">September 15, 2025</span>
+          </div>
+          <h3 class="blog-title">
+            How Coworking Spaces Accelerate Startup Growth in India
+          </h3>
+          <p class="blog-excerpt">
+            Learn how startups are leveraging coworking spaces to reduce costs, build networks, and scale their operations faster than ever before.
+          </p>
+          <div class="blog-footer">
+            <div class="blog-author">
+              <img src="https://i.pravatar.cc/32?img=20" alt="Author" class="author-avatar" (error)="onImageError($event)">
+              <span>Amit Patel</span>
+            </div>
+            <a routerLink="/blogs" class="blog-read-more">Read More →</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- View All Articles Button -->
+    <div class="text-center mt-16">
+      <button routerLink="/blogs" class="btn-articles-view px-8 py-3 rounded-lg transition-all duration-300">
+        View All Articles
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-16 sm:py-24 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section Header -->
+    <div class="text-center mb-16 sm:mb-20">
+      <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4 sm:mb-6">
+        Frequently Asked Questions
+      </h2>
+      <p class="text-lg sm:text-xl text-muted max-w-3xl mx-auto leading-relaxed">
+        Got questions? We have answers. Find everything you need to know about WishCowork and our workspace solutions.
+      </p>
+    </div>
+
+    <!-- FAQ Items -->
+    <div class="space-y-3 sm:space-y-4">
+      <!-- Loading State -->
+      <div *ngIf="loadingFAQs" class="text-center py-12">
+        <div class="inline-flex items-center justify-center">
+          <div class="animate-spin rounded-full h-10 w-10 border-2 border-accent border-t-transparent"></div>
+        </div>
+        <p class="text-muted mt-4 text-lg">Loading FAQs...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loadingFAQs && faqs.length === 0" class="brand-surface rounded-2xl p-8 sm:p-12 text-center border border-deep/10">
+        <p class="text-muted text-lg">FAQs will be available soon.</p>
+        <p class="text-muted text-base mt-2">Contact our support team for immediate assistance.</p>
+      </div>
+
+      <!-- FAQ Items Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <div *ngFor="let faq of displayedFAQs; let i = index" class="group lg:col-span-1">
+          <button
+            class="w-full px-4 sm:px-8 py-5 sm:py-6 flex items-start sm:items-center justify-between bg-white hover:brand-surface rounded-xl sm:rounded-2xl transition-all duration-300 border border-deep/10 hover:border-accent hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-accent/50 focus:ring-opacity-50"
+            (click)="toggleFAQ(i)"
+            [class.border-accent]="expandedFAQ === i"
+            [class.shadow-lg]="expandedFAQ === i"
+          >
+            <div class="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 text-left">
+              <!-- Number Badge -->
+              <div class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-sm sm:text-base">
+                {{ i + 1 }}
+              </div>
+              <!-- Question Text -->
+              <span class="text-base sm:text-lg font-semibold text-black group-hover:text-accent transition-colors duration-200">
+                {{ faq.question }}
+              </span>
+            </div>
+            <!-- Chevron Icon -->
+            <svg
+              class="w-5 h-5 sm:w-6 sm:h-6 text-accent flex-shrink-0 ml-3 transition-all duration-300 transform group-hover:scale-110"
+              [class.rotate-180]="expandedFAQ === i"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+
+          <!-- Answer Content -->
+          <div
+            class="overflow-hidden transition-all duration-300 ease-in-out lg:col-span-2"
+            [style.max-height.px]="expandedFAQ === i ? 1000 : 0"
+          >
+            <div class="px-4 sm:px-8 py-5 sm:py-6 text-base text-black brand-surface border-b border-l border-r border-deep/10 rounded-b-xl sm:rounded-b-2xl">
+              <div class="ml-0 sm:ml-14 leading-relaxed whitespace-pre-wrap">
+                {{ faq.answer }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Show More/Less Button -->
+      <div *ngIf="faqs.length > maxFAQsToShow" class="text-center mt-8 lg:col-span-2">
+        <button
+          (click)="toggleShowAllFAQs()"
+          class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+        >
+          <span>{{ showAllFAQs ? 'Show Less' : 'Show More FAQs' }}</span>
+          <svg
+            class="w-5 h-5 transition-transform duration-300"
+            [class.rotate-180]="showAllFAQs"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Still Have Questions? -->
+    <div class="mt-16 sm:mt-20">
+      <div class="brand-surface rounded-3xl p-8 sm:p-12 lg:p-16 text-center border border-deep/10">
+        <h3 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-black">Still have questions?</h3>
+        <p class="text-muted mb-8 text-base sm:text-lg max-w-2xl mx-auto">
+          Our dedicated support team is available 24/7 to help you find the perfect workspace solution.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center">
+          <button 
+            routerLink="/contact"
+            class="btn-primary px-8 py-4"
+          >
+            Contact Support
+          </button>
+          <button 
+            (click)="contactSupport()"
+            class="btn-secondary px-8 py-4"
+          >
+            Email Us
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 
 <!-- Planning Your Next Office Space Section -->
 <section class="py-16 sm:py-24 bg-white">

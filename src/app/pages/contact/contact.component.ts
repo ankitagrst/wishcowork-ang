@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { SeoService } from '../../services/seo.service';
 import { SettingsService } from '../../services/settings.service';
+import { EnquiryService } from '../../services/enquiry.service';
 
 interface ContactForm {
   name: string;

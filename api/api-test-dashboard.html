@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WishCoWork API Testing Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .api-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .api-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .api-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .api-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-get {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .btn-post {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .btn-put {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+        
+        .btn-delete {
+            background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%);
+        }
+        
+        .result-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .result-container h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border-color: #bee5eb;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .clear-btn {
+            background: linear-gradient(135deg, #868f96 0%, #596164 100%);
+            margin-top: 15px;
+            width: 100%;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #495057;
+            font-weight: 600;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-modal {
+            background: #dc3545;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 WishCoWork API Testing Dashboard</h1>
+            <p class="subtitle">Complete API Testing Suite for All Endpoints</p>
+        </header>
+
+        <div class="api-sections">
+            <!-- Properties API -->
+            <div class="api-section">
+                <h2>🏢 Properties API</h2>
+                <div class="button-group">
+                    <button class="btn-get" onclick="testAPI('properties', 'GET')">GET All</button>
+                    <button class="btn-get" onclick="testAPI('properties/1', 'GET')">GET by ID</button>
+                    <button class="btn-post" onclick="showModal('properties', 'POST')">CREATE</button>
+                    <button class="btn-put" onclick="showModal('properties', 'PUT')">UPDATE</button>
+                    <button class="btn-delete" onclick="testAPI('properties/1', 'DELETE')">DELETE</button>
+                </div>
+            </div>
+
+            <!-- Pricing API -->
+            <div class="api-section">
+                <h2>💰 Pricing API</h2>
+                <div class="button-group">
+                    <button class="btn-get" onclick="testAPI('pricing/plans', 'GET')">GET Plans</button>
+                    <button class="btn-get" onclick="testAPI('pricing/services', 'GET')">GET Services</button>
+                    <button class="btn-get" onclick="testAPI('pricing/faqs', 'GET')">GET FAQs</button>
+                    <button class="btn-post" onclick="showModal('pricing/plans', 'POST')">CREATE Plan</button>
+                    <button class="btn-post" onclick="showModal('pricing/services', 'POST')">CREATE Service</button>
+                    <button class="btn-post" onclick="showModal('pricing/faqs', 'POST')">CREATE FAQ</button>
+                </div>
+            </div>
+
+            <!-- Events API -->
+            <div class="api-section">
+                <h2>🎉 Events API</h2>
+                <div class="button-group">
+                    <button class="btn-get" onclick="testAPI('events', 'GET')">GET All</button>
+                    <button class="btn-get" onclick="testAPI('events?upcoming=true', 'GET')">GET Upcoming</button>
+                    <button class="btn-get" onclick="testAPI('events?category=Networking', 'GET')">GET by Category</button>
+                    <button class="btn-post" onclick="showModal('events', 'POST')">CREATE</button>
+                    <button class="btn-put" onclick="showModal('events', 'PUT')">UPDATE</button>
+                    <button class="btn-delete" onclick="testAPI('events/1', 'DELETE')">DELETE</button>
+                </div>
+            </div>
+
+            <!-- Auth API -->
+            <div class="api-section">
+                <h2>🔐 Auth API</h2>
+                <div class="button-group">
+                    <button class="btn-post" onclick="showModal('auth/login', 'POST')">LOGIN</button>
+                    <button class="btn-post" onclick="showModal('auth/register', 'POST')">REGISTER</button>
+                    <button class="btn-get" onclick="testAPI('auth/verify', 'GET')">VERIFY Token</button>
+                </div>
+            </div>
+
+            <!-- Blogs API -->
+            <div class="api-section">
+                <h2>📝 Blogs API</h2>
+                <div class="button-group">
+                    <button class="btn-get" onclick="testAPI('blogs', 'GET')">GET All</button>
+                    <button class="btn-get" onclick="testAPI('blogs?featured=true', 'GET')">GET Featured</button>
+                    <button class="btn-get" onclick="testAPI('blogs?category=Productivity', 'GET')">GET by Category</button>
+                    <button class="btn-post" onclick="showModal('blogs', 'POST')">CREATE</button>
+                    <button class="btn-put" onclick="showModal('blogs', 'PUT')">UPDATE</button>
+                    <button class="btn-delete" onclick="testAPI('blogs/1', 'DELETE')">DELETE</button>
+                </div>
+            </div>
+
+            <!-- News API -->
+            <div class="api-section">
+                <h2>📰 News API</h2>
+                <div class="button-group">
+                    <button class="btn-get" onclick="testAPI('news', 'GET')">GET All</button>
+                    <button class="btn-get" onclick="testAPI('news?featured=true', 'GET')">GET Featured</button>
+                    <button class="btn-get" onclick="testAPI('news?category=Company News', 'GET')">GET by Category</button>
+                    <button class="btn-post" onclick="showModal('news', 'POST')">CREATE</button>
+                    <button class="btn-put" onclick="showModal('news', 'PUT')">UPDATE</button>
+                    <button class="btn-delete" onclick="testAPI('news/1', 'DELETE')">DELETE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="result-container">
+            <h3>📊 API Statistics</h3>
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalRequests">0</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="successRequests">0</div>
+                    <div class="stat-label">Successful</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="errorRequests">0</div>
+                    <div class="stat-label">Errors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="avgTime">0ms</div>
+                    <div class="stat-label">Avg Response Time</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Display -->
+        <div class="result-container">
+            <h3>📋 API Response</h3>
+            <div id="result" class="result">No requests yet. Click any button above to test an API endpoint.</div>
+            <button class="clear-btn" onclick="clearResults()">Clear Results</button>
+        </div>
+    </div>
+
+    <!-- Modal for POST/PUT requests -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create/Update Data</h2>
+                <button class="close-modal" onclick="closeModal()">×</button>
+            </div>
+            <div id="modalBody"></div>
+            <button onclick="submitModalData()" style="width: 100%; margin-top: 20px;">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://wishapi';
+        let stats = {
+            total: 0,
+            success: 0,
+            error: 0,
+            times: []
+        };
+        let currentEndpoint = '';
+        let currentMethod = '';
+
+        async function testAPI(endpoint, method = 'GET', body = null) {
+            const startTime = performance.now();
+            stats.total++;
+            
+            try {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                };
+                
+                if (body) {
+                    options.body = JSON.stringify(body);
+                }
+                
+                displayResult(`⏳ ${method} request to: ${API_BASE}/${endpoint}`, 'info');
+                
+                const response = await fetch(`${API_BASE}/${endpoint}`, options);
+                const endTime = performance.now();
+                const responseTime = Math.round(endTime - startTime);
+                stats.times.push(responseTime);
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    stats.success++;
+                    displayResult({
+                        status: response.status,
+                        statusText: response.statusText,
+                        responseTime: `${responseTime}ms`,
+                        data: data
+                    }, 'success', `✅ ${method} ${endpoint}`);
+                } else {
+                    stats.error++;
+                    displayResult({
+                        status: response.status,
+                        statusText: response.statusText,
+                        responseTime: `${responseTime}ms`,
+                        error: data
+                    }, 'error', `❌ ${method} ${endpoint}`);
+                }
+            } catch (error) {
+                stats.error++;
+                displayResult({
+                    error: error.message,
+                    endpoint: endpoint,
+                    method: method
+                }, 'error', '❌ Request Failed');
+            }
+            
+            updateStats();
+        }
+
+        function displayResult(data, type = 'info', title = '') {
+            const resultDiv = document.getElementById('result');
+            let html = '';
+            
+            if (title) {
+                html += `<h3>${title}</h3>`;
+            }
+            
+            if (type === 'info') {
+                html += `<div class="info">${data}</div>`;
+            } else {
+                html += `<div class="${type}">`;
+                html += type === 'success' ? '✅ Success!' : '❌ Error!';
+                html += '</div>';
+            }
+            
+            html += `<pre>${typeof data === 'string' ? data : JSON.stringify(data, null, 2)}</pre>`;
+            resultDiv.innerHTML = html;
+        }
+
+        function updateStats() {
+            document.getElementById('totalRequests').textContent = stats.total;
+            document.getElementById('successRequests').textContent = stats.success;
+            document.getElementById('errorRequests').textContent = stats.error;
+            
+            if (stats.times.length > 0) {
+                const avgTime = Math.round(stats.times.reduce((a, b) => a + b, 0) / stats.times.length);
+                document.getElementById('avgTime').textContent = avgTime + 'ms';
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('result').innerHTML = 'No requests yet. Click any button above to test an API endpoint.';
+        }
+
+        function showModal(endpoint, method) {
+            currentEndpoint = endpoint;
+            currentMethod = method;
+            const modal = document.getElementById('modal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = `${method} - ${endpoint}`;
+            
+            // Generate form based on endpoint
+            let formHTML = '';
+            
+            if (endpoint.includes('events')) {
+                formHTML = `
+                    <label>Title *</label>
+                    <input type="text" id="title" placeholder="Event Title" required>
+                    
+                    <label>Description *</label>
+                    <textarea id="description" rows="3" placeholder="Event Description" required></textarea>
+                    
+                    <label>Event Date *</label>
+                    <input type="date" id="eventDate" required>
+                    
+                    <label>Event Time *</label>
+                    <input type="time" id="eventTime" required>
+                    
+                    <label>Location *</label>
+                    <input type="text" id="location" placeholder="Event Location" required>
+                    
+                    <label>Image URL</label>
+                    <input type="url" id="image" placeholder="https://example.com/image.jpg">
+                    
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="Networking">Networking</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Tech Talk">Tech Talk</option>
+                        <option value="Social">Social</option>
+                        <option value="Summit">Summit</option>
+                    </select>
+                    
+                    <label>Registration Link</label>
+                    <input type="url" id="registrationLink" placeholder="https://forms.gle/example">
+                    
+                    <label>Max Attendees</label>
+                    <input type="number" id="maxAttendees" placeholder="0 = unlimited" value="0">
+                    
+                    <label>Display Order</label>
+                    <input type="number" id="displayOrder" value="0">
+                    
+                    <label><input type="checkbox" id="isFeatured"> Mark as Featured</label>
+                    <label><input type="checkbox" id="isActive" checked> Active</label>
+                `;
+            } else if (endpoint.includes('pricing/plans')) {
+                formHTML = `
+                    <label>Plan Name *</label>
+                    <input type="text" id="name" placeholder="Hot Desk" required>
+                    
+                    <label>Description *</label>
+                    <textarea id="description" rows="3" required></textarea>
+                    
+                    <label>Category *</label>
+                    <select id="category">
+                        <option value="coworking">Coworking</option>
+                        <option value="private">Private Office</option>
+                        <option value="virtual">Virtual Office</option>
+                        <option value="meeting">Meeting Room</option>
+                    </select>
+                    
+                    <label>Price *</label>
+                    <input type="number" id="price" required>
+                    
+                    <label>Unit *</label>
+                    <select id="unit">
+                        <option value="hour">Hour</option>
+                        <option value="day">Day</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                    </select>
+                    
+                    <label>Features (comma-separated)</label>
+                    <textarea id="features" rows="2" placeholder="Feature 1, Feature 2, Feature 3"></textarea>
+                    
+                    <label><input type="checkbox" id="isPopular"> Mark as Popular</label>
+                    <label><input type="checkbox" id="isActive" checked> Active</label>
+                `;
+            } else if (endpoint.includes('blogs')) {
+                formHTML = `
+                    <label>Title *</label>
+                    <input type="text" id="title" placeholder="Blog Title" required>
+                    
+                    <label>Slug</label>
+                    <input type="text" id="slug" placeholder="auto-generated-slug">
+                    
+                    <label>Excerpt</label>
+                    <textarea id="excerpt" rows="2" placeholder="Short description"></textarea>
+                    
+                    <label>Content *</label>
+                    <textarea id="content" rows="5" placeholder="Blog content (HTML supported)" required></textarea>
+                    
+                    <label>Author *</label>
+                    <input type="text" id="author" placeholder="Author Name" required>
+                    
+                    <label>Author Image URL</label>
+                    <input type="url" id="authorImage" placeholder="https://example.com/author.jpg">
+                    
+                    <label>Featured Image URL</label>
+                    <input type="url" id="featuredImage" placeholder="https://example.com/image.jpg">
+                    
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="Productivity">Productivity</option>
+                        <option value="Industry Trends">Industry Trends</option>
+                        <option value="Networking">Networking</option>
+                        <option value="Home Office">Home Office</option>
+                        <option value="Business">Business</option>
+                        <option value="General">General</option>
+                    </select>
+                    
+                    <label>Tags (comma-separated)</label>
+                    <input type="text" id="tags" placeholder="tag1, tag2, tag3">
+                    
+                    <label>Read Time (minutes)</label>
+                    <input type="number" id="readTime" value="5" min="1">
+                    
+                    <label>Display Order</label>
+                    <input type="number" id="displayOrder" value="0">
+                    
+                    <label><input type="checkbox" id="isFeatured"> Mark as Featured</label>
+                    <label><input type="checkbox" id="isPublished" checked> Published</label>
+                `;
+            } else if (endpoint.includes('news')) {
+                formHTML = `
+                    <label>Title *</label>
+                    <input type="text" id="title" placeholder="News Title" required>
+                    
+                    <label>Slug</label>
+                    <input type="text" id="slug" placeholder="auto-generated-slug">
+                    
+                    <label>Summary</label>
+                    <textarea id="summary" rows="2" placeholder="Brief summary"></textarea>
+                    
+                    <label>Content *</label>
+                    <textarea id="content" rows="4" placeholder="News content" required></textarea>
+                    
+                    <label>Image URL</label>
+                    <input type="url" id="image" placeholder="https://example.com/image.jpg">
+                    
+                    <label>Source</label>
+                    <input type="text" id="source" placeholder="WishCoWork" value="WishCoWork">
+                    
+                    <label>Source URL</label>
+                    <input type="url" id="sourceUrl" placeholder="https://example.com">
+                    
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="Company News">Company News</option>
+                        <option value="Industry News">Industry News</option>
+                        <option value="General">General</option>
+                    </select>
+                    
+                    <label>Tags (comma-separated)</label>
+                    <input type="text" id="tags" placeholder="tag1, tag2, tag3">
+                    
+                    <label>Display Order</label>
+                    <input type="number" id="displayOrder" value="0">
+                    
+                    <label><input type="checkbox" id="isFeatured"> Mark as Featured</label>
+                    <label><input type="checkbox" id="isPublished" checked> Published</label>
+                `;
+            } else if (endpoint.includes('auth/login')) {
+                formHTML = `
+                    <label>Email *</label>
+                    <input type="email" id="email" placeholder="admin@wishcowork.com" required>
+                    
+                    <label>Password *</label>
+                    <input type="password" id="password" placeholder="Password" required>
+                `;
+            }
+            
+            modalBody.innerHTML = formHTML;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+
+        function submitModalData() {
+            const formData = {};
+            const inputs = document.querySelectorAll('#modalBody input, #modalBody textarea, #modalBody select');
+            
+            inputs.forEach(input => {
+                if (input.type === 'checkbox') {
+                    formData[input.id] = input.checked;
+                } else if (input.id === 'features' || input.id === 'tags') {
+                    formData[input.id] = input.value.split(',').map(f => f.trim()).filter(f => f);
+                } else if (input.type === 'number') {
+                    formData[input.id] = parseInt(input.value) || 0;
+                } else {
+                    formData[input.id] = input.value;
+                }
+            });
+            
+            testAPI(currentEndpoint, currentMethod, formData);
+            closeModal();
+        }
+
+        // Auto-load test on page load
+        window.onload = () => {
+            displayResult('🚀 API Testing Dashboard Ready!\n\nClick any button above to test an API endpoint.', 'info', 'Welcome');
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+# Enable CORS headers if mod_headers is available - MUST BE FIRST
+<IfModule mod_headers.c>
+    # Always set CORS headers for all requests
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+    Header always set Access-Control-Max-Age "86400"
+</IfModule>
+
+# Enable rewrite engine if mod_rewrite is available
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Prevent automatic directory slash redirect for API endpoints
+    DirectorySlash Off
+    
+    # API Routing - Auth endpoint (with or without trailing slash)
+    RewriteRule ^auth/?$ auth/index.php [QSA,L]
+    RewriteRule ^auth/(.+)$ auth/index.php [QSA,L]
+    
+    # API Routing - Properties endpoint (with or without trailing slash)
+    RewriteRule ^properties/?$ properties/index.php [QSA,L]
+    RewriteRule ^properties/(.+)$ properties/index.php [QSA,L]
+    
+    # API Routing - Pricing endpoint (with or without trailing slash)
+    RewriteRule ^pricing/?$ pricing/index.php [QSA,L]
+    RewriteRule ^pricing/(.+)$ pricing/index.php [QSA,L]
+    
+    # API Routing - Events endpoint (with or without trailing slash)
+    RewriteRule ^events/?$ events/index.php [QSA,L]
+    RewriteRule ^events/(.+)$ events/index.php [QSA,L]
+    
+    # API Routing - Blogs endpoint (with or without trailing slash)
+    RewriteRule ^blogs/?$ blogs/index.php [QSA,L]
+    RewriteRule ^blogs/(.+)$ blogs/index.php [QSA,L]
+    
+    # API Routing - News endpoint (with or without trailing slash)
+    RewriteRule ^news/?$ news/index.php [QSA,L]
+    RewriteRule ^news/(.+)$ news/index.php [QSA,L]
+    
+    # API Routing - Views endpoint (with or without trailing slash)
+    RewriteRule ^views/?$ views/index.php [QSA,L]
+    RewriteRule ^views/(.+)$ views/index.php [QSA,L]
+    
+    # API Routing - Enquiries endpoint
+    RewriteRule ^enquiries/?$ enquiries/index.php [QSA,L]
+    RewriteRule ^enquiries/(.+)$ enquiries/index.php [QSA,L]
+
+    # API Routing - Upload endpoint
+    RewriteRule ^upload/?$ upload/index.php [QSA,L]
+    
+    # API Routing - Enterprise Logos endpoint
+    RewriteRule ^enterprise-logos/?$ enterprise-logos/index.php [QSA,L]
+    
+    # Setup Script Shortcut
+    RewriteRule ^auto-setup\.php$ setup/auto-setup.php [QSA,L]
+    RewriteRule ^auto-setup/?$ setup/auto-setup.php [QSA,L]
+    
+    # Default handler for root
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^$ index.php [QSA,L]
+</IfModule>

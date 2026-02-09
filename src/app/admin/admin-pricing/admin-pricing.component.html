@@ -14,7 +14,7 @@
           </button>
           <div>
             <h1 class="text-2xl font-bold text-deep">Pricing Management</h1>
-            <p class="text-[10px] font-bold text-deep/40 uppercase tracking-widest mt-1">Manage workspace plans, services, and FAQs</p>
+            <p class="text-[10px] font-bold text-deep/40 uppercase tracking-widest mt-1">Configure property pricing, services, and FAQs</p>
           </div>
         </div>
         <div class="flex items-center space-x-3">
@@ -58,13 +58,6 @@
       <div class="border-b border-deep/5">
         <nav class="flex">
           <button
-            (click)="activeTab = 'plans'"
-            [ngClass]="{'text-accent': activeTab === 'plans', 'bg-sand/30': activeTab === 'plans', 'text-deep/40': activeTab !== 'plans'}"
-            class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all border-r border-deep/5 last:border-r-0"
-          >
-            Plans ({{ plans.length }})
-          </button>
-          <button
             (click)="activeTab = 'services'"
             [ngClass]="{'text-accent': activeTab === 'services', 'bg-sand/30': activeTab === 'services', 'text-deep/40': activeTab !== 'services'}"
             class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all border-r border-deep/5 last:border-r-0"
@@ -74,62 +67,18 @@
           <button
             (click)="activeTab = 'faqs'"
             [ngClass]="{'text-accent': activeTab === 'faqs', 'bg-sand/30': activeTab === 'faqs', 'text-deep/40': activeTab !== 'faqs'}"
-            class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all"
+            class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all border-r border-deep/5 last:border-r-0"
           >
             FAQs ({{ faqs.length }})
           </button>
+          <button
+            (click)="activeTab = 'property-pricing'"
+            [ngClass]="{'text-accent': activeTab === 'property-pricing', 'bg-sand/30': activeTab === 'property-pricing', 'text-deep/40': activeTab !== 'property-pricing'}"
+            class="flex-1 py-5 px-6 font-bold text-[10px] uppercase tracking-widest hover:text-accent transition-all"
+          >
+            Property Pricing ({{ properties.length }})
+          </button>
         </nav>
-      </div>
-    </div>
-
-    <!-- Plans Tab -->
-    <div *ngIf="activeTab === 'plans'" class="bg-white rounded-3xl shadow-xl shadow-deep/5 border border-deep/5 overflow-hidden">
-      <div class="p-8 border-b border-deep/5 flex justify-between items-center bg-sand/30">
-        <h2 class="text-sm font-bold text-deep uppercase tracking-widest">Workspace Plans</h2>
-        <button (click)="openPlanModal()" class="bg-deep text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 flex items-center gap-2">
-          <span>+ Add Plan</span>
-        </button>
-      </div>
-
-      <div class="p-8">
-        <div class="grid gap-6">
-          <div *ngFor="let plan of plans" class="bg-white border border-deep/5 rounded-2xl p-6 hover:shadow-xl hover:shadow-deep/5 transition-all group">
-            <div class="flex justify-between items-start">
-              <div class="flex-1">
-                <div class="flex items-center gap-3 mb-3">
-                  <h3 class="text-lg font-bold text-deep">{{ plan.name }}</h3>
-                  <span [class]="'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md ' + (plan.category === 'coworking' ? 'bg-green-50 text-green-600' : plan.category === 'private' ? 'bg-blue-50 text-blue-600' : plan.category === 'virtual' ? 'bg-purple-50 text-purple-600' : 'bg-orange-50 text-orange-600')">
-                    {{ plan.category }}
-                  </span>
-                  <span *ngIf="plan.isPopular" class="text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md bg-accent/10 text-accent">Popular</span>
-                  <span [class]="'text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-md ' + (plan.isActive ? 'bg-green-50 text-green-600' : 'bg-deep/5 text-deep/40')">
-                    {{ plan.isActive ? 'Active' : 'Inactive' }}
-                  </span>
-                </div>
-                <p class="text-deep/60 text-sm leading-relaxed mb-4">{{ plan.description }}</p>
-                <div class="flex items-baseline gap-1 mb-4">
-                  <span class="text-2xl font-bold text-deep">₹{{ plan.price }}</span>
-                  <span class="text-deep/40 font-medium text-sm">/{{ plan.unit }}</span>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <span *ngFor="let feature of plan.features" class="text-[10px] font-bold uppercase tracking-wider bg-sand px-3 py-1 rounded-md text-deep/60 border border-deep/5">{{ feature }}</span>
-                </div>
-              </div>
-              <div class="flex gap-2 ml-4">
-                <button (click)="openPlanModal(plan)" class="p-2 text-deep/40 hover:text-deep hover:bg-sand rounded-lg transition-all" title="Edit Plan">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                  </svg>
-                </button>
-                <button (click)="deletePlan(plan.id!)" class="p-2 text-deep/40 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all" title="Delete Plan">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -217,111 +166,115 @@
       </div>
     </div>
 
-  </main>
-</div>
-
-<!-- Plan Modal -->
-<div *ngIf="showPlanModal" class="absolute left-0 w-full h-screen bg-deep/80 backdrop-blur-sm flex items-start justify-center p-4 z-[100] overflow-y-auto overscroll-contain" [style.top.px]="currentScrollY" (click)="closeModal()">
-  <div class="bg-white rounded-2xl max-w-2xl w-full my-8 shadow-2xl transform transition-all" (click)="$event.stopPropagation()">
-    <div class="p-8 border-b border-deep/5 bg-brand-surface rounded-t-2xl">
-      <h2 class="text-2xl font-bold text-deep tracking-tight">{{ selectedPlan?.id ? 'Edit Plan' : 'Add New Plan' }}</h2>
-      <p class="text-sm font-medium text-deep/40 mt-1">Update your pricing plan details and features.</p>
-    </div>
-    
-    <div class="p-8 space-y-6">
-      <form #planForm="ngForm">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="space-y-2">
-            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Plan Name *</label>
-            <input [(ngModel)]="selectedPlan!.name" name="planName" type="text" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="e.g., Hot Desk">
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Category *</label>
-            <select [(ngModel)]="selectedPlan!.category" name="planCategory" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all appearance-none">
-              <option value="coworking">Coworking</option>
-              <option value="private">Private Office</option>
-              <option value="virtual">Virtual Office</option>
-              <option value="meeting">Meeting Room</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="space-y-2 mt-6">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Description *</label>
-          <textarea [(ngModel)]="selectedPlan!.description" name="planDescription" rows="3" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required placeholder="Describe what's included in this plan..."></textarea>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-          <div class="space-y-2">
-            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Price *</label>
-            <div class="relative">
-              <span class="absolute left-5 top-1/2 -translate-y-1/2 text-deep/40 font-bold">₹</span>
-              <input [(ngModel)]="selectedPlan!.price" name="planPrice" type="number" class="w-full pl-10 pr-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all" required>
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Unit *</label>
-            <select [(ngModel)]="selectedPlan!.unit" name="planUnit" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all appearance-none">
-              <option value="hour">Hour</option>
-              <option value="day">Day</option>
-              <option value="month">Month</option>
-              <option value="year">Year</option>
-            </select>
-          </div>
-
-          <div class="space-y-2">
-            <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1">Display Order</label>
-            <input [(ngModel)]="selectedPlan!.displayOrder" name="planDisplayOrder" type="number" class="w-full px-5 py-4 bg-sand/10 border border-deep/10 rounded-2xl text-deep focus:outline-none focus:border-accent transition-all">
-          </div>
-        </div>
-
-        <!-- Features Section -->
-        <div class="mt-8">
-          <label class="block text-[10px] font-bold uppercase tracking-widest text-deep/40 ml-1 mb-4">Plan Features</label>
-          <div class="space-y-3">
-            <div *ngFor="let feature of selectedPlan!.features; let i = index; trackBy: trackFeature" class="flex gap-2">
-              <input [(ngModel)]="selectedPlan!.features[i]" [name]="'feature' + i" type="text" class="flex-1 px-5 py-3 bg-sand/10 border border-deep/10 rounded-xl text-sm text-deep focus:outline-none focus:border-accent transition-all" placeholder="Feature description">
-              <button type="button" (click)="removeFeature(i)" class="p-3 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-              </button>
-            </div>
-            <button type="button" (click)="addFeature()" class="w-full py-3 border-2 border-dashed border-deep/10 rounded-xl text-xs font-bold text-deep/40 hover:border-accent hover:text-accent transition-all uppercase tracking-widest">
-              + Add Feature
+    <!-- Property Pricing Tab -->
+    <div *ngIf="activeTab === 'property-pricing'" class="bg-white rounded-3xl shadow-xl shadow-deep/5 border border-deep/5 overflow-hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-8">
+        <!-- Properties List -->
+        <div class="lg:col-span-1">
+          <h3 class="text-sm font-bold text-deep uppercase tracking-widest mb-6">Select Property</h3>
+          <div class="space-y-2 max-h-96 overflow-y-auto">
+            <button
+              *ngFor="let prop of properties"
+              (click)="selectProperty(prop)"
+              [ngClass]="{'bg-accent text-white': selectedProperty?.id === prop.id, 'bg-deep/5 text-deep hover:bg-deep/10': selectedProperty?.id !== prop.id}"
+              class="w-full text-left px-4 py-3 rounded-xl font-medium text-sm transition-all"
+            >
+              <div class="font-bold">{{ prop.title }}</div>
+              <div class="text-xs opacity-70 mt-1">{{ prop.city | titlecase }} - {{ prop.category | titlecase }}</div>
             </button>
           </div>
         </div>
 
-        <div class="flex items-center gap-6 mt-8 p-4 bg-sand/20 rounded-2xl border border-deep/5">
-          <label class="flex items-center gap-3 cursor-pointer group">
-            <div class="relative">
-              <input type="checkbox" [(ngModel)]="selectedPlan!.isPopular" name="planIsPopular" class="sr-only peer">
-              <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors peer-checked:bg-accent"></div>
-              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm peer-checked:translate-x-4"></div>
-            </div>
-            <span class="text-xs font-bold text-deep/60 uppercase tracking-wider">Mark as Popular</span>
-          </label>
+        <!-- Pricing Management -->
+        <div class="lg:col-span-2">
+          <div *ngIf="!selectedProperty" class="text-center py-12">
+            <svg class="w-16 h-16 mx-auto text-deep/20 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-deep/40 font-medium">Select a property to manage pricing</p>
+          </div>
 
-          <label class="flex items-center gap-3 cursor-pointer group">
-            <div class="relative">
-              <input type="checkbox" [(ngModel)]="selectedPlan!.isActive" name="planIsActive" class="sr-only peer">
-              <div class="w-10 h-6 bg-sand border border-deep/10 rounded-full transition-colors peer-checked:bg-accent"></div>
-              <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm peer-checked:translate-x-4"></div>
+          <div *ngIf="selectedProperty" class="pricing-form">
+            <!-- Current Pricing -->
+            <div class="mb-8">
+              <h3 class="text-sm font-bold text-deep uppercase tracking-widest mb-4">Current Pricing</h3>
+              <div class="grid grid-cols-2 gap-4">
+                <div *ngFor="let type of bookingTypes" class="bg-deep/5 rounded-xl p-4">
+                  <div class="text-xs font-bold text-deep/60 uppercase tracking-wider mb-2">{{ type | titlecase }}</div>
+                  <div *ngIf="getPricingForType(type)" class="flex items-end justify-between">
+                    <div class="text-2xl font-bold text-accent">₹{{ getPricingForType(type)!.price | number:'1.0-0' }}</div>
+                    <button
+                      (click)="editPropertyPricing(getPricingForType(type)!)"
+                      class="text-xs font-bold text-deep/40 hover:text-deep transition-all"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  <div *ngIf="!getPricingForType(type)" class="text-deep/40 text-sm font-medium">
+                    Not set
+                  </div>
+                </div>
+              </div>
             </div>
-            <span class="text-xs font-bold text-deep/60 uppercase tracking-wider">Active</span>
-          </label>
+
+            <!-- Pricing Form -->
+            <div class="border-t border-deep/5 pt-8">
+              <h3 class="text-sm font-bold text-deep uppercase tracking-widest mb-6">Set/Update Pricing</h3>
+              <form [formGroup]="pricingForm" class="space-y-6">
+                <div class="grid grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-2">Booking Type</label>
+                    <select formControlName="booking_type" class="w-full px-4 py-3 rounded-xl border border-deep/10 focus:ring-2 focus:ring-accent focus:border-transparent">
+                      <option *ngFor="let type of bookingTypes" [value]="type">{{ type | titlecase }}</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-2">Price (₹)</label>
+                    <input type="number" formControlName="price" placeholder="0" min="0" step="0.01" class="w-full px-4 py-3 rounded-xl border border-deep/10 focus:ring-2 focus:ring-accent focus:border-transparent">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-2">Description</label>
+                  <textarea formControlName="description" placeholder="E.g., per day, per hour, per month" rows="2" class="w-full px-4 py-3 rounded-xl border border-deep/10 focus:ring-2 focus:ring-accent focus:border-transparent"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-2">Valid From (Optional)</label>
+                    <input type="date" formControlName="valid_from" class="w-full px-4 py-3 rounded-xl border border-deep/10 focus:ring-2 focus:ring-accent focus:border-transparent">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-deep uppercase tracking-wider mb-2">Valid To (Optional)</label>
+                    <input type="date" formControlName="valid_to" class="w-full px-4 py-3 rounded-xl border border-deep/10 focus:ring-2 focus:ring-accent focus:border-transparent">
+                  </div>
+                </div>
+
+                <div class="flex gap-4">
+                  <button
+                    type="button"
+                    (click)="submitPropertyPricing()"
+                    [disabled]="loading || pricingForm.invalid"
+                    class="flex-1 bg-deep text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-deep/90 disabled:opacity-50 transition-all"
+                  >
+                    {{ loading ? 'Saving...' : 'Save Pricing' }}
+                  </button>
+                  <button
+                    type="button"
+                    (click)="resetPricingForm()"
+                    class="flex-1 bg-deep/5 text-deep px-6 py-3 rounded-xl font-bold text-sm hover:bg-deep/10 transition-all"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
 
-    <div class="p-8 border-t border-deep/5 bg-brand-surface rounded-b-2xl flex justify-end gap-4">
-      <button (click)="closeModal()" class="px-8 py-4 text-sm font-bold text-deep/40 hover:text-deep transition-all uppercase tracking-widest">Cancel</button>
-      <button (click)="savePlan()" [disabled]="loading" class="px-10 py-4 bg-accent text-deep rounded-2xl font-bold text-sm shadow-lg shadow-accent/20 hover:shadow-accent/40 transition-all active:scale-95 disabled:opacity-50 uppercase tracking-widest">
-        {{ loading ? 'Saving...' : (selectedPlan?.id ? 'Update Plan' : 'Create Plan') }}
-      </button>
-    </div>
-  </div>
+  </main>
 </div>
 
 <!-- Service Modal -->
@@ -434,7 +387,7 @@
       </form>
     </div>
 
-    <div class="p-8 border-t border-deep/5 bg-brand-surface flex justify-end gap-4">
+    <div class="p-8 border-t border-deep/5 bg-brand-surface flex justify-end gap-4 rounded-b-[2.5rem]">
       <button (click)="closeModal()" class="px-8 py-3 rounded-xl border border-deep/10 text-deep font-bold text-sm hover:bg-sand transition-all uppercase tracking-widest">Cancel</button>
       <button (click)="saveFaq()" class="px-8 py-3 rounded-xl bg-deep text-white font-bold text-sm hover:bg-deep/90 transition-all shadow-lg shadow-deep/20 uppercase tracking-widest">Save FAQ</button>
     </div>

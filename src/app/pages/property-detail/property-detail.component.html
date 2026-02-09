@@ -132,10 +132,30 @@
         <!-- Booking Card -->
         <div class="lg:col-span-1">
           <div class="card p-4 sm:p-6 lg:sticky lg:top-6">
+            <!-- Pricing Options Header -->
+            <h3 class="text-sm font-bold text-black uppercase tracking-wider mb-4">Available Pricing</h3>
+            
+            <!-- Pricing Options Grid -->
+            <div class="grid grid-cols-2 gap-2 mb-6">
+              <button *ngFor="let option of bookingTypeOptions" 
+                      (click)="selectBookingType(option.value)"
+                      [class.ring-2]="currentBookingType === option.value"
+                      [class.ring-accent]="currentBookingType === option.value"
+                      [ngClass]="currentBookingType === option.value ? 'bg-orange-50' : ''"
+                      type="button"
+                      class="p-3 rounded-lg border border-gray-200 hover:border-accent transition-all text-center">
+                <div class="text-lg mb-1">{{ option.icon }}</div>
+                <div class="text-xs font-bold text-black">{{ option.label }}</div>
+                <div *ngIf="allPricing[option.value] !== undefined" class="text-xs text-accent font-semibold mt-1">
+                  ₹{{ allPricing[option.value] | number:'1.0-0' }}<span class="text-[9px]">/{{ getPriceDescription(option.value) }}</span>
+                </div>
+              </button>
+            </div>
+
             <div class="mb-4 sm:mb-6">
               <div class="flex items-baseline mb-2">
-                <span class="text-2xl sm:text-3xl font-bold text-black">₹{{property.price.toLocaleString()}}</span>
-                <span class="text-base sm:text-lg text-muted ml-2">/{{property.priceType}}</span>
+                <span class="text-2xl sm:text-3xl font-bold text-black">₹{{currentPrice | number:'1.0-0'}}</span>
+                <span class="text-base sm:text-lg text-muted ml-2">/{{ getPriceDescription(currentBookingType) }}</span>
               </div>
               <div class="flex items-center space-x-2">
                 <span [class]="property.availability === 'available' ? 'text-accent' : 'text-red-600'" 
@@ -147,17 +167,16 @@
 
             <!-- Booking Form -->
             <form [formGroup]="enquiryForm" class="space-y-3 sm:space-y-4">
+              <!-- Hidden booking type selector - updated via button clicks -->
+              <select formControlName="bookingType" class="hidden">
+                <option value="day-pass">Day Pass</option>
+                <option value="meeting-room">Meeting Room</option>
+                <option value="coworking">Coworking Space</option>
+                <option value="private-office">Private Office</option>
+                <option value="virtual-office">Virtual Office</option>
+              </select>
+              
               <div class="grid grid-cols-1 gap-3">
-                <div>
-                  <label class="block text-xs sm:text-sm font-medium text-black mb-1">Booking Type</label>
-                  <select formControlName="bookingType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm">
-                    <option value="day-pass">Day Pass</option>
-                    <option value="meeting-room">Meeting Room</option>
-                    <option value="coworking">Coworking Space</option>
-                    <option value="private-office">Private Office</option>
-                    <option value="virtual-office">Virtual Office</option>
-                  </select>
-                </div>
                 <div>
                   <label class="block text-xs sm:text-sm font-medium text-black mb-1">Full Name</label>
                   <input type="text" formControlName="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent text-sm" placeholder="Your Name">
@@ -204,17 +223,20 @@
               </div>
 
               <button (click)="onBookNow()" 
-                      [disabled]="property.availability !== 'available' || submitting"
+                      [disabled]="property.availability !== 'available' || submitting || loadingPrice"
                       class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] text-sm sm:text-base touch-manipulation active:scale-95">
-                <span *ngIf="!submitting">
-                  {{ (enquiryForm.get('bookingType')?.value === 'day-pass' || enquiryForm.get('bookingType')?.value === 'meeting-room') ? 'Pay & Book' : 'Submit Enquiry' }}
+                <span *ngIf="!submitting && !loadingPrice">
+                  {{ isPaymentBookingType(currentBookingType) ? 'Pay & Book' : 'Send Query' }}
                 </span>
-                <span *ngIf="submitting" class="flex items-center justify-center">
+                <span *ngIf="loadingPrice" class="flex items-center justify-center">
                   <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                  Loading price...
+                </span>
+                <span *ngIf="submitting && !loadingPrice" class="flex items-center justify-center">
+                  <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 014-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                   Processing...
                 </span>
               </button>
-
               <button (click)="onContactTour()"
                       [disabled]="submitting"
                       class="w-full btn-secondary min-h-[44px] text-sm sm:text-base touch-manipulation active:scale-95">
@@ -223,28 +245,16 @@
             </form>
 
             <!-- Price Breakdown -->
-            <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t" *ngIf="shouldShowServiceFee() || shouldShowTax()">
+            <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t" *ngIf="currentPrice > 0">
               <div class="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-                <div class="flex justify-between text-muted">
-                  <span>Base price</span>
-                  <span class="font-medium">₹{{property.price | number:'1.0-0'}}</span>
+                <div class="flex justify-between font-semibold text-black text-sm sm:text-base">
+                  <span>{{ currentBookingType | titlecase }} Price</span>
+                  <span class="text-accent">₹{{currentPrice | number:'1.0-0'}}</span>
                 </div>
-                <div class="flex justify-between text-muted" *ngIf="shouldShowServiceFee()">
-                  <span>Service fee ({{property.serviceFeePercent || 10}}%)</span>
-                  <span class="font-medium">₹{{calculateServiceFee(property.price) | number:'1.0-0'}}</span>
-                </div>
-                <div class="flex justify-between text-muted" *ngIf="shouldShowTax()">
-                  <span>Taxes (GST {{property.taxPercent || 18}}%)</span>
-                  <span class="font-medium">₹{{calculateTax(property.price) | number:'1.0-0'}}</span>
-                </div>
-                <div class="flex justify-between font-semibold text-black text-sm sm:text-base pt-2 sm:pt-3 border-t">
-                  <span>Total</span>
-                  <span class="text-accent">₹{{calculateTotal(property.price) | number:'1.0-0'}}</span>
-                </div>
+                <p class="text-[10px] sm:text-xs text-muted">
+                  * Price is per {{ currentBookingType === 'coworking' ? 'month' : currentBookingType === 'day-pass' ? 'day' : 'hour' }}. Contact admin for discounts on longer bookings.
+                </p>
               </div>
-              <p class="mt-2 sm:mt-3 text-[10px] sm:text-xs text-muted">
-                * Prices shown are estimates. Final amount may vary based on booking duration.
-              </p>
             </div>
           </div>
         </div>
